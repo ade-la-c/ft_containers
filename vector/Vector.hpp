@@ -6,7 +6,7 @@
 /*   By: ade-la-c <ade-la-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 18:35:09 by ade-la-c          #+#    #+#             */
-/*   Updated: 2022/03/02 15:38:18 by ade-la-c         ###   ########.fr       */
+/*   Updated: 2022/03/02 16:20:29 by ade-la-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,13 @@ public:
 	explicit vector( const allocator_type & alloc = allocator_type() )
 	: _capacity(0), _size(0), _alloc(alloc) {}		//* default constructor
 	explicit vector( size_type n, const value_type & val = value_type(), const allocator_type & alloc = allocator_type() )
-	: _capacity(n), _size(n), _alloc(alloc) { _alloc.allocate(n, 0); }		//* fill constructor
+	: _capacity(n), _size(n), _alloc(alloc) {
+	
+		_alloc.allocate(n, 0);
+		for (int i = 0; i < n; i++) {
+			_alloc.construct(_valueArray[i], &val);			//? not sure ab this line
+		}
+	}		//* fill constructor
 	template< class InputIterator >		//* range constructor constructs with as many elements as the range (first, last)
 	vector( InputIterator first, InputIterator last, const allocator_type & alloc = allocator_type() ) 
 	: _capacity(0), _size(0), _alloc(alloc) {
@@ -84,8 +90,13 @@ public:
 	//	Capacity
 
 	size_type		size( void ) const { return this->_size; }
-	size_type		max_size( void ) const {  }
-	void			resize( size_type n, value_type val = value_type() );
+	size_type		max_size( void ) const { return std::numeric_limits<size_type>::max; }
+	void			resize( size_type n, value_type val = value_type() ) {
+
+		for (int i = n; i < _size; i++) {
+			_valueArray[i]
+		}
+	}
 	size_type		capacity( void ) const;
 	bool			empty( void ) const;
 	void			reserve( size_type n );
