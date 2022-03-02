@@ -6,7 +6,7 @@
 /*   By: ade-la-c <ade-la-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 18:35:09 by ade-la-c          #+#    #+#             */
-/*   Updated: 2022/03/01 19:18:39 by ade-la-c         ###   ########.fr       */
+/*   Updated: 2022/03/02 15:38:18 by ade-la-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,20 +41,34 @@ public:
 	typedef typename allocator_type::size_type size_type;
 	typedef typename allocator_type::difference_type difference_type;
 
-	//	MEMBER FONCTIONS
+	//	MEMBER FUNCTIONS	//
 
-	explicit vector( const allocator_type & Alloc = allocator_type() )
-	: _len(0), _size(0) {} // fill constructor, n elements of value val
-	explicit vector( size_type n, const value_type & val = value_type(), const allocator_type & Alloc = allocator_type() )
-	: _len(0), _size(0) {
+	explicit vector( const allocator_type & alloc = allocator_type() )
+	: _capacity(0), _size(0), _alloc(alloc) {}		//* default constructor
+	explicit vector( size_type n, const value_type & val = value_type(), const allocator_type & alloc = allocator_type() )
+	: _capacity(n), _size(n), _alloc(alloc) { _alloc.allocate(n, 0); }		//* fill constructor
+	template< class InputIterator >		//* range constructor constructs with as many elements as the range (first, last)
+	vector( InputIterator first, InputIterator last, const allocator_type & alloc = allocator_type() ) 
+	: _capacity(0), _size(0), _alloc(alloc) {
 
-		// write a private function to allocate the correct size of cells 1 by 1, growing the size progressively...
+		while (first != end) {
+			push_back(*first);
+			++first;
+		}
 	}
-	template< class InputIterator > // range constructor constructs with as many elements as the range (first, last)
-	vector( InputIterator first, InputIterator last, const allocator_type & alloc = allocator_type() );
-	vector( const vector & x );
-	vector &	operator=( const vector & x );
-	~vector( void );
+	vector( const vector & x ) { *this = x; }		//* copy constructor
+	vector &	operator=( const vector & x ) {
+
+		if (this != &rhs) {
+			this->_capacity = x._capacity;
+			this->_size = x._size;
+			this->_alloc.allocate(x._capacity);					//?	not sure ab this line
+			for (int i = 0; i < this->_size; i++)
+				this->_valueArray[i] = x._valueArray[i];
+		}
+		return *this;
+	}
+	~vector( void ) { _alloc.deallocate(_valueArray, _capacity); } //* destructor
 
 	//	Iterators
 
@@ -69,8 +83,8 @@ public:
 
 	//	Capacity
 
-	size_type		size( void ) const;
-	size_type		max_size( void ) const;
+	size_type		size( void ) const { return this->_size; }
+	size_type		max_size( void ) const {  }
 	void			resize( size_type n, value_type val = value_type() );
 	size_type		capacity( void ) const;
 	bool			empty( void ) const;
@@ -78,14 +92,24 @@ public:
 
 	//	Element access
 
-	reference			operator[]( size_type n );
-	const_reference		operator[]( size_type n ) const;
-	reference			at( size_type n );
-	const_reference		at( size_type n ) const;
-	reference			front( void );
-	const_reference		front( void ) const;
-	reference			back( void );
-	const_reference		back( void ) const;
+	reference			operator[]( size_type n ) { return this->_valueArray[n]; }
+	const_reference		operator[]( size_type n ) const { return this->_valueArray[n]; }
+	reference			at( size_type n ) {
+
+		if (n >= _size)
+			throw std::out_of_range();
+		return this->_valueArray[n];
+	}
+	const_reference		at( size_type n ) const {
+
+		if (n >= _size)
+			throw std::out_of_range();
+		return this->_valueArray[n];
+	}
+	reference			front( void ) { return this->_valueArray[0]; }
+	const_reference		front( void ) const { return this->_valueArray[0]; }
+	reference			back( void ) { return this->_valueArray[_size - 1]; }
+	const_reference		back( void ) const { return this->_valueArray[_size - 1]; }
 
 	//	Modifiers
 
@@ -110,9 +134,10 @@ public:
 
 private:
 
-	int				_size;	// number of cells allocated
-	int				_len;	// number of cells filled
-	value_type *	_valueArray;
+	size_type			_capacity;		// number of cells allocated
+	size_type			_size;			// number of cells filled
+	value_type *		_valueArray;
+	allocator_type		_alloc;
 
 };
 
