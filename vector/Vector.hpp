@@ -6,7 +6,7 @@
 /*   By: ade-la-c <ade-la-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 18:35:09 by ade-la-c          #+#    #+#             */
-/*   Updated: 2022/03/02 16:20:29 by ade-la-c         ###   ########.fr       */
+/*   Updated: 2022/03/03 19:49:15 by ade-la-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,12 @@ public:
 
 	explicit vector( const allocator_type & alloc = allocator_type() )
 	: _capacity(0), _size(0), _alloc(alloc) {}		//* default constructor
-	explicit vector( size_type n, const value_type & val = value_type(), const allocator_type & alloc = allocator_type() )
+	explicit vector( size_type n, const value_type & val = value_type(), const allocator_type & alloc = allocator_type() )	//?
 	: _capacity(n), _size(n), _alloc(alloc) {
 	
 		_alloc.allocate(n, 0);
-		for (int i = 0; i < n; i++) {
-			_alloc.construct(_valueArray[i], &val);			//? not sure ab this line
+		for (size_type i = 0; i < n; i++) {
+			_alloc.construct(_valueArray[i], val);			//? not sure ab this line
 		}
 	}		//* fill constructor
 	template< class InputIterator >		//* range constructor constructs with as many elements as the range (first, last)
@@ -63,7 +63,7 @@ public:
 		}
 	}
 	vector( const vector & x ) { *this = x; }		//* copy constructor
-	vector &	operator=( const vector & x ) {
+	vector &	operator=( const vector & x ) {					//?
 
 		if (this != &rhs) {
 			this->_capacity = x._capacity;
@@ -74,7 +74,13 @@ public:
 		}
 		return *this;
 	}
-	~vector( void ) { _alloc.deallocate(_valueArray, _capacity); } //* destructor
+	~vector( void ) {
+
+		for (size_type i = 0; i < _size; i++) {
+			_alloc.destroy(_valueArray[i]);
+		}
+		_alloc.deallocate(_valueArray, _capacity);
+	} //* destructor
 
 	//	Iterators
 
@@ -93,13 +99,28 @@ public:
 	size_type		max_size( void ) const { return std::numeric_limits<size_type>::max; }
 	void			resize( size_type n, value_type val = value_type() ) {
 
-		for (int i = n; i < _size; i++) {
-			_valueArray[i]
+		size_type	x = 0;
+
+		if (n < _size) {
+			for (size_type i = n - 1; i < _size; i++ && x++) {
+				_alloc.destroy(_valueArray[i]);
+			}
+			_alloc.deallocate(_valueArray[n - 1], x);
+		} else {
+			_reallocate(n, false);
+			for (size_type i = 0; i < n; i++) {
+				_alloc.construct(_valueArray[i], val);
+			}
 		}
 	}
-	size_type		capacity( void ) const;
-	bool			empty( void ) const;
-	void			reserve( size_type n );
+	size_type		capacity( void ) const { return this->_capacity; }
+	bool			empty( void ) const { return this->_size == 0 ? true : false; }
+	void			reserve( size_type n ) {
+
+		if (n > _capacity) {
+			_reallocate(n, true);
+		}
+	}
 
 	//	Element access
 
@@ -124,14 +145,32 @@ public:
 
 	//	Modifiers
 
-	template< class InputIterator >
+	template< class InputIterator >	//* range
 	void		assign( InputIterator first, InputIterator last );
-	void		assign( size_type n, const value_type & val );
-	void		push_back( const value_type & val );
-	void		pop_back( void );
-	iterator	insert( iterator position, const value_type & val ); // single element
-	void		insert( iterator position, size_type n, const value_type & val ); // fill
-	template< class InputIterator > // range
+	void		assign( size_type n, const value_type & val ) {
+
+		_reallocate(n, 0);
+		for (size_type i = 0; i < n; i++) {
+			_alloc.construct(_valueArray[i], val);
+		}
+	}
+	void		push_back( const value_type & val ) {
+
+		if (_size + 1 >= _capacity) {
+			_reallocate(_capacity * 2, false);
+		}
+		_alloc.construct(_valueArray[size], val);
+		_size++;
+		_capacity *= 2;
+	}
+	void		pop_back( void ) {
+
+		_alloc.destroy(_valueArray[_size - 1]);
+		_size--;
+	}
+	iterator	insert( iterator position, const value_type & val ); //* single element
+	void		insert( iterator position, size_type n, const value_type & val ); //* fill
+	template< class InputIterator > //* range
 	void		insert( iterator position, InputIterator first, InputIterator last );
 	iterator	erase( iterator position );
 	iterator	erase( iterator first, iterator last );
@@ -140,15 +179,29 @@ public:
 
 	//	Allocator
 
-	allocator_type	get_allocator( void ) const;
+	allocator_type		get_allocator( void ) const { return this->_alloc; }
 
 
 private:
 
-	size_type			_capacity;		// number of cells allocated
-	size_type			_size;			// number of cells filled
-	value_type *		_valueArray;
+	size_type			_capacity;		//* number of cells allocated
+	size_type			_size;			//* number of cells filled
+	pointer				_valueArray;
 	allocator_type		_alloc;
+
+	void		_reallocate( size_type new_size, bool construct ) {
+
+		pointer		new_ptr = _alloc.allocate(new_size);
+
+		for (size_type i = 0; i < _size; i++) {
+			if (construct == true)
+				_alloc.construct(new_ptr + i, _valueArray[i]);
+			_alloc.destroy(_valueArray[i]);
+		}
+		_alloc.deallocate(_valueArray, _size);
+		_valueArray = new_ptr;
+		_size = n;
+	}
 
 };
 
