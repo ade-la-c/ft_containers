@@ -6,7 +6,7 @@
 /*   By: ade-la-c <ade-la-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 18:35:09 by ade-la-c          #+#    #+#             */
-/*   Updated: 2022/03/03 19:49:15 by ade-la-c         ###   ########.fr       */
+/*   Updated: 2022/03/04 17:10:34 by ade-la-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +84,14 @@ public:
 
 	//	Iterators
 
-	iterator				begin( void );
-	const_iterator			begin( void ) const;
-	iterator				end( void );
-	const_iterator			end( void ) const;
-	reverse_iterator		rbegin( void );
-	const_reverse_iterator	rbegin( void ) const;
-	reverse_iterator		rend( void );
-	const_reverse_iterator	rend( void ) const;
+	iterator				begin( void ) { return iterator(this->_valueArray); }
+	const_iterator			begin( void ) const { return const_iterator(this->_valueArray); }
+	iterator				end( void ) { return iterator(this->_valueArray + this->_size); }
+	const_iterator			end( void ) const { return const_iterator(this->_valueArray + this->_size); }
+	reverse_iterator		rbegin( void ) { return reverse_iteraotr(this->end()); }
+	const_reverse_iterator	rbegin( void ) const { return const_reverse_iterator(this->end()); }
+	reverse_iterator		rend( void ) { return revese_iterator(this->begin()); }
+	const_reverse_iterator	rend( void ) const { return const_reverse_iterator(this->begin()); }
 
 	//	Capacity
 
