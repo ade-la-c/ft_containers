@@ -6,7 +6,7 @@
 /*   By: ade-la-c <ade-la-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 18:35:09 by ade-la-c          #+#    #+#             */
-/*   Updated: 2022/05/13 18:21:31 by ade-la-c         ###   ########.fr       */
+/*   Updated: 2022/05/17 16:58:09 by ade-la-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ namespace	ft {
 		vector( InputIterator first, InputIterator last, const allocator_type & alloc = allocator_type() ) 
 		: _capacity(0), _size(0), _alloc(alloc) {
 
-			while (first != end) {
+			while (first != last) {
 				push_back(*first);
 				++first;
 			}
@@ -167,8 +167,11 @@ namespace	ft {
 			_alloc.destroy(_valueArray[_size - 1]);
 			_size--;
 		}
-		iterator	insert( iterator position, const value_type & val ); //* single element
-		void		insert( iterator position, size_type n, const value_type & val ); //* fill
+		iterator	insert( iterator position, const value_type & val ) {				//* single element
+
+
+		}
+		void		insert( iterator position, size_type n, const value_type & val );	//* fill
 		template< class InputIterator > //* range
 		void		insert( iterator position, InputIterator first, InputIterator last );
 		iterator	erase( iterator position );
@@ -185,7 +188,7 @@ namespace	ft {
 
 		size_type			_capacity;		//* number of cells allocated
 		size_type			_size;			//* number of cells filled
-		pointer				_valueArray;
+		pointer				_valueArray;	//* array of T
 		allocator_type		_alloc;
 
 		void		_reallocate( size_type new_size, bool construct ) {
