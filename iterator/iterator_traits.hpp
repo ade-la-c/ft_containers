@@ -1,38 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Iterator.hpp                                       :+:      :+:    :+:   */
+/*   iterator_traits.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ade-la-c <ade-la-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/09 19:04:38 by ade-la-c          #+#    #+#             */
-/*   Updated: 2022/05/11 13:52:36 by ade-la-c         ###   ########.fr       */
+/*   Created: 2022/05/17 16:11:29 by ade-la-c          #+#    #+#             */
+/*   Updated: 2022/05/17 16:13:48 by ade-la-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ITERATOR_H
-# define ITERATOR_H
+#ifndef ITERATOR_TRAITS_H
+# define ITERATOR_TRAITS_H
 
-# include <iostream>
-# include <memory>
-
-namespace ft {
-
-
-	template< class Category, class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T& >
-	class	iterator {
-
-
-	public:
-
-		
-
-
-	private:
+namespace ft { 					//?
 
 
 
-	};
 
 
 }
