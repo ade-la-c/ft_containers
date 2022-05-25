@@ -6,7 +6,7 @@
 /*   By: ade-la-c <ade-la-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 18:35:09 by ade-la-c          #+#    #+#             */
-/*   Updated: 2022/05/17 16:58:09 by ade-la-c         ###   ########.fr       */
+/*   Updated: 2022/05/24 15:19:11 by ade-la-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,16 @@ namespace	ft {
 		//	Modifiers
 
 		template< class InputIterator >	//* range
-		void		assign( InputIterator first, InputIterator last );
+		void		assign( InputIterator first, InputIterator last ) {
+
+			
+
+			while (first != last) {
+				erase(first);
+
+				++first;
+			}
+		}
 		void		assign( size_type n, const value_type & val ) {
 
 			_reallocate(n, 0);
@@ -169,7 +178,7 @@ namespace	ft {
 		}
 		iterator	insert( iterator position, const value_type & val ) {				//* single element
 
-
+			
 		}
 		void		insert( iterator position, size_type n, const value_type & val );	//* fill
 		template< class InputIterator > //* range
