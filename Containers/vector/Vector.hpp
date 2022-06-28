@@ -6,7 +6,7 @@
 /*   By: ade-la-c <ade-la-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 18:35:09 by ade-la-c          #+#    #+#             */
-/*   Updated: 2022/05/24 15:19:11 by ade-la-c         ###   ########.fr       */
+/*   Updated: 2022/06/28 16:12:46 by ade-la-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 
 # include <iostream>
 # include <memory>
+# include <iterator>		//! must remove include
+
+//! # include <../iterator/random_access_iterator.hpp>
 
 namespace	ft {
 
@@ -33,10 +36,17 @@ namespace	ft {
 		typedef typename allocator_type::const_reference			const_reference;
 		typedef typename allocator_type::pointer					pointer;
 		typedef typename allocator_type::const_pointer				const_pointer;
-		typedef typename ft::wrap_iter<pointer>						iterator;
-		typedef typename ft::wrap_iter<const_pointer>				const_iterator;
-		typedef typename ft::reverse_iterator<iterator>				reverse_iterator;
-		typedef typename ft::reverse_iterator<const_iterator>		const_reverse_iterator;
+
+		typedef typename std::__wrap_iter<pointer>						iterator;				//!-------------------------------/
+		typedef typename std::__wrap_iter<const_pointer>				const_iterator;			//!			TEMPORAIRE			 /
+		typedef typename std::reverse_iterator<iterator>				reverse_iterator;		//!								/
+		typedef typename std::reverse_iterator<const_iterator>		const_reverse_iterator;		//!----------------------------/
+
+
+		// typedef typename ft::wrap_iter<pointer>						iterator;
+		// typedef typename ft::wrap_iter<const_pointer>				const_iterator;
+		// typedef typename ft::reverse_iterator<iterator>				reverse_iterator;
+		// typedef typename ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 		typedef typename allocator_type::size_type					size_type;
 		typedef typename allocator_type::difference_type			difference_type;
 
@@ -145,19 +155,13 @@ namespace	ft {
 		//	Modifiers
 
 		template< class InputIterator >	//* range
-		void		assign( InputIterator first, InputIterator last ) {
+		void		assign( InputIterator first, InputIterator last ) {//TODO wip
 
-			
-
-			while (first != last) {
-				erase(first);
-
-				++first;
-			}
+			_reallocate(n, false)
 		}
-		void		assign( size_type n, const value_type & val ) {
+		void		assign( size_type n, const value_type & val ) {//TODO wip
 
-			_reallocate(n, 0);
+			_reallocate(n, false);
 			for (size_type i = 0; i < n; i++) {
 				_alloc.construct(_valueArray[i], val);
 			}
@@ -176,15 +180,27 @@ namespace	ft {
 			_alloc.destroy(_valueArray[_size - 1]);
 			_size--;
 		}
-		iterator	insert( iterator position, const value_type & val ) {				//* single element
+		iterator	insert( iterator position, const value_type & val ){			//* single element
+		
+			ft::vector<int>		tmp_vector();
 
-			
 		}
 		void		insert( iterator position, size_type n, const value_type & val );	//* fill
 		template< class InputIterator > //* range
 		void		insert( iterator position, InputIterator first, InputIterator last );
 		iterator	erase( iterator position );
-		iterator	erase( iterator first, iterator last );
+		iterator	erase( iterator first, iterator last ) {		//? 
+
+			while (first != last) {
+
+				if (first == last)
+					break;
+				_alloc.destroy(first); //? first or *first ?
+				++first;
+				--_size;
+			}
+			return last;
+		}
 		void		swap( vector & x );
 		void		clear( void );
 
@@ -197,9 +213,14 @@ namespace	ft {
 
 		size_type			_capacity;		//* number of cells allocated
 		size_type			_size;			//* number of cells filled
+		// iterator
 		pointer				_valueArray;	//* array of T
 		allocator_type		_alloc;
 
+		pointer				_start;
+		pointer				_end;
+	
+		// _reallocate destroys everything to do a new allocation from scratch, it can construct the elements depending on boolean
 		void		_reallocate( size_type new_size, bool construct ) {
 
 			pointer		new_ptr = _alloc.allocate(new_size);

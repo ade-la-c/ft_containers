@@ -1,0 +1,11 @@
+ayoo
+
+todo:
+-   modify constructors to set up all the
+    private members correctly (begin, end pointers)
+
+-   we're working on insert single element,
+|-> need to work on reallocating a whole chunk when
+    an insert is done
+
+-   need to figure out assign functions utility
