@@ -6,7 +6,7 @@
 /*   By: ade-la-c <ade-la-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 18:35:09 by ade-la-c          #+#    #+#             */
-/*   Updated: 2022/06/30 21:31:10 by ade-la-c         ###   ########.fr       */
+/*   Updated: 2022/06/30 21:33:05 by ade-la-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ namespace	ft {
 				_alloc.construct(_valueArray[0], first++);
 				size++;
 			}
+			_capacity = _size;
 		}
 		void		assign( size_type n, const value_type & val ) {
 
@@ -172,6 +173,7 @@ namespace	ft {
 				_alloc.construct(_valueArray[i], val);
 			}
 			_size = n;
+			_capacity = n;
 		}
 		void		push_back( const value_type & val ) {
 
@@ -189,7 +191,7 @@ namespace	ft {
 		}
 		iterator	insert( iterator position, const value_type & val ) {			//* single element
 
-
+			
 		}
 		void		insert( iterator position, size_type n, const value_type & val );	//* fill
 		template< class InputIterator > //* range
