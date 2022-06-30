@@ -6,7 +6,7 @@
 /*   By: ade-la-c <ade-la-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 18:35:09 by ade-la-c          #+#    #+#             */
-/*   Updated: 2022/06/28 16:12:46 by ade-la-c         ###   ########.fr       */
+/*   Updated: 2022/06/30 21:31:10 by ade-la-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,16 +155,23 @@ namespace	ft {
 		//	Modifiers
 
 		template< class InputIterator >	//* range
-		void		assign( InputIterator first, InputIterator last ) {//TODO wip
+		void		assign( InputIterator first, InputIterator last ) {
 
-			_reallocate(n, false)
+			clear();
+
+			while (first != last) {
+				_alloc.construct(_valueArray[0], first++);
+				size++;
+			}
 		}
-		void		assign( size_type n, const value_type & val ) {//TODO wip
+		void		assign( size_type n, const value_type & val ) {
 
-			_reallocate(n, false);
+			clear();
+
 			for (size_type i = 0; i < n; i++) {
 				_alloc.construct(_valueArray[i], val);
 			}
+			_size = n;
 		}
 		void		push_back( const value_type & val ) {
 
@@ -180,9 +187,8 @@ namespace	ft {
 			_alloc.destroy(_valueArray[_size - 1]);
 			_size--;
 		}
-		iterator	insert( iterator position, const value_type & val ){			//* single element
-		
-			ft::vector<int>		tmp_vector();
+		iterator	insert( iterator position, const value_type & val ) {			//* single element
+
 
 		}
 		void		insert( iterator position, size_type n, const value_type & val );	//* fill
