@@ -6,7 +6,7 @@
 /*   By: ade-la-c <ade-la-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 18:35:09 by ade-la-c          #+#    #+#             */
-/*   Updated: 2022/06/30 21:33:05 by ade-la-c         ###   ########.fr       */
+/*   Updated: 2022/06/30 22:36:08 by ade-la-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,8 +159,8 @@ namespace	ft {
 
 			clear();
 
-			while (first != last) {
-				_alloc.construct(_valueArray[0], first++);
+			for (int i = 0; first != last; i++) {
+				_alloc.construct(_valueArray[i], first++);
 				size++;
 			}
 			_capacity = _size;
@@ -191,11 +191,53 @@ namespace	ft {
 		}
 		iterator	insert( iterator position, const value_type & val ) {			//* single element
 
-			
+			int		i;
+
+			for (i = 0; i < _size; ++i) {
+				if (_valueArray[i] == position) {
+					reserve(++_size);
+					break;
+				}
+			}
+			while (int j = _size; j > i; j--) {	//? -1 +1 a tweak si nécessaire
+				_valueArray[j] = _valueArray[j - 1];
+			}
+			_valueArray[i] = val;
+			return position;
 		}
-		void		insert( iterator position, size_type n, const value_type & val );	//* fill
+		void		insert( iterator position, size_type n, const value_type & val ) {	//* fill
+
+			int		i;
+
+			for (i = 0; i < _size; ++i) {
+				if (_valueArray[i] == position) {
+					_size += n;
+					reserve(_size);
+					break;
+				}
+			}
+			while (int j = _size; j - 1 > i; j--) {	//? -1 +1 a tweak si nécessaire
+				_valueArray[j] = _valueArray[j - 1];
+			}
+			while (i < _size) {
+				_valueArray[i++] = val;
+			}
+		}
 		template< class InputIterator > //* range
-		void		insert( iterator position, InputIterator first, InputIterator last );
+		void		insert( iterator position, InputIterator first, InputIterator last ) {
+
+			int		i;
+
+			for (i = 0; i < _size; ++i) {
+				if (_valueArray[i] == position) {
+					while (first != last && i < size) {
+						reserve(++_size);
+						_valueArray[i++] = first++;
+					}
+					break;
+				}
+			}
+		}
 		iterator	erase( iterator position );
 		iterator	erase( iterator first, iterator last ) {		//? 
 
@@ -225,8 +267,8 @@ namespace	ft {
 		pointer				_valueArray;	//* array of T
 		allocator_type		_alloc;
 
-		pointer				_start;
-		pointer				_end;
+		pointer				_start;			//TODO yet to initialize
+		pointer				_end;			//TODO yet to initialize
 	
 		// _reallocate destroys everything to do a new allocation from scratch, it can construct the elements depending on boolean
 		void		_reallocate( size_type new_size, bool construct ) {
@@ -237,8 +279,8 @@ namespace	ft {
 				if (construct == true)
 					_alloc.construct(new_ptr + i, _valueArray[i]);
 				_alloc.destroy(_valueArray[i]);
+				_alloc.deallocate(_valueArray[i], 1);
 			}
-			_alloc.deallocate(_valueArray, _size);
 			_valueArray = new_ptr;
 			_size = n;
 		}
