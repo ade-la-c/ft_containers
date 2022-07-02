@@ -6,7 +6,7 @@
 /*   By: ade-la-c <ade-la-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 18:35:09 by ade-la-c          #+#    #+#             */
-/*   Updated: 2022/06/30 22:36:08 by ade-la-c         ###   ########.fr       */
+/*   Updated: 2022/07/02 19:01:31 by ade-la-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ namespace	ft {
 		}
 		size_type		capacity( void ) const { return this->_capacity; }
 		bool			empty( void ) const { return this->_size == 0 ? true : false; }
+		//*	Requests that the vector capacity be at least enough to contain n elements.
 		void			reserve( size_type n ) {
 
 			if (n > _capacity) {
@@ -234,11 +235,14 @@ namespace	ft {
 						reserve(++_size);
 						_valueArray[i++] = first++;
 					}
-					break;
+					break;//TODO
 				}
 			}
+			
 		}
+		//*	Removes from the vector a single element (position).
 		iterator	erase( iterator position );
+		//*	Removes from the vector a range of elements (first - last).
 		iterator	erase( iterator first, iterator last ) {		//? 
 
 			while (first != last) {
