@@ -6,7 +6,7 @@
 /*   By: ade-la-c <ade-la-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 18:35:09 by ade-la-c          #+#    #+#             */
-/*   Updated: 2022/07/02 19:01:31 by ade-la-c         ###   ########.fr       */
+/*   Updated: 2022/07/04 17:24:49 by ade-la-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,12 +93,16 @@ namespace	ft {
 
 		//	Iterators
 
+		//*	Returns an iterator pointing to the first element in the vector.
 		iterator				begin( void ) { return iterator(this->_valueArray); }
 		const_iterator			begin( void ) const { return const_iterator(this->_valueArray); }
+		//*	Returns an iterator referring to the past-the-end element in the vector container.
 		iterator				end( void ) { return iterator(this->_valueArray + this->_size); }
 		const_iterator			end( void ) const { return const_iterator(this->_valueArray + this->_size); }
+		//*	Returns a reverse iterator pointing to the last element in the vector (i.e., its reverse beginning).
 		reverse_iterator		rbegin( void ) { return reverse_iteraotr(this->end()); }
 		const_reverse_iterator	rbegin( void ) const { return const_reverse_iterator(this->end()); }
+		//*	Returns a reverse iterator pointing to the theoretical element preceding the first element in the vector (reverse end).
 		reverse_iterator		rend( void ) { return revese_iterator(this->begin()); }
 		const_reverse_iterator	rend( void ) const { return const_reverse_iterator(this->begin()); }
 
@@ -148,8 +152,10 @@ namespace	ft {
 				throw std::out_of_range();
 			return this->_valueArray[n];
 		}
+		//*	Returns a reference to the first element in the vector.
 		reference			front( void ) { return this->_valueArray[0]; }
 		const_reference		front( void ) const { return this->_valueArray[0]; }
+		//*	Returns a reference to the last element in the vector.
 		reference			back( void ) { return this->_valueArray[_size - 1]; }
 		const_reference		back( void ) const { return this->_valueArray[_size - 1]; }
 
@@ -192,7 +198,7 @@ namespace	ft {
 		}
 		iterator	insert( iterator position, const value_type & val ) {			//* single element
 
-			int		i;
+			size_type		i;
 
 			for (i = 0; i < _size; ++i) {
 				if (_valueArray[i] == position) {
@@ -200,15 +206,15 @@ namespace	ft {
 					break;
 				}
 			}
-			while (int j = _size; j > i; j--) {	//? -1 +1 a tweak si nécessaire
+			for (size_type j = _size; j > i; j--) {	//? -1 +1 a tweak si nécessaire
 				_valueArray[j] = _valueArray[j - 1];
 			}
 			_valueArray[i] = val;
-			return position;
+			return position;	//?
 		}
 		void		insert( iterator position, size_type n, const value_type & val ) {	//* fill
 
-			int		i;
+			size_type		i;
 
 			for (i = 0; i < _size; ++i) {
 				if (_valueArray[i] == position) {
@@ -217,7 +223,7 @@ namespace	ft {
 					break;
 				}
 			}
-			while (int j = _size; j - 1 > i; j--) {	//? -1 +1 a tweak si nécessaire
+			for (size_type j = _size; j - 1 > i; j--) {	//? -1 +1 a tweak si nécessaire
 				_valueArray[j] = _valueArray[j - 1];
 			}
 			while (i < _size) {
@@ -227,21 +233,43 @@ namespace	ft {
 		template< class InputIterator > //* range
 		void		insert( iterator position, InputIterator first, InputIterator last ) {
 
-			int		i;
+			size_type		i;
+			InputIterator	tmp = first;
 
 			for (i = 0; i < _size; ++i) {
 				if (_valueArray[i] == position) {
-					while (first != last && i < size) {
+					while (tmp != last && i < size) {// increasing capacity
 						reserve(++_size);
-						_valueArray[i++] = first++;
+						tmp++;
 					}
-					break;//TODO
+					break;
 				}
 			}
-			
+			for (size_type j = _size; j - 1 > i; j--) {	//? -1 +1 a tweak si nécessaire
+				_valueArray[j] = _valueArray[j - 1];
+			}
+			while (first != last) {					//? a tester
+				_valueArray[i--] = last--;
+			}
 		}
 		//*	Removes from the vector a single element (position).
-		iterator	erase( iterator position );
+		iterator	erase( iterator position ) {
+
+			size_type	i;
+			iterator	it;
+
+			for (i = 0; i < _size; ++i) {
+				if (_valueArray[i] == position) {	// position found
+					_alloc.destroy(_valueArray[i]);	// position erased
+					break;
+				}
+			}
+			for (; i + 1 < _size; ++i) {
+				_valueArray[i] = _valueArray[i + 1];	//	relink vextor
+			}
+			
+			return it;
+		}
 		//*	Removes from the vector a range of elements (first - last).
 		iterator	erase( iterator first, iterator last ) {		//? 
 
@@ -253,6 +281,7 @@ namespace	ft {
 				++first;
 				--_size;
 			}
+			if (++last)
 			return last;
 		}
 		void		swap( vector & x );
