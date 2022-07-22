@@ -1,9 +1,9 @@
-#ifndef VECTOR_H
-# define VECTOR_H
+#pragma once
 
-# include <iostream>
-# include <memory>
-# include <iterator>		//! must remove include
+#include <iostream>
+#include <memory>
+#include <limits>
+#include <iterator>		//! must remove include
 
 //! # include <../iterator/random_access_iterator.hpp>
 
@@ -55,7 +55,7 @@ namespace	ft {
 		: _capacity(0), _size(0), _alloc(alloc) {
 
 			while (first != last) {
-				push_back(*first);
+				push_back(*first);			//?
 				++first;
 			}
 		}
@@ -88,7 +88,7 @@ namespace	ft {
 		iterator				end( void ) { return iterator(this->_valueArray + this->_size); }
 		const_iterator			end( void ) const { return const_iterator(this->_valueArray + this->_size); }
 		//*	Returns a reverse iterator pointing to the last element in the vector (i.e., its reverse beginning).
-		reverse_iterator		rbegin( void ) { return reverse_iteraotr(this->end()); }
+		reverse_iterator		rbegin( void ) { return reverse_iterator(this->end()); }
 		const_reverse_iterator	rbegin( void ) const { return const_reverse_iterator(this->end()); }
 		//*	Returns a reverse iterator pointing to the theoretical element preceding the first element in the vector (reverse end).
 		reverse_iterator		rend( void ) { return revese_iterator(this->begin()); }
@@ -97,22 +97,22 @@ namespace	ft {
 		//	Capacity
 
 		size_type		size( void ) const { return this->_size; }
-		size_type		max_size( void ) const { return std::numeric_limits<size_type>::max; }
+		size_type		max_size( void ) const { return std::numeric_limits<size_type>::max(); }
+		//*	Resizes the container so it contains n elements
 		void			resize( size_type n, value_type val = value_type() ) {
 
-			size_type	x = 0;
-
 			if (n < _size) {
-				for (size_type i = n - 1; i < _size; i++ && x++) {
-					_alloc.destroy(_valueArray[i]);
+				for (size_type i = n; i < _size; i++) {
+					alloc.destroy(_valueArray[i]);
 				}
-				_alloc.deallocate(_valueArray[n - 1], x);
-			} else {
-				_reallocate(n, false);
-				for (size_type i = 0; i < n; i++) {
+			} else if (n > _size) {
+
+				for (size_type i = _size; i < n; i++) {
+					push_back(&val);
 					_alloc.construct(_valueArray[i], val);
 				}
 			}
+			_size = n;
 		}
 		size_type		capacity( void ) const { return this->_capacity; }
 		bool			empty( void ) const { return this->_size == 0 ? true : false; }
@@ -126,8 +126,8 @@ namespace	ft {
 
 		//	Element access
 
-		reference			operator[]( size_type n ) { return this->_valueArray[n]; }
-		const_reference		operator[]( size_type n ) const { return this->_valueArray[n]; }
+		reference			operator[]( size_type n ) { return *(_valueArray + n); }
+		const_reference		operator[]( size_type n ) const { return *(_valueArray + n); }
 		reference			at( size_type n ) {
 
 			if (n >= _size)
@@ -149,9 +149,11 @@ namespace	ft {
 
 		//	Modifiers
 
+		//* Assigns new contents to the vector, replacing its current contents, and modifying its size accordingly.
 		template< class InputIterator >	//* range
 		void		assign( InputIterator first, InputIterator last ) {
 
+/*
 			clear();
 
 			for (int i = 0; first != last; i++) {
@@ -159,6 +161,8 @@ namespace	ft {
 				size++;
 			}
 			_capacity = _size;
+*/
+
 		}
 		void		assign( size_type n, const value_type & val ) {
 
@@ -173,9 +177,9 @@ namespace	ft {
 		void		push_back( const value_type & val ) {
 
 			if (_size + 1 >= _capacity) {
-				_reallocate(_capacity * 2, false);
+				_reallocate(_capacity * 2, true);
 			}
-			_alloc.construct(_valueArray[size], val);
+			_alloc.construct(_valueArray[_size], val);
 			_size++;
 			_capacity *= 2;
 		}
@@ -324,5 +328,3 @@ namespace	ft {
 	void	swap( vector<T,Alloc> & x, vector<T,Alloc> & y );
 
 }
-
-#endif
