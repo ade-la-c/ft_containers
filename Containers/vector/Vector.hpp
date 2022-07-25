@@ -5,7 +5,8 @@
 #include <limits>
 #include <iterator>		//! must remove include
 
-//! # include <../iterator/random_access_iterator.hpp>
+#include <../utils/utils.hpp>
+//! # include <../utils/random_access_iterator.hpp>
 
 namespace	ft {
 
@@ -102,14 +103,14 @@ namespace	ft {
 		void			resize( size_type n, value_type val = value_type() ) {
 
 			if (n < _size) {
-				for (size_type i = n; i < _size; i++) {
-					alloc.destroy(_valueArray[i]);
+
+				for (size_type i = _size - n; n > 0; n--) {
+					pop_back();
 				}
 			} else if (n > _size) {
 
 				for (size_type i = _size; i < n; i++) {
 					push_back(&val);
-					_alloc.construct(_valueArray[i], val);
 				}
 			}
 			_size = n;
@@ -153,27 +154,22 @@ namespace	ft {
 		template< class InputIterator >	//* range
 		void		assign( InputIterator first, InputIterator last ) {
 
-/*
 			clear();
+			for (first < last; first++) {
 
-			for (int i = 0; first != last; i++) {
-				_alloc.construct(_valueArray[i], first++);
-				size++;
+				push_back(first);
 			}
-			_capacity = _size;
-*/
-
 		}
 		void		assign( size_type n, const value_type & val ) {
 
 			clear();
 
-			for (size_type i = 0; i < n; i++) {
-				_alloc.construct(_valueArray[i], val);
+			while (n--) {
+
+				push_back(val);
 			}
-			_size = n;
-			_capacity = n;
 		}
+		//*	Adds element at the end of the vector
 		void		push_back( const value_type & val ) {
 
 			if (_size + 1 >= _capacity) {
@@ -276,7 +272,9 @@ namespace	ft {
 			if (++last)
 			return last;
 		}
+		//*	Exchanges the content of the container by the content of x, which is another vector object of the same type. Sizes may differ.
 		void		swap( vector & x );
+		//*	Removes all elements from the vector (which are destroyed), leaving the container with a size of 0.
 		void		clear( void );
 
 		//	Allocator
