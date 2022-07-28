@@ -59,6 +59,29 @@ namespace	ft {
 
 	// */
 
+	//*	Iterator classes
+	template<class Category, class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T&>
+	class iterator {
+
+		typedef ptrdiff_t								difference_type;
+
+		typedef T										value_type;
+
+		typedef const T*								pointer;
+
+		typedef const T&								reference;
+
+		typedef ft::random_access_iterator_tag			iterator_category;
+	};
+
+	template<class T>
+	class	bidirectional_iterator : ft::iterator<ft::bidirectional_iterator_tag, T> {
+
+		typedef typename bidirectio
+	}
+
+	// */
+
 	//*	iterator_traits class defines properties of iterators
 	template<class Iterator>
 	struct	iterator_traits {
@@ -109,21 +132,7 @@ namespace	ft {
 	};
 	// */
 
-	//*	Iterator class
-	template<class Category, class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T&>
-	class iterator {
 
-		typedef ptrdiff_t								difference_type;
-
-		typedef T										value_type;
-
-		typedef const T*								pointer;
-
-		typedef const T&								reference;
-
-		typedef ft::random_access_iterator_tag			iterator_category;
-	};
-	// */
 
 	//*	difference allows us to quickly calculate the space between two iterators
 	template<class InputIterator>

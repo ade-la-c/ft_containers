@@ -3,10 +3,10 @@
 #include <iostream>
 #include <memory>
 #include <limits>
-#include <iterator>//!  <<<================ must remove include
+// #include <iterator>//!  <<<================ must remove include
 
-#include "../../utils/utils.hpp"
-//! # include <../utils/random_access_iterator.hpp>
+#include "../utils/utils.hpp"
+#include "../utils/random_access_iterator.hpp"
 
 namespace	ft {
 
@@ -19,25 +19,19 @@ namespace	ft {
 
 		//	Type definers
 
-		typedef T													value_type;
-		typedef Alloc												allocator_type;
-		typedef typename allocator_type::reference					reference;
-		typedef typename allocator_type::const_reference			const_reference;
-		typedef typename allocator_type::pointer					pointer;
-		typedef typename allocator_type::const_pointer				const_pointer;
+		typedef T														value_type;
+		typedef Alloc													allocator_type;
+		typedef typename allocator_type::reference						reference;
+		typedef typename allocator_type::const_reference				const_reference;
+		typedef typename allocator_type::pointer						pointer;
+		typedef typename allocator_type::const_pointer					const_pointer;
 
-		typedef typename std::__wrap_iter<pointer>						iterator;				//!-------------------------------/
-		typedef typename std::__wrap_iter<const_pointer>				const_iterator;			//!			TEMPORAIRE			 /
-		typedef typename std::reverse_iterator<iterator>				reverse_iterator;		//!								/
-		typedef typename std::reverse_iterator<const_iterator>		const_reverse_iterator;		//!----------------------------/
-
-
-		// typedef typename ft::wrap_iter<pointer>						iterator;
-		// typedef typename ft::wrap_iter<const_pointer>				const_iterator;
-		// typedef typename ft::reverse_iterator<iterator>				reverse_iterator;
-		// typedef typename ft::reverse_iterator<const_iterator>		const_reverse_iterator;
-		typedef typename allocator_type::size_type					size_type;
-		typedef typename allocator_type::difference_type			difference_type;
+		typedef typename ft::random_access_iterator<value_type>			iterator;
+		typedef typename ft::random_access_iterator<const value_type>	const_iterator;
+		typedef typename ft::reverse_iterator<iterator>					reverse_iterator;
+		typedef typename ft::reverse_iterator<const_iterator>			const_reverse_iterator;
+		typedef typename allocator_type::size_type						size_type;
+		typedef typename allocator_type::difference_type				difference_type;
 
 		//	MEMBER FUNCTIONS	//
 
@@ -152,8 +146,7 @@ namespace	ft {
 		//* Assigns new contents to the vector, replacing its current contents, and modifying its size accordingly.
 		template< class InputIterator >	//* range
 		void		assign( InputIterator first, InputIterator last,
-							typename ft::enable_if<!ft::is_integral<InputIterator>::value,
-													InputIterator>::type* = u_nullptr ) {
+							typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = u_nullptr ) {
 
 			clear();
 			for (first < last; first++) {
@@ -188,6 +181,7 @@ namespace	ft {
 		//*	The vector is extended by inserting new elements before the element at the specified position
 		iterator	insert( iterator position, const value_type & val ) {			//* single element
 
+/*
 			size_type		i;
 
 			for (i = 0; i < _size; ++i) {
@@ -201,6 +195,23 @@ namespace	ft {
 			}
 			_valueArray[i] = val;
 			return position;	//?
+//// */
+
+			// size_type	i;
+			// iterator::difference_type pos = position - vec.begin() + 1;
+			// iterator::difference_type end = vec.end() - position - 1;
+			// pointer		end_part[end];			//? jsuis def ou ça marche, changer type de "end" lvalue
+
+			// reserve(_size + 1);
+			// for (size_type i = (size_type)pos, j = 0; i < _size; i++ && j++) {
+			// 	end_part[j] = this->_valueArray[i];
+			// }
+
+			size_type	pos = position - vec.begin() + 1;
+			pointer		tmp;
+
+			_valueArray
+			for ()
 		}
 		void		insert( iterator position, size_type n, const value_type & val ) {	//* fill
 
@@ -221,19 +232,20 @@ namespace	ft {
 			}
 		}
 		template< class InputIterator > //* range
-		void		insert( iterator position, InputIterator first, InputIterator last ) {
+		void		insert( iterator position, InputIterator first, InputIterator last
+							typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = u_nullptr) {
 
-			size_type		i;
-			InputIterator	tmp = first;
+			// size_type		i;
+			// InputIterator	tmp = first;
 
-			for (i = 0; i < _size; ++i) {
-				if (_valueArray[i] == position) {
-					while (tmp != last && i < size) {// increasing capacity
-						reserve(++_size);
-						tmp++;
-					}
-					break;
-				}
+			// for (i = 0; i < _size; ++i) {
+			// 	if (_valueArray[i] == position) {
+			// 		while (tmp != last && i < size) {// increasing capacity		//TODO rewrite
+			// 			reserve(++_size);
+			// 			tmp++;
+			// 		}
+			// 		break;
+			// 	}
 			}
 			for (size_type j = _size; j - 1 > i; j--) {	//? -1 +1 a tweak si nécessaire
 				_valueArray[j] = _valueArray[j - 1];
