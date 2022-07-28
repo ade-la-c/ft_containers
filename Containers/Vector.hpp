@@ -3,9 +3,9 @@
 #include <iostream>
 #include <memory>
 #include <limits>
-#include <iterator>		//! must remove include
+#include <iterator>//!  <<<================ must remove include
 
-#include <../utils/utils.hpp>
+#include "../../utils/utils.hpp"
 //! # include <../utils/random_access_iterator.hpp>
 
 namespace	ft {
@@ -113,7 +113,6 @@ namespace	ft {
 					push_back(&val);
 				}
 			}
-			_size = n;
 		}
 		size_type		capacity( void ) const { return this->_capacity; }
 		bool			empty( void ) const { return this->_size == 0 ? true : false; }
@@ -152,7 +151,9 @@ namespace	ft {
 
 		//* Assigns new contents to the vector, replacing its current contents, and modifying its size accordingly.
 		template< class InputIterator >	//* range
-		void		assign( InputIterator first, InputIterator last ) {
+		void		assign( InputIterator first, InputIterator last,
+							typename ft::enable_if<!ft::is_integral<InputIterator>::value,
+													InputIterator>::type* = u_nullptr ) {
 
 			clear();
 			for (first < last; first++) {
@@ -184,6 +185,7 @@ namespace	ft {
 			_alloc.destroy(_valueArray[_size - 1]);
 			_size--;
 		}
+		//*	The vector is extended by inserting new elements before the element at the specified position
 		iterator	insert( iterator position, const value_type & val ) {			//* single element
 
 			size_type		i;
@@ -273,9 +275,9 @@ namespace	ft {
 			return last;
 		}
 		//*	Exchanges the content of the container by the content of x, which is another vector object of the same type. Sizes may differ.
-		void		swap( vector & x );
+		// void		swap( vector & x );
 		//*	Removes all elements from the vector (which are destroyed), leaving the container with a size of 0.
-		void		clear( void );
+		// void		clear( void );
 
 		//	Allocator
 
