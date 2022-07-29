@@ -77,8 +77,17 @@ namespace	ft {
 	template<class T>
 	class	bidirectional_iterator : ft::iterator<ft::bidirectional_iterator_tag, T> {
 
-		typedef typename bidirectio
-	}
+			typedef typename bidirectional_iterator : ft::iterator<ft::bidirectional_iterator_tag, T>::difference_type		difference_type;
+			typedef typename bidirectional_iterator : ft::iterator<ft::bidirectional_iterator_tag, T>::value_type			value_type;
+			typedef typename bidirectional_iterator : ft::iterator<ft::bidirectional_iterator_tag, T>::pointer				pointer;
+			typedef typename bidirectional_iterator : ft::iterator<ft::bidirectional_iterator_tag, T>::reference			reference;
+			typedef typename bidirectional_iterator : ft::iterator<ft::bidirectional_iterator_tag, T>::iterator_category	iterator_category;
+
+		private:
+
+			pointer		_content;
+
+	};
 
 	// */
 

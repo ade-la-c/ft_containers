@@ -26,12 +26,12 @@ namespace	ft {
 		typedef typename allocator_type::pointer						pointer;
 		typedef typename allocator_type::const_pointer					const_pointer;
 
-		typedef typename ft::random_access_iterator<value_type>			iterator;
-		typedef typename ft::random_access_iterator<const value_type>	const_iterator;
-		typedef typename ft::reverse_iterator<iterator>					reverse_iterator;
-		typedef typename ft::reverse_iterator<const_iterator>			const_reverse_iterator;
+		typedef ft::random_access_iterator<value_type>					iterator;
+		typedef ft::random_access_iterator<const value_type>			const_iterator;
+		typedef ft::reverse_iterator<iterator>							reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>					const_reverse_iterator;
 		typedef typename allocator_type::size_type						size_type;
-		typedef typename allocator_type::difference_type				difference_type;
+		typedef typename ft::iterator_traits::difference_type			difference_type;
 
 		//	MEMBER FUNCTIONS	//
 
@@ -181,77 +181,48 @@ namespace	ft {
 		//*	The vector is extended by inserting new elements before the element at the specified position
 		iterator	insert( iterator position, const value_type & val ) {			//* single element
 
-/*
-			size_type		i;
+			size_type	pos = position - this->begin() + 1;
 
-			for (i = 0; i < _size; ++i) {
-				if (_valueArray[i] == position) {
-					reserve(++_size);
-					break;
+			reserve(++_size);
+			for (size_type i = _size; i; --i) {
+
+				if (i > pos) {
+					_valueArray[i] = _valueArray[i - 1];
+				} else if (i == pos) {
+					_alloc.construct(&(_valueArray[i]), val);
 				}
 			}
-			for (size_type j = _size; j > i; j--) {	//? -1 +1 a tweak si nécessaire
-				_valueArray[j] = _valueArray[j - 1];
-			}
-			_valueArray[i] = val;
-			return position;	//?
-//// */
-
-			// size_type	i;
-			// iterator::difference_type pos = position - vec.begin() + 1;
-			// iterator::difference_type end = vec.end() - position - 1;
-			// pointer		end_part[end];			//? jsuis def ou ça marche, changer type de "end" lvalue
-
-			// reserve(_size + 1);
-			// for (size_type i = (size_type)pos, j = 0; i < _size; i++ && j++) {
-			// 	end_part[j] = this->_valueArray[i];
-			// }
-
-			size_type	pos = position - vec.begin() + 1;
-			pointer		tmp;
-
-			_valueArray
-			for ()
+			return this->begin()[pos]; //? -1 ou +1 ?
 		}
 		void		insert( iterator position, size_type n, const value_type & val ) {	//* fill
 
-			size_type		i;
+			size_type	pos = position - this->begin() + 1;
 
-			for (i = 0; i < _size; ++i) {
-				if (_valueArray[i] == position) {
-					_size += n;
-					reserve(_size);
-					break;
+			reserve(_size += n);
+			for (size_type i = _size; i; --i) {
+
+				if (i > pos + n) {
+					_valueArray[i] = _valueArray[i - n];
+				} else if (i >= pos) {
+					_alloc.construct(&(_valueArray[i]), val);
 				}
-			}
-			for (size_type j = _size; j - 1 > i; j--) {	//? -1 +1 a tweak si nécessaire
-				_valueArray[j] = _valueArray[j - 1];
-			}
-			while (i < _size) {
-				_valueArray[i++] = val;
 			}
 		}
 		template< class InputIterator > //* range
 		void		insert( iterator position, InputIterator first, InputIterator last
 							typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = u_nullptr) {
 
-			// size_type		i;
-			// InputIterator	tmp = first;
+			size_type	pos = position - this->begin() + 1;
+			size_type	dist = ft::distance(first, last);
 
-			// for (i = 0; i < _size; ++i) {
-			// 	if (_valueArray[i] == position) {
-			// 		while (tmp != last && i < size) {// increasing capacity		//TODO rewrite
-			// 			reserve(++_size);
-			// 			tmp++;
-			// 		}
-			// 		break;
-			// 	}
-			}
-			for (size_type j = _size; j - 1 > i; j--) {	//? -1 +1 a tweak si nécessaire
-				_valueArray[j] = _valueArray[j - 1];
-			}
-			while (first != last) {					//? a tester
-				_valueArray[i--] = last--;
+			reserve(_size += dist);
+			for (siez_type i = _size; i && first != last; --i) {
+
+				if (i > pos + dist) {
+					_valueArray[i] = _valueArray[i - dist];
+				} else if (i >= pos) {
+					_alloc.construct(&(_valueArray[i]), &first++);
+				}
 			}
 		}
 		//*	Removes from the vector a single element (position).
@@ -287,9 +258,9 @@ namespace	ft {
 			return last;
 		}
 		//*	Exchanges the content of the container by the content of x, which is another vector object of the same type. Sizes may differ.
-		// void		swap( vector & x );
+		void		swap( vector & x );
 		//*	Removes all elements from the vector (which are destroyed), leaving the container with a size of 0.
-		// void		clear( void );
+		void		clear( void );
 
 		//	Allocator
 
