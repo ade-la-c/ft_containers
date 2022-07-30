@@ -55,22 +55,20 @@ namespace	ft {
 			}
 		}
 		vector( const vector & x ) { *this = x; }		//* copy constructor
-		vector &	operator=( const vector & x ) {					//?
+		vector &	operator=( const vector & rhs ) {					//?
 
 			if (this != &rhs) {
-				this->_capacity = x._capacity;
-				this->_size = x._size;
-				this->_alloc.allocate(x._capacity);					//?	not sure ab this line
+				this->_capacity = rhs._capacity;
+				this->_size = rhs._size;
+				this->_alloc.allocate(rhs._capacity);					//?	not sure ab this line
 				for (int i = 0; i < this->_size; i++)
-					this->_valueArray[i] = x._valueArray[i];
+					this->_valueArray[i] = rhs._valueArray[i];
 			}
 			return *this;
 		}
 		~vector( void ) {
 
-			for (size_type i = 0; i < _size; i++) {
-				_alloc.destroy(_valueArray[i]);
-			}
+			clear();
 			_alloc.deallocate(_valueArray, _capacity);
 		} //* destructor
 
@@ -228,6 +226,7 @@ namespace	ft {
 		//*	Removes from the vector a single element (position).
 		iterator	erase( iterator position ) {
 
+/*.
 			size_type	i;
 			iterator	it;
 
@@ -242,10 +241,20 @@ namespace	ft {
 			}
 			
 			return it;
+// */
+
+			size_type	pos = position - this->begin() + 1;
+
+			_alloc.destroy(_valueArray[pos]);
+			for (size_type i = pos; i + 1 < _size; ++i) {
+				_valueArray[i] = _valueArray[i + 1];
+			}
+			return this->begin() + pos;
 		}
 		//*	Removes from the vector a range of elements (first - last).
 		iterator	erase( iterator first, iterator last ) {		//? 
 
+/**
 			while (first != last) {
 
 				if (first == last)
@@ -256,11 +265,46 @@ namespace	ft {
 			}
 			if (++last)
 			return last;
+*/
+
+			size_type	pos = position - this->begin() + 1;
+			size_type	dist = distance(first, last);
+
+			while (first != last) {
+				_alloc.destroy(first++);
+			}
+			for (size_type i = pos; i + dist < _size; i++) {
+				_valueArray[i] = _valueArray[i + dist];
+			}
+			return this->begin() + pos + dist;		//?
 		}
 		//*	Exchanges the content of the container by the content of x, which is another vector object of the same type. Sizes may differ.
-		void		swap( vector & x );
+		void		swap( vector & x ) {
+
+			vector	tmp;
+
+			tmp.reserve(this->_capacity);
+			tmp._valueArray = this->_valueArray;
+			tmp._size = this->_size;
+			tmp._capacity = this->_capacity;
+
+			this->reserve(x.capacity);
+			this->_valueArray = x._valueArray;
+			this->_size = x._size;
+			this->_capacity = x._capacity;
+
+			x.reserve(tmp._capacity);
+			x._valueArray = tmp._valueArray;
+			x._size = tmp._size;
+			x._capacity = tmp._capacity;
+		}
 		//*	Removes all elements from the vector (which are destroyed), leaving the container with a size of 0.
-		void		clear( void );
+		void		clear( void ) {
+
+			while (_size) {
+				pop_back();
+			}
+		}
 
 		//	Allocator
 
@@ -275,8 +319,8 @@ namespace	ft {
 		pointer				_valueArray;	//* array of T
 		allocator_type		_alloc;
 
-		pointer				_start;			//TODO yet to initialize
-		pointer				_end;			//TODO yet to initialize
+		// pointer				_start;			//TODO yet to initialize
+		// pointer				_end;			//TODO yet to initialize
 	
 		// _reallocate destroys everything to do a new allocation from scratch, it can construct the elements depending on boolean
 		void		_reallocate( size_type new_size, bool construct ) {
@@ -296,18 +340,24 @@ namespace	ft {
 	};
 
 	template < class T, class Alloc >
-	bool	operator==( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs );
+	bool	operator==( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs )
+	{ return lhs == rhs; }
 	template < class T, class Alloc >
-	bool	operator!=( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs );
+	bool	operator!=( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs )
+	{ return lhs != rhs; }
 	template < class T, class Alloc >
-	bool	operator<( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs );
+	bool	operator<( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs )
+	{ return lhs < rhs; }
 	template < class T, class Alloc >
-	bool	operator<=( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs );
+	bool	operator<=( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs )
+	{ return lhs <= rhs; }
 	template < class T, class Alloc >
-	bool	operator>(const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs);
+	bool	operator>(const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs)
+	{ return lhs > rhs; }
 	template < class T, class Alloc >
-	bool	operator>=( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs );
+	bool	operator>=( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs )
+	{ return lhs >= rhs; }
 	template< class T, class Alloc >
-	void	swap( vector<T,Alloc> & x, vector<T,Alloc> & y );
+	void	swap( vector<T,Alloc> & x, vector<T,Alloc> & y ) { x.swap(y); }
 
 }

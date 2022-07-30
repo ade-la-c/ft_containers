@@ -2,10 +2,12 @@
 
 
 #include <iostream>
-# include <cstddef>
-# include <limits>
-# include <sstream>
-# include <typeinfo>
+#include <cstddef>
+#include <limits>
+#include <sstream>
+#include <typeinfo>
+
+
 
 namespace	ft {
 
@@ -63,15 +65,13 @@ namespace	ft {
 	template<class Category, class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T&>
 	class iterator {
 
-		typedef ptrdiff_t								difference_type;
+		public:
 
-		typedef T										value_type;
-
-		typedef const T*								pointer;
-
-		typedef const T&								reference;
-
-		typedef ft::random_access_iterator_tag			iterator_category;
+			typedef Distance					difference_type;
+			typedef T							value_type;
+			typedef Pointer						pointer;
+			typedef Reference					reference;
+			typedef Category					iterator_category;
 	};
 
 	template<class T>
