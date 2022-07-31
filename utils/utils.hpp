@@ -7,6 +7,8 @@
 #include <sstream>
 #include <typeinfo>
 
+#include "iterator_traits.hpp"
+
 
 
 namespace	ft {
@@ -77,11 +79,11 @@ namespace	ft {
 	template<class T>
 	class	bidirectional_iterator : ft::iterator<ft::bidirectional_iterator_tag, T> {
 
-			typedef typename bidirectional_iterator : ft::iterator<ft::bidirectional_iterator_tag, T>::difference_type		difference_type;
-			typedef typename bidirectional_iterator : ft::iterator<ft::bidirectional_iterator_tag, T>::value_type			value_type;
-			typedef typename bidirectional_iterator : ft::iterator<ft::bidirectional_iterator_tag, T>::pointer				pointer;
-			typedef typename bidirectional_iterator : ft::iterator<ft::bidirectional_iterator_tag, T>::reference			reference;
-			typedef typename bidirectional_iterator : ft::iterator<ft::bidirectional_iterator_tag, T>::iterator_category	iterator_category;
+			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::difference_type		difference_type;
+			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::value_type			value_type;
+			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::pointer				pointer;
+			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::reference				reference;
+			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::iterator_category		iterator_category;
 
 		private:
 
@@ -91,54 +93,6 @@ namespace	ft {
 
 	// */
 
-	//*	iterator_traits class defines properties of iterators
-	template<class Iterator>
-	struct	iterator_traits {
-
-		//*	Type to express the result of subtracting one iterator from another.
-		typedef typename Iterator::difference_type		difference_type;
-
-		//*	The type of the element the iterator can point to.
-		typedef typename Iterator::value_type			value_type;
-
-		//*	The type of a pointer to an element the iterator can point to.
-		typedef typename Iterator::pointer				pointer;
-
-		//* The type of a reference to an element the iterator can point to.
-		typedef typename Iterator::reference			reference;
-
-		//*	The Iterator category
-		typedef typename Iterator::iterator_category	iterator_category;
-
-	};
-
-	template<class T>
-	struct	iterator_traits<T*> {
-
-		typedef ptrdiff_t								difference_type;
-
-		typedef T										value_type;
-
-		typedef T*										pointer;
-
-		typedef T&										reference;
-
-		typedef ft::random_access_iterator_tag			iterator_category;
-	};
-
-	template<class T>
-	struct	iterator_traits<const T*> {
-
-		typedef ptrdiff_t								difference_type;
-
-		typedef T										value_type;
-
-		typedef const T*								pointer;
-
-		typedef const T&								reference;
-
-		typedef ft::random_access_iterator_tag			iterator_category;
-	};
 	// */
 
 
