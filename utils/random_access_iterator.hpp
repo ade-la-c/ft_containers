@@ -17,7 +17,7 @@ namespace	ft {
 		typedef T*													pointer;
 		typedef T&													reference;
 
-		random_access_iterator( void ) : _content(NULL) {}
+		random_access_iterator( void ) : _content() {}
 
 		random_access_iterator( pointer ptr ) : _content(ptr) {}
 

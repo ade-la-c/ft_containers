@@ -65,19 +65,20 @@ namespace	ft {
 
 	//*	Iterator classes
 	template<class Category, class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T&>
-	class iterator {
+	struct iterator {
 
-		public:
 
-			typedef Distance					difference_type;
-			typedef T							value_type;
-			typedef Pointer						pointer;
-			typedef Reference					reference;
-			typedef Category					iterator_category;
+		typedef Distance					difference_type;
+		typedef T							value_type;
+		typedef Pointer						pointer;
+		typedef Reference					reference;
+		typedef Category					iterator_category;
 	};
 
 	template<class T>
 	class	bidirectional_iterator : ft::iterator<ft::bidirectional_iterator_tag, T> {
+
+		public:
 
 			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::difference_type		difference_type;
 			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::value_type			value_type;
@@ -85,46 +86,50 @@ namespace	ft {
 			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::reference				reference;
 			typedef typename ft::iterator<ft::bidirectional_iterator_tag, T>::iterator_category		iterator_category;
 
+
 		private:
 
 			pointer		_content;
+
 
 	};
 
 	// */
 
-	// */
-
-
 
 	//*	difference allows us to quickly calculate the space between two iterators
 	template<class InputIterator>
 	typename ft::iterator_traits<InputIterator>::difference_type
-		distance (InputIterator first, InputIterator last) {
+	distance (InputIterator first, InputIterator last) {
 
-			typename ft::iterator_traits<InputIterator>::difference_type rtn = 0;
-			while (first != last)
-			{
-				first++;
-				rtn++;
-			}
-			return (rtn);
+		typename ft::iterator_traits<InputIterator>::difference_type rtn = 0;
+		while (first != last) {
+
+			first++;
+			rtn++;
 		}
+		return (rtn);
+	}
 	// */
 
 	//*	Exceptions
     template <typename T>
-    class InvalidIteratorException : public std::exception
-    {
+    class	InvalidIteratorException : public std::exception {
+
         private:
+
             std::string _msg;
-        
-        public :
-            InvalidIteratorException () throw() { _msg = "Is invalid iterator tag : " + std::string(typeid(T).name()); }
+
+
+        public:
+
+            InvalidIteratorException ( void ) throw() { _msg = "Is invalid iterator tag : " + std::string(typeid(T).name()); }
             InvalidIteratorException (const InvalidIteratorException&) throw() {}
             InvalidIteratorException& operator= (const InvalidIteratorException&) throw() {}
-            virtual ~InvalidIteratorException() throw() {}
-            virtual const char* what() const throw() { return (_msg.c_str()); }
+            virtual ~InvalidIteratorException( void ) throw() {}
+            virtual const char* what( void ) const throw() { return (_msg.c_str()); }
+
+
     };
 	// */
 
