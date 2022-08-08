@@ -114,8 +114,8 @@ namespace	ft {
 
 			if (n < _size) {
 
-				// for (size_type i = _size - n; n > 0; n--) {
 				for (; n > 0; n--) {
+				// for () {
 					pop_back();
 				}
 			} else if (n > _size) {
@@ -124,6 +124,7 @@ namespace	ft {
 					push_back(val);
 				}
 			}
+			_size = n;
 		}
 		size_type		capacity( void ) const { return this->_capacity; }
 		bool			empty( void ) const { return this->_size == 0 ? true : false; }
@@ -141,8 +142,10 @@ namespace	ft {
 		const_reference		operator[]( size_type n ) const { return *(_valueArray + n); }
 		reference			at( size_type n ) {
 
-			if (n >= _size)
+			if (n >= _size) {
+/*debug*/		std::cout << "at(" << n << ") " << "_size = " << _size << std::endl;
 				throw std::out_of_range("Vector at.");
+			}
 			return this->_valueArray[n];
 		}
 		const_reference		at( size_type n ) const {
@@ -186,9 +189,10 @@ namespace	ft {
 			if (_size + 1 >= _capacity) {
 				_reallocate(_capacity * 2, true);
 			}
-			_alloc.construct(_valueArray, val);					//! wrong
+			// _alloc.construct(_valueArray + _size, val);					//! wrong
+			_alloc.construct(&(this->at(_size)), val);
 			_size++;
-			_capacity *= 2;
+			// _capacity *= 2;
 		}
 		void		pop_back( void ) {
 
@@ -291,7 +295,7 @@ namespace	ft {
 			size_type	dist = ft::distance(first, last);
 
 			while (first != last) {
-				_alloc.destroy(first);
+				_alloc.destroy(&(*first));
 				first++;
 			}
 			for (size_type i = pos; i + dist < _size; i++) {
@@ -336,7 +340,7 @@ namespace	ft {
 
 		size_type			_capacity;		//* number of cells allocated
 		size_type			_size;			//* number of cells filled
-		// iterator
+
 		pointer				_valueArray;	//* array of T
 		allocator_type		_alloc;
 	
@@ -352,7 +356,7 @@ namespace	ft {
 				_alloc.deallocate(_valueArray + i, 1);
 			}
 			_valueArray = new_ptr;
-			_size = new_size;
+			_capacity = new_size;
 		}
 
 	};
@@ -372,4 +376,7 @@ namespace	ft {
 	template< class T, class Alloc >
 	void	swap( vector<T,Alloc> & x, vector<T,Alloc> & y ) { x.swap(y); }
 
+
 }
+
+	void	vector_testing( void );
