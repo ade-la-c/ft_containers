@@ -128,13 +128,14 @@ namespace	ft {
 
 			if (n < _size) {
 
-				for (; n > 0; n--) {
-				// for () {
+				// for (; n > 0; n--) {
+				while (_size != n) {
 					pop_back();
 				}
 			} else if (n > _size) {
 
-				for (size_type i = _size; i < n; i++) {
+				// for (size_type i = _size; i < n; i++) {
+				while (_size != n) {
 					push_back(val);
 				}
 			}
@@ -145,24 +146,20 @@ namespace	ft {
 		//*	Requests that the vector capacity be at least enough to contain n elements.
 		void			reserve( size_type n ) {
 
-			/*// if (n > _capacity) {
-			// 	_reallocate(n, true);
-			// }*/
-
-			pointer		new_ptr;
-
-			if (n <= _capacity) {
+			if (n < _capacity) {
 				return;
 			}
-			new_ptr = _alloc.allocate(n, 0);
-			for (size_type i = 0; i < n; i++) {
-// /*debug*/	std::cout<<"_size = "<<_size<<std::endl;
-				_alloc.construct(new_ptr + i, _valueArray[i]);
-			}
-			clear();
-			_alloc.deallocate(_valueArray, _capacity);
-			_valueArray = new_ptr;
-			_capacity = n;
+
+			vector	tmp;
+
+			tmp = *this;
+			this->clear();
+			this->_alloc.deallocate(this->_valueArray, this->_capacity);
+			this->_valueArray = this->_alloc.allocate(n);
+			for (size_type i = 0; i < tmp._size; i++)
+				this->_alloc.construct(this->_valueArray + i, *(tmp._valueArray + i));
+			this->_size = tmp._size;
+			this->_capacity = n;
 		}
 
 		//	Element access
