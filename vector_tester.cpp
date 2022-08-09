@@ -95,7 +95,7 @@ void	vector_size_test(void) {
 	FT::vector<int>	vec;
 	std::cout << "A. size : " << vec.size() << std::endl;
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 10; i++) {//std::cout<<"ayo"<<std::endl;
 		vec.push_back(i);
 	}
 	std::cout << "B. size : " << vec.size() << std::endl;

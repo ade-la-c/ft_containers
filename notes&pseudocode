@@ -4,10 +4,10 @@ todo:
 -   modify constructors to set up all the
     private members correctly (begin, end pointers)
 
--	figure out iterators
-
 -	deconstruct every function in identifiable steps
 	to go quicker
+
+-   improve allocate() by providing hint ?
 
 
 https://www.youtube.com/watch?v=F9eDv-YIOQ0

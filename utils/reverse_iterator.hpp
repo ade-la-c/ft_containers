@@ -31,8 +31,7 @@ namespace	ft {
 				Iterator	tmp = this->_content;
 				return *--tmp;
 			}
-			reverse_iterator	operator+( difference_type n ) const
-			{ return reverse_iterator(_content - 1); }
+			reverse_iterator	operator+( difference_type n ) const { return reverse_iterator(_content - n); }
 			reverse_iterator &	operator++( void ) {
 
 				this->_content--;

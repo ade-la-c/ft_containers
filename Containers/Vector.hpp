@@ -41,12 +41,16 @@ namespace	ft {
 		explicit vector( const allocator_type & alloc = allocator_type() )
 		: _capacity(0), _size(0), _alloc(alloc) {
 
+/*debug*/	std::cout<<"default constructor called"<<std::endl;
+
 			this->_valueArray = this->_alloc.allocate(0, 0);
 		}
 		//* fill constructor
 		explicit vector( size_type n, const value_type & val = value_type(), const allocator_type & alloc = allocator_type() )	//?
 		: _capacity(n), _size(n), _alloc(alloc) {
 		
+/*debug*/	std::cout<<"fill constructor called"<<std::endl;
+
 			this->_valueArray = this->_alloc.allocate(n, 0);
 			for (size_type i = 0; i < n; i++) {
 				_alloc.construct(_valueArray + i, val);			//? not sure ab this line
@@ -55,21 +59,29 @@ namespace	ft {
 		//* range constructor constructs with as many elements as the range (first, last)
 		template< class InputIterator >
 		vector( InputIterator first, InputIterator last, const allocator_type & alloc = allocator_type(),
-				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL)
-		: _capacity(0), _size(0), _alloc(alloc) {
+				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL) {
 
-			while (first != last) {
-				push_back(*first);			//?
-				++first;
+/*debug*/	std::cout<<"range constructor called"<<std::endl;
+
+			_size = ft::distance(first, last);
+			_capacity = _size;
+			_alloc = alloc;
+			this->_valueArray = this->_alloc.allocate(_size, 0);
+
+			for (size_type i = 0; i < _size; i++) {
+				_alloc.construct(_valueArray + i, *(first + i));
 			}
 		}
 		//* copy constructor
 		vector( const vector & x ) :  _capacity(x._capacity), _size(x._size), _alloc(x._alloc) {
 
+/*debug*/	std::cout<<"copy constructor called"<<std::endl;
 			this->_valueArray = this->_alloc.allocate(_capacity, 0);
 			*this = x;
 		}
 		vector &	operator=( const vector & rhs ) {					//?
+
+/*debug*/	std::cout<<"assignation operator called"<<std::endl;
 
 			if (this != &rhs) {
 				this->_size = rhs._size;
@@ -85,6 +97,8 @@ namespace	ft {
 			return *this;
 		}
 		~vector( void ) {
+
+/*debug*/	std::cout<<"destructor called"<<std::endl;
 
 			clear();
 			_alloc.deallocate(_valueArray, _capacity);
@@ -131,9 +145,24 @@ namespace	ft {
 		//*	Requests that the vector capacity be at least enough to contain n elements.
 		void			reserve( size_type n ) {
 
-			if (n > _capacity) {
-				_reallocate(n, true);
+			/*// if (n > _capacity) {
+			// 	_reallocate(n, true);
+			// }*/
+
+			pointer		new_ptr;
+
+			if (n <= _capacity) {
+				return;
 			}
+			new_ptr = _alloc.allocate(n, 0);
+			for (size_type i = 0; i < n; i++) {
+// /*debug*/	std::cout<<"_size = "<<_size<<std::endl;
+				_alloc.construct(new_ptr + i, _valueArray[i]);
+			}
+			clear();
+			_alloc.deallocate(_valueArray, _capacity);
+			_valueArray = new_ptr;
+			_capacity = n;
 		}
 
 		//	Element access
@@ -143,16 +172,15 @@ namespace	ft {
 		reference			at( size_type n ) {
 
 			if (n >= _size) {
-/*debug*/		std::cout << "at(" << n << ") " << "_size = " << _size << std::endl;
 				throw std::out_of_range("Vector at.");
 			}
-			return this->_valueArray[n];
+			return *(this->_valueArray + n);
 		}
 		const_reference		at( size_type n ) const {
 
 			if (n >= _size)
-				throw std::out_of_range();
-			return this->_valueArray[n];
+				throw std::out_of_range("Vector const at.");
+			return *(this->_valueArray + n);
 		}
 		//*	Returns a reference to the first element in the vector.
 		reference			front( void ) { return this->_valueArray[0]; }
@@ -187,12 +215,10 @@ namespace	ft {
 		void		push_back( const value_type & val ) {
 
 			if (_size + 1 >= _capacity) {
-				_reallocate(_capacity * 2, true);
+				reserve(_capacity * 2);
 			}
-			// _alloc.construct(_valueArray + _size, val);					//! wrong
-			_alloc.construct(&(this->at(_size)), val);
+			_alloc.construct(_valueArray + _size, val);
 			_size++;
-			// _capacity *= 2;
 		}
 		void		pop_back( void ) {
 
