@@ -46,14 +46,14 @@ namespace	ft {
 			this->_valueArray = this->_alloc.allocate(0, 0);
 		}
 		//* fill constructor
-		explicit vector( size_type n, const value_type & val = value_type(), const allocator_type & alloc = allocator_type() )	//?
+		explicit vector( size_type n, const value_type & val = value_type(), const allocator_type & alloc = allocator_type() )
 		: _capacity(n), _size(n), _alloc(alloc) {
 		
 /*debug*/	std::cout<<"fill constructor called"<<std::endl;
 
 			this->_valueArray = this->_alloc.allocate(n, 0);
 			for (size_type i = 0; i < n; i++) {
-				_alloc.construct(_valueArray + i, val);			//? not sure ab this line
+				_alloc.construct(_valueArray + i, val);
 			}
 		}
 		//* range constructor constructs with as many elements as the range (first, last)
@@ -79,30 +79,35 @@ namespace	ft {
 			this->_valueArray = this->_alloc.allocate(_capacity, 0);
 			*this = x;
 		}
-		vector &	operator=( const vector & rhs ) {					//?
+		//*	assignation operator
+		vector &	operator=( const vector & rhs ) {
 
 /*debug*/	std::cout<<"assignation operator called"<<std::endl;
 
 			if (this != &rhs) {
-				this->_size = rhs._size;
-				this->_capacity = rhs._capacity;
+				
+				this->clear();
+				this->_alloc.deallocate(this->_valueArray, this->_capacity);
 				this->_valueArray = this->_alloc.allocate(rhs._capacity, 0);					//?	not sure ab this line
 				for (size_type i = 0; i < _size; i++) {
 
-					// (this->_valueArray + i) = (rhs._valueArray + i);
 					this->_alloc.construct(this->_valueArray + i, *(rhs._valueArray + i));
 				}
+				this->_size = rhs._size;
+				this->_capacity = rhs._capacity;
 			}
 
 			return *this;
 		}
+		//*	destructor
 		~vector( void ) {
 
 /*debug*/	std::cout<<"destructor called"<<std::endl;
 
-			clear();
-			_alloc.deallocate(_valueArray, _capacity);
-		} //* destructor
+			this->clear();
+			if (this->_valueArray)
+				this->_alloc.deallocate(this->_valueArray, this->_capacity);
+		}
 
 		//	Iterators
 
@@ -126,41 +131,43 @@ namespace	ft {
 		//*	Resizes the container so it contains n elements
 		void			resize( size_type n, value_type val = value_type() ) {
 
-			if (n < _size) {
+			if (n <= _size) {
 
-				// for (; n > 0; n--) {
 				while (_size != n) {
 					pop_back();
 				}
 			} else if (n > _size) {
 
-				// for (size_type i = _size; i < n; i++) {
 				while (_size != n) {
 					push_back(val);
 				}
 			}
-			_size = n;
+			// _size = n;
 		}
 		size_type		capacity( void ) const { return this->_capacity; }
 		bool			empty( void ) const { return this->_size == 0 ? true : false; }
 		//*	Requests that the vector capacity be at least enough to contain n elements.
 		void			reserve( size_type n ) {
+// /*debug*/std::cout<<n<<std::endl;
 
 			if (n < _capacity) {
 				return;
 			}
-
 			vector	tmp;
 
+			_capacity = n;
 			tmp = *this;
-			this->clear();
-			this->_alloc.deallocate(this->_valueArray, this->_capacity);
-			this->_valueArray = this->_alloc.allocate(n);
+			clear();
+			_alloc.deallocate(_valueArray, _capacity);
+			_capacity = 0;
+// /*debug*/	std::cout<<"reserve n:"<<n<<" size:"<<_size<<" cap:"<<_capacity<<std::endl;
+			_valueArray = _alloc.allocate(n, 0);
+			_capacity = n;
+			_size = tmp._size;
 			for (size_type i = 0; i < tmp._size; i++) {
-				this->_alloc.construct(this->_valueArray + i, *(tmp._valueArray + i));
+// /*debug*/		std::cout<<"->"<<tmp._size<<std::endl;
+				_alloc.construct(_valueArray + i, *(tmp._valueArray + i));
 			}
-			this->_size = tmp._size;
-			this->_capacity = n;
 		}
 
 		//	Element access
@@ -213,7 +220,12 @@ namespace	ft {
 		void		push_back( const value_type & val ) {
 
 			if (_size + 1 >= _capacity) {
-				reserve(_capacity * 2);
+
+				if (_capacity == 0) {
+					reserve(1);
+				} else {
+					reserve(_capacity * 2);
+				}
 			}
 			_alloc.construct(_valueArray + _size, val);
 			_size++;
@@ -229,18 +241,18 @@ namespace	ft {
 			size_type	pos = position - this->begin() + 1;
 
 			reserve(++_size);
-			for (size_type i = _size; i; --i) {
-
+			for (size_type i = _size - 1; i; --i) {
+/*debug*/		std::cout<<"i : "<<i<<std::endl;
 				if (i > pos) {
 					_valueArray[i] = _valueArray[i - 1];
 				} else if (i == pos) {
-					_alloc.construct(&(_valueArray[i]), val);
+					_alloc.construct(_valueArray + i, val);
 				}
 			}
 			return this->begin() + pos; //? -1 ou +1 ?
 		}
 		void		insert( iterator position, size_type n, const value_type & val ) {	//* fill
-
+/*.
 			size_type	pos = position - this->begin() + 1;
 
 			reserve(_size += n);
@@ -248,9 +260,15 @@ namespace	ft {
 
 				if (i > pos + n) {
 					_valueArray[i] = _valueArray[i - n];
-				} else if (i >= pos) {
+				} else if (i >= pos) {std::cout<<"i "<<i;
 					_alloc.construct(&(_valueArray[i]), val);
 				}
+			}
+// */
+
+			iterator	it = position;
+			for (size_type i = 0; i < n; ++i, ++it) {
+				it = insert(it, val);
 			}
 		}
 		template< class InputIterator > //* range
@@ -261,7 +279,7 @@ namespace	ft {
 			size_type	dist = ft::distance(first, last);
 
 			reserve(_size += dist);
-			for (size_type i = _size; i && first != last; --i) {
+			for (size_type i = _size - 1; i && first != last; --i) {
 
 				if (i > pos + dist) {
 					_valueArray[i] = _valueArray[i - dist];
@@ -333,19 +351,22 @@ namespace	ft {
 			vector	tmp;
 
 			tmp.reserve(this->_capacity);
-			tmp._valueArray = this->_valueArray;
-			tmp._size = this->_size;
 			tmp._capacity = this->_capacity;
+			tmp._size = this->_size;
+			tmp._valueArray = this->_valueArray;
+			tmp._alloc = this->_alloc;
 
 			this->reserve(x._capacity);
-			this->_valueArray = x._valueArray;
-			this->_size = x._size;
 			this->_capacity = x._capacity;
+			this->_size = x._size;
+			this->_valueArray = x._valueArray;
+			this->_alloc = x._alloc;
 
 			x.reserve(tmp._capacity);
-			x._valueArray = tmp._valueArray;
-			x._size = tmp._size;
 			x._capacity = tmp._capacity;
+			x._size = tmp._size;
+			x._valueArray = tmp._valueArray;
+			x._alloc = tmp._alloc;
 		}
 		//*	Removes all elements from the vector (which are destroyed), leaving the container with a size of 0.
 		void		clear( void ) {
