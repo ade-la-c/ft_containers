@@ -41,7 +41,7 @@ namespace	ft {
 		explicit vector( const allocator_type & alloc = allocator_type() )
 		: _capacity(0), _size(0), _alloc(alloc) {
 
-/*debug*/	std::cout<<"default constructor called"<<std::endl;
+// /*debug*/	std::cout<<"default constructor called"<<std::endl;
 
 			this->_valueArray = this->_alloc.allocate(0, 0);
 		}
@@ -49,7 +49,7 @@ namespace	ft {
 		explicit vector( size_type n, const value_type & val = value_type(), const allocator_type & alloc = allocator_type() )
 		: _capacity(n), _size(n), _alloc(alloc) {
 		
-/*debug*/	std::cout<<"fill constructor called"<<std::endl;
+// /*debug*/	std::cout<<"fill constructor called"<<std::endl;
 
 			this->_valueArray = this->_alloc.allocate(n, 0);
 			for (size_type i = 0; i < n; i++) {
@@ -61,7 +61,7 @@ namespace	ft {
 		vector( InputIterator first, InputIterator last, const allocator_type & alloc = allocator_type(),
 				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL) {
 
-/*debug*/	std::cout<<"range constructor called"<<std::endl;
+// /*debug*/	std::cout<<"range constructor called"<<std::endl;
 
 			_size = ft::distance(first, last);
 			_capacity = _size;
@@ -75,14 +75,14 @@ namespace	ft {
 		//* copy constructor
 		vector( const vector & x ) :  _capacity(x._capacity), _size(x._size), _alloc(x._alloc) {
 
-/*debug*/	std::cout<<"copy constructor called"<<std::endl;
+// /*debug*/	std::cout<<"copy constructor called"<<std::endl;
 			this->_valueArray = this->_alloc.allocate(_capacity, 0);
 			*this = x;
 		}
 		//*	assignation operator
 		vector &	operator=( const vector & rhs ) {
 
-/*debug*/	std::cout<<"assignation operator called"<<std::endl;
+// /*debug*/	std::cout<<"assignation operator called"<<std::endl;
 
 			if (this != &rhs) {
 				
@@ -102,7 +102,7 @@ namespace	ft {
 		//*	destructor
 		~vector( void ) {
 
-/*debug*/	std::cout<<"destructor called"<<std::endl;
+// /*debug*/	std::cout<<"destructor called"<<std::endl;
 
 			this->clear();
 			if (this->_valueArray)
@@ -242,7 +242,7 @@ namespace	ft {
 
 			reserve(++_size);
 			for (size_type i = _size - 1; i; --i) {
-/*debug*/		std::cout<<"i : "<<i<<std::endl;
+// /*debug*/		std::cout<<"i : "<<i<<std::endl;
 				if (i > pos) {
 					_valueArray[i] = _valueArray[i - 1];
 				} else if (i == pos) {
@@ -348,25 +348,25 @@ namespace	ft {
 		//*	Exchanges the content of the container by the content of x, which is another vector object of the same type. Sizes may differ.
 		void		swap( vector & x ) {
 
-			vector	tmp;
+			size_type		cap;
+			size_type		siz;
+			pointer			values;
+			allocator_type	allo;
 
-			tmp.reserve(this->_capacity);
-			tmp._capacity = this->_capacity;
-			tmp._size = this->_size;
-			tmp._valueArray = this->_valueArray;
-			tmp._alloc = this->_alloc;
+			cap = this->_capacity;
+			siz = this->_size;
+			values = this->_valueArray;
+			allo = this->_alloc;
 
-			this->reserve(x._capacity);
 			this->_capacity = x._capacity;
 			this->_size = x._size;
 			this->_valueArray = x._valueArray;
 			this->_alloc = x._alloc;
 
-			x.reserve(tmp._capacity);
-			x._capacity = tmp._capacity;
-			x._size = tmp._size;
-			x._valueArray = tmp._valueArray;
-			x._alloc = tmp._alloc;
+			x._capacity = cap;
+			x._size = siz;
+			x._valueArray = values;
+			x._alloc = allo;
 		}
 		//*	Removes all elements from the vector (which are destroyed), leaving the container with a size of 0.
 		void		clear( void ) {
