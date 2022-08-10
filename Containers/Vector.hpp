@@ -156,8 +156,9 @@ namespace	ft {
 			this->clear();
 			this->_alloc.deallocate(this->_valueArray, this->_capacity);
 			this->_valueArray = this->_alloc.allocate(n);
-			for (size_type i = 0; i < tmp._size; i++)
+			for (size_type i = 0; i < tmp._size; i++) {
 				this->_alloc.construct(this->_valueArray + i, *(tmp._valueArray + i));
+			}
 			this->_size = tmp._size;
 			this->_capacity = n;
 		}
@@ -366,21 +367,7 @@ namespace	ft {
 
 		pointer				_valueArray;	//* array of T
 		allocator_type		_alloc;
-	
-		// _reallocate destroys everything to do a new allocation from scratch, it can construct the elements depending on boolean
-		void		_reallocate( size_type new_size, bool construct ) {
 
-			pointer		new_ptr = _alloc.allocate(new_size);
-
-			for (size_type i = 0; i < _size; i++) {
-				if (construct == true)
-					_alloc.construct(new_ptr + i, _valueArray[i]);
-				_alloc.destroy(_valueArray + i);
-				_alloc.deallocate(_valueArray + i, 1);
-			}
-			_valueArray = new_ptr;
-			_capacity = new_size;
-		}
 
 	};
 
