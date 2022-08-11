@@ -1,5 +1,7 @@
 #include "Containers/Vector.hpp"
 #include <iostream>
+#include <vector>
+#include <iterator>
 
 #ifndef FT
  #define FT ft
@@ -14,6 +16,11 @@ void	vector_constructor_test(void) {
 	//iterator constructor can also be used to construct from arrays
 	int	tab[] = {15, 3, 50, 30};
 	FT::vector<int>	fifth(tab, tab + sizeof(tab) / sizeof(int));
+
+	std::cerr << "Vector 'fourth' values :" << std::endl;
+	for (FT::vector<int>::iterator it = fourth.begin(); it != fourth.end(); ++it)
+		std::cerr << *it << ' ';
+	std::cerr << std::endl;
 
 	std::cout << "Vector 'first' values :" << std::endl;
 	for (FT::vector<int>::iterator it = first.begin(); it != first.end(); ++it)

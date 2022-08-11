@@ -76,7 +76,7 @@ namespace	ft {
 		vector( const vector & x ) :  _capacity(x._capacity), _size(x._size), _alloc(x._alloc) {
 
 // /*debug*/	std::cout<<"copy constructor called"<<std::endl;
-			this->_valueArray = this->_alloc.allocate(_capacity, 0);
+			this->_valueArray = this->_alloc.allocate(0, 0);
 			*this = x;
 		}
 		//*	assignation operator
