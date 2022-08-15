@@ -3,7 +3,6 @@
 #include <iostream>
 #include <memory>
 #include <limits>
-// #include <iterator>//!  <<<================ must remove include
 
 #include "../utils/utils.hpp"
 #include "../utils/random_access_iterator.hpp"
@@ -76,7 +75,7 @@ namespace	ft {
 		vector( const vector & x ) :  _capacity(x._capacity), _size(x._size), _alloc(x._alloc) {
 
 // /*debug*/	std::cout<<"copy constructor called"<<std::endl;
-			this->_valueArray = this->_alloc.allocate(0, 0);
+			this->_valueArray = this->_alloc.allocate(0);
 			*this = x;
 		}
 		//*	assignation operator
@@ -85,13 +84,14 @@ namespace	ft {
 // /*debug*/	std::cout<<"assignation operator called"<<std::endl;
 
 			if (this != &rhs) {
-				
 				this->clear();
 				this->_alloc.deallocate(this->_valueArray, this->_capacity);
 				this->_valueArray = this->_alloc.allocate(rhs._capacity, 0);					//?	not sure ab this line
 				for (size_type i = 0; i < _size; i++) {
+				std::cerr<<"ayo"<<rhs.at(i)<<std::endl;
 
 					this->_alloc.construct(this->_valueArray + i, *(rhs._valueArray + i));
+/*debug*/			std::cerr<<_valueArray[i]<<"<-"<<std::endl;
 				}
 				this->_size = rhs._size;
 				this->_capacity = rhs._capacity;
@@ -291,23 +291,6 @@ namespace	ft {
 		}
 		//*	Removes from the vector a single element (position).
 		iterator	erase( iterator position ) {
-
-/*.
-			size_type	i;
-			iterator	it;
-
-			for (i = 0; i < _size; ++i) {
-				if (_valueArray[i] == position) {	// position found
-					_alloc.destroy(_valueArray[i]);	// position erased
-					break;
-				}
-			}
-			for (; i + 1 < _size; ++i) {
-				_valueArray[i] = _valueArray[i + 1];	//	relink vextor
-			}
-			
-			return it;
-// */
 
 			size_type	pos = position - this->begin() + 1;
 

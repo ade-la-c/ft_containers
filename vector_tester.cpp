@@ -16,12 +16,32 @@ void	vector_constructor_test(void) {
 	//iterator constructor can also be used to construct from arrays
 	int	tab[] = {15, 3, 50, 30};
 	FT::vector<int>	fifth(tab, tab + sizeof(tab) / sizeof(int));
+////
+	std::cerr << "Vector 'first' values :" << std::endl;
+	for (FT::vector<int>::iterator it = first.begin(); it != first.end(); ++it)
+		std::cerr << *it << ' ';
+	std::cerr << std::endl;
+
+	std::cerr << "Vector 'second' values :" << std::endl;
+	for (FT::vector<int>::iterator it = second.begin(); it != second.end(); ++it)
+		std::cerr << *it << ' ';
+	std::cerr << std::endl;
+
+	std::cerr << "Vector 'third' values :" << std::endl;
+	for (FT::vector<int>::iterator it = third.begin(); it != third.end(); ++it)
+		std::cerr << *it << ' ';
+	std::cerr << std::endl;
 
 	std::cerr << "Vector 'fourth' values :" << std::endl;
 	for (FT::vector<int>::iterator it = fourth.begin(); it != fourth.end(); ++it)
 		std::cerr << *it << ' ';
 	std::cerr << std::endl;
 
+	std::cerr << "Vector 'fifth' values :" << std::endl;
+	for (FT::vector<int>::iterator it = fifth.begin(); it != fifth.end(); ++it)
+		std::cerr << *it << ' ';
+	std::cerr << std::endl;
+////
 	std::cout << "Vector 'first' values :" << std::endl;
 	for (FT::vector<int>::iterator it = first.begin(); it != first.end(); ++it)
 		std::cout << *it << ' ';
@@ -50,7 +70,7 @@ void	vector_operator_test(void) {
 
 void	vector_begin_test(void) {
 	FT::vector<int>	vec;
-	for (int i = 1; i <= 5; i++)
+	for (size_t i = 1; i <= 5; i++)
 		vec.push_back(i);
 	
 	std::cout << "Vec contains :" << std::endl;
@@ -62,7 +82,7 @@ void	vector_begin_test(void) {
 
 void	vector_end_test(void) {
 	FT::vector<int>	vec;
-	for (int i = 1; i <= 5; i++)
+	for (size_t i = 1; i <= 5; i++)
 		vec.push_back(i);
 	
 	std::cout << "Vec contains :" << std::endl;
@@ -102,7 +122,7 @@ void	vector_size_test(void) {
 	FT::vector<int>	vec;
 	std::cout << "A. size : " << vec.size() << std::endl;
 
-	for (int i = 0; i < 10; i++) {
+	for (size_t i = 0; i < 10; i++) {
 		vec.push_back(i);
 	}
 	std::cout << "B. size : " << vec.size() << std::endl;
@@ -117,7 +137,7 @@ void	vector_size_test(void) {
 void	vector_maxsize_test(void) {
 	FT::vector<int>	vec;
 
-	for (int i = 0; i < 100; i++)
+	for (size_t i = 0; i < 100; i++)
 		vec.push_back(i);
 	std::cout << "Size	 : " << vec.size() << std::endl;
 	std::cout << "Max_size : " << vec.max_size() << std::endl;
@@ -127,7 +147,7 @@ void	vector_maxsize_test(void) {
 void	vector_resize_test(void) {
 	FT::vector<int>	vec;
 
-	for (int i = 0; i < 10; i++)
+	for (size_t i = 0; i < 10; i++)
 		vec.push_back(i);
 	vec.resize(5);
 	vec.resize(8, 100);
@@ -141,7 +161,7 @@ void	vector_resize_test(void) {
 void	vector_capacity_test(void) {
 	FT::vector<int>	vec;
 
-	for (int i = 0; i < 100; i++)
+	for (size_t i = 0; i < 100; i++)
 		vec.push_back(i);
 	std::cout << "Size	 : " << vec.size() << std::endl;
 	std::cout << "Max_size : " << vec.max_size() << std::endl;
@@ -152,7 +172,7 @@ void	vector_empty_test(void) {
 	FT::vector<int>	vec;
 	int						sum(0);
 
-	for (int i = 1; i <= 10; i++)
+	for (size_t i = 1; i <= 10; i++)
 		vec.push_back(i);
 	while (!vec.empty()) {
 		sum += vec.back();
@@ -167,7 +187,7 @@ void	vector_reserve_test(void) {
 
 	first = second.capacity();
 	std::cout << "Making second grow :" << std::endl;
-	for (int i = 0; i < 100; i++) {
+	for (size_t i = 0; i < 100; i++) {
 		second.push_back(i);
 		if (first != second.capacity()) {
 			first = second.capacity();
@@ -178,7 +198,7 @@ void	vector_reserve_test(void) {
 	first = third.capacity();
 	third.reserve(100);
 	std::cout << "Making third grow :" << std::endl;
-	for (int i = 0; i < 100; i++) {
+	for (size_t i = 0; i < 100; i++) {
 		third.push_back(i);
 		if (first != third.capacity()) {
 			first = third.capacity();
@@ -291,7 +311,7 @@ void	vector_insert_test(void) {
 void	vector_erase_test(void) {
 	FT::vector<int>		vec;
 
-	for (int i = 1; i <= 10; i++)
+	for (size_t i = 1; i <= 10; i++)
 		vec.push_back(i);
 	vec.erase(vec.begin() + 5);
 	vec.erase(vec.begin(), vec.begin() + 3);
