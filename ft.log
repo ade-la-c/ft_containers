@@ -4,10 +4,11 @@
 
 [1;35m/* ******** Vector Constructor Test ******** */[0m
 
+copy constructor called
 Vector 'first' values :
 
 Vector 'fourth' values :
--1094795586 -1094795586 -1094795586 -1094795586 
+100 100 100 100 
 Vector 'fifth' values :
 15 3 50 30 
 
@@ -19,22 +20,22 @@ Size of second : 3
 [1;35m/* ******** Vector Begin Test ************** */[0m
 
 Vec contains :
--1094795586 -1094795586 -1094795586 4 5 
+1 2 3 4 5 
 
 [1;35m/* ******** Vector End Test **************** */[0m
 
 Vec contains :
--1094795586 -1094795586 -1094795586 4 5 
+1 2 3 4 5 
 
 [1;35m/* ******** Vector Rbegin Test ************* */[0m
 
 Vec contains :
-7 -1094795586 -1094795586 -1094795586 
+7 3 6 5 
 
 [1;35m/* ******** Vector Rend Test *************** */[0m
 
 Vec contains :
-7 -1094795586 -1094795586 -1094795586 
+7 2 6 5 
 
 [1;35m/* ******** Vector Size Test *************** */[0m
 
@@ -52,7 +53,7 @@ Capacity : 128
 [1;35m/* ******** Vector Resize Test ************* */[0m
 
 Vec contains :
--1094795586 -1094795586 -1094795586 -1094795586 -1094795586 100 100 100 0 0 0 0 
+0 1 2 3 4 100 100 100 0 0 0 0 
 
 [1;35m/* ******** Vector Capacity Test *********** */[0m
 
@@ -62,7 +63,7 @@ Capacity : 128
 
 [1;35m/* ******** Vector Empty Test ************** */[0m
 
-Total: 926365517
+Total: 55
 
 [1;35m/* ******** Vector Reserve Test ************ */[0m
 
@@ -91,18 +92,18 @@ Vec contains :
 
 [1;35m/* ******** Vector Front Test ************** */[0m
 
-Vec front() : -1094795606
+Vec front() : 50
 
 [1;35m/* ******** Vector Back Test *************** */[0m
 
 Vec contains :
--1094795586 -1094795586 -1094795586 -1094795586 -1094795586 -1094795586 -1094795586 -1094795586 -1094795586 -1094795586 -1094795586 -1094795586 -1094795586 -1094795586 -1094795586 1 0 
+16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0 
 
 [1;35m/* ******** Vector Assign Test ************* */[0m
 
 Size of first	: 7
 Vec first contains :
--1094795586 -1094795586 -1094795586 100 100 100 100 
+100 100 100 100 100 100 100 
 
 Size of second	: 0
 Vec second contains :
@@ -110,45 +111,7 @@ Vec second contains :
 
 Size of third	: 3
 Vec third contains :
--1094795586 -1094795586 8 
+16 4 8 
 
 [1;35m/* ******** Vector Insert Test ************* */[0m
-
-Vec first contains :
--1094795586 -1094795586 3 2 1 -1094795586 -1094795586 -1094795586 -1094795586 -1094795586 -1094795586 
-
-[1;35m/* ******** Vector Erase Test ************** */[0m
-
-Vec contains :
--1094795586 -1094795586 -1094795586 8 9 10 10 9 10 10 
-
-[1;35m/* ******** Vector Swap Test *************** */[0m
-
-*it : 100
-*it : 100
-Vec first contains :
-200 200 200 200 
-
-Vec second contains :
-100 100 100 
-
-[1;35m/* ******** Vector Clear Test *************** */[0m
-
-Vec contains :
--1094795586 -1094795586 300 
-
-Vec contains :
-400 500 
-
-[1;35m/* ******** Vector Get_Allocator Test ****** */[0m
-
-Vec contains :
-0 1 2 3 4 
-
-[1;35m/* ******** Vector NM_Swap Test ************ */[0m
-
-Vec first contains :
-300 300 300 300 
-Vec second contains :
-100 100 100 
 

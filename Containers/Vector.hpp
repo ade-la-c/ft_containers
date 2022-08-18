@@ -40,7 +40,7 @@ namespace	ft {
 		explicit vector( const allocator_type & alloc = allocator_type() )
 		: _capacity(0), _size(0), _alloc(alloc) {
 
-// /*debug*/	std::cout<<"default constructor called"<<std::endl;
+			// std::cout<<"default constructor called"<<std::endl;//!debug
 
 			this->_valueArray = this->_alloc.allocate(0, 0);
 		}
@@ -48,7 +48,7 @@ namespace	ft {
 		explicit vector( size_type n, const value_type & val = value_type(), const allocator_type & alloc = allocator_type() )
 		: _capacity(n), _size(n), _alloc(alloc) {
 		
-// /*debug*/	std::cout<<"fill constructor called"<<std::endl;
+			// std::cout<<"fill constructor called"<<std::endl;//!debug
 
 			this->_valueArray = this->_alloc.allocate(n, 0);
 			for (size_type i = 0; i < n; i++) {
@@ -60,7 +60,7 @@ namespace	ft {
 		vector( InputIterator first, InputIterator last, const allocator_type & alloc = allocator_type(),
 				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL) {
 
-// /*debug*/	std::cout<<"range constructor called"<<std::endl;
+			// std::cout<<"range constructor called"<<std::endl;//!debug
 
 			_size = ft::distance(first, last);
 			_capacity = _size;
@@ -72,26 +72,30 @@ namespace	ft {
 			}
 		}
 		//* copy constructor
-		vector( const vector & x ) :  _capacity(x._capacity), _size(x._size), _alloc(x._alloc) {
+		vector( const vector & x ) : _capacity(x._capacity), _size(x._size), _alloc(x._alloc) {
 
-// /*debug*/	std::cout<<"copy constructor called"<<std::endl;
+			std::cout<<"copy constructor called"<<std::endl;//!debug
 			this->_valueArray = this->_alloc.allocate(0);
+			std::cerr<<"this capacity = "<<_capacity<<" "<<"rhs size = "<<x._size<<std::endl;//!debug
 			*this = x;
 		}
 		//*	assignation operator
 		vector &	operator=( const vector & rhs ) {
 
-// /*debug*/	std::cout<<"assignation operator called"<<std::endl;
+			// std::cout<<"assignation operator called"<<std::endl;//!debug
+			std::cerr<<"_size="<<_size<<" rhs._size="<<rhs._size<<std::endl;//!debug
 
 			if (this != &rhs) {
+
+				std::cerr<<"----"<<std::endl;//!debug
 				this->clear();
 				this->_alloc.deallocate(this->_valueArray, this->_capacity);
-				this->_valueArray = this->_alloc.allocate(rhs._capacity, 0);					//?	not sure ab this line
-				for (size_type i = 0; i < _size; i++) {
-				std::cerr<<"ayo"<<rhs.at(i)<<std::endl;
+				this->_valueArray = this->_alloc.allocate(rhs._capacity);
+				for (size_type i = 0; i < rhs._size; i++) {
 
-					this->_alloc.construct(this->_valueArray + i, *(rhs._valueArray + i));
-/*debug*/			std::cerr<<_valueArray[i]<<"<-"<<std::endl;
+					std::cerr<<"-_"<<"_valueArray["<<*(rhs._valueArray + i)<<"] (i="<<i<<")"<<std::endl;//!debug
+					// this->_alloc.construct(this->_valueArray + i, *(rhs._valueArray + i));
+					push_back(*(rhs._valueArray + i));
 				}
 				this->_size = rhs._size;
 				this->_capacity = rhs._capacity;
@@ -102,7 +106,7 @@ namespace	ft {
 		//*	destructor
 		~vector( void ) {
 
-// /*debug*/	std::cout<<"destructor called"<<std::endl;
+			// std::cout<<"destructor called"<<std::endl;//!debug
 
 			this->clear();
 			if (this->_valueArray)
@@ -142,32 +146,28 @@ namespace	ft {
 					push_back(val);
 				}
 			}
-			// _size = n;
 		}
 		size_type		capacity( void ) const { return this->_capacity; }
 		bool			empty( void ) const { return this->_size == 0 ? true : false; }
 		//*	Requests that the vector capacity be at least enough to contain n elements.
 		void			reserve( size_type n ) {
-// /*debug*/std::cout<<n<<std::endl;
+			// std::cout<<n<<std::endl;//!debug
 
-			if (n < _capacity) {
+			if (n <= _capacity) {
 				return;
 			}
 			vector	tmp;
 
-			_capacity = n;
+			std::cerr<<"_capacity"<<_capacity<<std::endl;//!debug
 			tmp = *this;
 			clear();
 			_alloc.deallocate(_valueArray, _capacity);
-			_capacity = 0;
-// /*debug*/	std::cout<<"reserve n:"<<n<<" size:"<<_size<<" cap:"<<_capacity<<std::endl;
-			_valueArray = _alloc.allocate(n, 0);
-			_capacity = n;
-			_size = tmp._size;
+			_valueArray = _alloc.allocate(n);
 			for (size_type i = 0; i < tmp._size; i++) {
-// /*debug*/		std::cout<<"->"<<tmp._size<<std::endl;
 				_alloc.construct(_valueArray + i, *(tmp._valueArray + i));
 			}
+			_size = tmp._size;
+			_capacity = n;
 		}
 
 		//	Element access
@@ -210,7 +210,6 @@ namespace	ft {
 		void		assign( size_type n, const value_type & val ) {
 
 			clear();
-
 			for (size_type i = 0; i < n; ++i) {
 
 				push_back(val);
@@ -240,9 +239,11 @@ namespace	ft {
 
 			size_type	pos = position - this->begin() + 1;
 
+/*.
 			reserve(++_size);
 			for (size_type i = _size - 1; i; --i) {
-// /*debug*/		std::cout<<"i : "<<i<<std::endl;
+
+				std::cout<<"i : "<<i<<std::endl;//!debug
 				if (i > pos) {
 					_valueArray[i] = _valueArray[i - 1];
 				} else if (i == pos) {
@@ -250,6 +251,18 @@ namespace	ft {
 				}
 			}
 			return this->begin() + pos; //? -1 ou +1 ?
+// */
+
+			reserve(_size + 1);
+			++_size;
+			size_type i = _size - 1;
+			while (i > pos) {
+				_valueArray[i] = _valueArray[i - 1];
+				i--;
+			}
+			_valueArray[i] = val;
+			return begin() + pos;
+
 		}
 		void		insert( iterator position, size_type n, const value_type & val ) {	//* fill
 /*.
@@ -394,3 +407,4 @@ namespace	ft {
 }
 
 	void	vector_testing( void );
+
