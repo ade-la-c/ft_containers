@@ -140,12 +140,12 @@ namespace	ft {
 			}
 			pointer		tmp = _alloc.allocate(n);
 
-			_capacity = n;
-			for (size_type i = 0; i < _size - 1; ++i) {
-				std::cout<<(tmp+i)<<" - "<<_valueArray + i<<" "<<i<<std::endl;
+			for (size_type i = 0; i < _size; ++i) {
+				std::cout<<(tmp+i)<<" - "<<_valueArray + i<<" i: "<<i<<" size: "<<_size<<" cap: "<<_capacity<<" n: "<<n<<std::endl;//!debug
 				_alloc.construct(tmp + i, _valueArray[i]);
 			}
 			_alloc.deallocate(_valueArray, _capacity);
+			_capacity = n;
 			_valueArray = tmp;
 		}
 
@@ -192,14 +192,16 @@ namespace	ft {
 		}
 		void		push_back( const value_type & val ) {
 
-			_size += 1;
-			if (_size >= _capacity) {
+			if (_size + 1 >= _capacity) {
 				if (!_capacity) {
+					// std::cout<<"ee"<<std::endl;//!debug
 					reserve(2);
+					// std::cout<<"/ee"<<std::endl;//!debug
 				} else {
 					reserve(_capacity * 2);
 				}
 			}
+			_size += 1;
 			_alloc.construct(_valueArray + (_size - 1), val);
 		}
 		void		pop_back( void ) {
