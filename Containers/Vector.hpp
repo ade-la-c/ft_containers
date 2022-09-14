@@ -44,7 +44,7 @@ namespace	ft {
 		}
 		//*	fill constructor
 		explicit vector( size_type n, const value_type & val = value_type(), const allocator_type & alloc = allocator_type() )
-		: _capacity(0), _size(0), _alloc(0) {
+		: _capacity(0), _size(0), _alloc(alloc) {
 
 			this->_valueArray = this->_alloc.allocate(n, 0);
 			for (size_type i = 0; i < n; i++) {
@@ -129,19 +129,21 @@ namespace	ft {
 			}
 		}
 		size_type		capacity( void ) const { return this->_capacity; }
-		bool			empty( void ) const { return this->_size = 0 ? true : false; }
+		bool			empty( void ) const { return this->_size == 0 ? true : false; }
 		void			reserve( size_type n ) {
 
-			if (n > max_size()) {
-				throw std::length_error("Vector reserve, input is bigger than max size.");
-			}
 			if (n <= _capacity) {
 				return;
 			}
-			pointer		*tmp = _alloc.allocate(n);
+			if (n > max_size()) {
+				throw std::length_error("Vector reserve, input is bigger than max size.");
+			}
+			pointer		tmp = _alloc.allocate(n);
 
-			for (size_type i = 0; i < _size; ++i) {
-				tmp[i] = _valueArray[i];
+			_capacity = n;
+			for (size_type i = 0; i < _size - 1; ++i) {
+				std::cout<<(tmp+i)<<" - "<<_valueArray + i<<" "<<i<<std::endl;
+				_alloc.construct(tmp + i, _valueArray[i]);
 			}
 			_alloc.deallocate(_valueArray, _capacity);
 			_valueArray = tmp;
@@ -193,7 +195,7 @@ namespace	ft {
 			_size += 1;
 			if (_size >= _capacity) {
 				if (!_capacity) {
-					_valueArray = _alloc.allocate(1);
+					reserve(2);
 				} else {
 					reserve(_capacity * 2);
 				}
@@ -209,7 +211,6 @@ namespace	ft {
 		}
 		iterator	insert( iterator position, const value_type & val ) {
 
-			print_vector("avant insert");//!debug
 			size_type	pos = position - begin();
 			size_type	i = _size;
 
@@ -218,7 +219,6 @@ namespace	ft {
 				_valueArray[i] = _valueArray[i - 1];
 			}
 			_valueArray[i] = val;
-			print_vector("après insert");//!debug
 			return begin() + pos;
 		}
 		void		insert( iterator position, size_type n, const value_type & val ) {
@@ -232,7 +232,51 @@ namespace	ft {
 		void		insert( iterator position, InputIterator first, InputIterator last,
 		typename ft::enable_if< !ft::is_integral<InputIterator>::value, InputIterator >::type * = NULL ) {
 
-			
+			for (; first != last; ++first) {
+
+				position = insert(position, *first) + 1;
+			}
+		}
+		iterator	erase( iterator position ) {
+
+			size_type	pos = position - begin();
+std::cout << position.base() << " - " << &_valueArray[pos] << std::endl;//! not yet tested (debug)
+			_alloc.destroy(_valueArray + pos);
+			for (size_type i = pos; i + 1 < _size; ++i) {
+				_valueArray[i] = _valueArray[i + 1];
+			}
+			return position;
+		}
+		iterator	erase( iterator first, iterator last ) {
+
+			iterator	it = first;
+			for (; it != last; ++it) {
+
+				erase(it);
+			}
+			return first;//! not sure ab this function
+		}
+		void		swap( vector & x ) {
+
+			size_type		cap;
+			size_type		siz;
+			pointer			values;
+			allocator_type	allo;
+
+			cap = this->_capacity;
+			siz = this->_size;
+			values = this->_valueArray;
+			allo = this->_alloc;
+
+			this->_capacity = x._capacity;
+			this->_size = x._size;
+			this->_valueArray = x._valueArray;
+			this->_alloc = x._alloc;
+
+			x._capacity = cap;
+			x._size = siz;
+			x._valueArray = values;
+			x._alloc = allo;
 		}
 		void		clear( void ) {
 
@@ -245,13 +289,14 @@ namespace	ft {
 
 		allocator_type	get_allocator( void ) const { return this->_alloc; }
 
-		void	print_vector( std:string str ) const {		//!debug function
+		void	print_vector( std::string str ) const {		//!debug function
 
-			std::cout << str << ":\n" << std::endl;
-			for (size_type i = 0; i < _size; ++) {
+			std::cout << str << ":" << std::endl;
+			for (size_type i = 0; i < _size; ++i) {
 
-				std::cout << _valueArray[i] << std::endl;
+				std::cout << _valueArray[i] << " " << std::flush;
 			}
+			std::cout<<std::endl<<std::endl;;
 		}
 
 	private:
@@ -280,4 +325,4 @@ namespace	ft {
 	void	swap( vector<T,Alloc> & x, vector<T,Alloc> & y ) { x.swap(y); }
 
 }
-	void	vector_testing( void );
+void	vector_testing( void );

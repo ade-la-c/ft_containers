@@ -309,6 +309,7 @@ namespace	ft {
 		iterator	erase( iterator position ) {
 
 			size_type	pos = position - this->begin() + 1;
+std::cout << position.base() << " - " << _valueArray[pos] << std::endl;//! needs working insert to test
 
 			_alloc.destroy(_valueArray + pos);
 			for (size_type i = pos; i + 1 < _size; ++i) {
