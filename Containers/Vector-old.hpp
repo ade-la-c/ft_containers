@@ -240,7 +240,7 @@ namespace	ft {
 		//*	The vector is extended by inserting new elements before the element at the specified position
 		iterator	insert( iterator position, const value_type & val ) {			//* single element
 
-			size_type	pos = position - this->begin() + 1;
+			size_type	pos = position - this->begin();//this line is right
 
 			/*.
 			reserve(++_size);

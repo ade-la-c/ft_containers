@@ -176,9 +176,19 @@ namespace	ft {
 		void	assign(InputIterator first, InputIterator last,
 		typename ft::enable_if< !ft::is_integral<InputIterator>::value, InputIterator >::type * = NULL ) {
 		
-			
+			clear();
+			for (; first < last; ++first) {
+				push_back(*first);
+			}
 		}
-		void	push_back( const value_type & val ) {
+		void		assign( size_type n, const value_type & val ) {
+
+			clear();
+			for (size_type i = 0; i < n; ++i) {
+				push_back(val);
+			}
+		}
+		void		push_back( const value_type & val ) {
 
 			_size += 1;
 			if (_size >= _capacity) {
@@ -190,14 +200,41 @@ namespace	ft {
 			}
 			_alloc.construct(_valueArray + (_size - 1), val);
 		}
-		void	pop_back( void ) {
+		void		pop_back( void ) {
 
 			if (_size) {
 				_alloc.destroy(_valueArray + _size);
 			}
 			_size -= 1;
 		}
-		void	clear( void ) {
+		iterator	insert( iterator position, const value_type & val ) {
+
+			print_vector("avant insert");//!debug
+			size_type	pos = position - begin();
+			size_type	i = _size;
+
+			reserve(++_size);
+			for (;i > pos; --i) {
+				_valueArray[i] = _valueArray[i - 1];
+			}
+			_valueArray[i] = val;
+			print_vector("après insert");//!debug
+			return begin() + pos;
+		}
+		void		insert( iterator position, size_type n, const value_type & val ) {
+
+			iterator	it = position;
+			for (size_type i = 0; i < n; ++i, ++it) {
+				it = insert(it, val);
+			}
+		}
+		template< class InputIterator >
+		void		insert( iterator position, InputIterator first, InputIterator last,
+		typename ft::enable_if< !ft::is_integral<InputIterator>::value, InputIterator >::type * = NULL ) {
+
+			
+		}
+		void		clear( void ) {
 
 			while (_size) {
 				pop_back();
@@ -208,6 +245,14 @@ namespace	ft {
 
 		allocator_type	get_allocator( void ) const { return this->_alloc; }
 
+		void	print_vector( std:string str ) const {		//!debug function
+
+			std::cout << str << ":\n" << std::endl;
+			for (size_type i = 0; i < _size; ++) {
+
+				std::cout << _valueArray[i] << std::endl;
+			}
+		}
 
 	private:
 
@@ -219,7 +264,20 @@ namespace	ft {
 
 	};
 
-
-
+	template < class T, class Alloc >
+	bool	operator==( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs ) { return lhs == rhs; }
+	template < class T, class Alloc >
+	bool	operator!=( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs ) { return lhs != rhs; }
+	template < class T, class Alloc >
+	bool	operator<( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs ) { return lhs < rhs; }
+	template < class T, class Alloc >
+	bool	operator<=( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs ) { return lhs <= rhs; }
+	template < class T, class Alloc >
+	bool	operator>(const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs) { return lhs > rhs; }
+	template < class T, class Alloc >
+	bool	operator>=( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs ) { return lhs >= rhs; }
+	template< class T, class Alloc >
+	void	swap( vector<T,Alloc> & x, vector<T,Alloc> & y ) { x.swap(y); }
 
 }
+	void	vector_testing( void );
