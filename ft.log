@@ -4,7 +4,6 @@
 
 [1;35m/* ******** Vector Constructor Test ******** */[0m
 
-copy constructor called
 Vector 'first' values :
 
 Vector 'fourth' values :
