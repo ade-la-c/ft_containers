@@ -132,16 +132,22 @@ namespace	ft {
 		bool			empty( void ) const { return this->_size == 0 ? true : false; }
 		void			reserve( size_type n ) {
 
-			if (n <= _capacity) {
+			if (n < _capacity) {
 				return;
 			}
 			if (n > max_size()) {
 				throw std::length_error("Vector reserve, input is bigger than max size.");
 			}
-			pointer		tmp = _alloc.allocate(n);
+			pointer		tmp;
+
+			if (n < _capacity * 2) {
+				tmp = _alloc.allocate(_capacity * 2);
+			} else {
+				tmp = _alloc.allocate(n);
+			}
 
 			for (size_type i = 0; i < _size; ++i) {
-				std::cout<<(tmp+i)<<" - "<<_valueArray + i<<" i: "<<i<<" size: "<<_size<<" cap: "<<_capacity<<" n: "<<n<<std::endl;//!debug
+				// std::cerr<<(tmp+i)<<" - "<<_valueArray + i<<" i: "<<i<<" size: "<<_size<<" cap: "<<_capacity<<" n: "<<n<<std::endl;//!debug
 				_alloc.construct(tmp + i, _valueArray[i]);
 			}
 			_alloc.deallocate(_valueArray, _capacity);
@@ -194,9 +200,7 @@ namespace	ft {
 
 			if (_size + 1 >= _capacity) {
 				if (!_capacity) {
-					// std::cout<<"ee"<<std::endl;//!debug
 					reserve(2);
-					// std::cout<<"/ee"<<std::endl;//!debug
 				} else {
 					reserve(_capacity * 2);
 				}
@@ -212,16 +216,18 @@ namespace	ft {
 			_size -= 1;
 		}
 		iterator	insert( iterator position, const value_type & val ) {
-			print_vector("before insert");//!debug
+
 			size_type	pos = position - begin();
 			size_type	i = _size + 1;
 
-			reserve(++_size);
-			for (;i > pos; --i) {
-				_valueArray[i] = _valueArray[i - 1];
+			std::cerr<<"pos: "<<pos<<std::endl;
+			reserve(_size + 1);
+			for (; i > pos; --i) {
+				std::cerr << _valueArray+i<<" - "<<&_valueArray[i-1]<<" size: "<<_size<<" cap: "<<_capacity<<" i: "<<i<<std::endl;//!debug
+				_alloc.construct(_valueArray + i, _valueArray[i - 1]);
 			}
+			_size++;
 			_valueArray[i] = val;
-			print_vector("after insert");//!debug
 			return begin() + pos;
 		}
 		void		insert( iterator position, size_type n, const value_type & val ) {
@@ -243,7 +249,7 @@ namespace	ft {
 		iterator	erase( iterator position ) {
 
 			size_type	pos = position - begin();
-std::cout << position.base() << " - " << &_valueArray[pos] << std::endl;//! not yet tested (debug)
+			std::cerr << position.base() << " - " << &_valueArray[pos] << std::endl;//! not yet tested (debug)
 			_alloc.destroy(_valueArray + pos);
 			for (size_type i = pos; i + 1 < _size; ++i) {
 				_valueArray[i] = _valueArray[i + 1];
@@ -292,14 +298,16 @@ std::cout << position.base() << " - " << &_valueArray[pos] << std::endl;//! not 
 
 		allocator_type	get_allocator( void ) const { return this->_alloc; }
 
-	void	print_vector( std::string str ) const {		//!debug function
+	void	print_vector( std::string str, bool extra_nl = true ) const {		//!debug function
 
-		std::cout << str << ": size: " << _size << " cap: " << _capacity << std::endl;
+		std::cerr << str << ": size: " << _size << " cap: " << _capacity << std::endl;
 		for (size_type i = 0; i < _size; ++i) {
 
-			std::cout << _valueArray[i] << " " << std::flush;
+			std::cerr << _valueArray[i] << " " << std::flush;
 		}
-		std::cout<<std::endl<<std::endl;;
+		std::cerr<<std::endl;
+		if (extra_nl)
+			std::cerr<<std::endl;
 	}
 
 	private:
