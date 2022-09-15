@@ -72,9 +72,7 @@ void	vector_operator_test(void) {
 void	vector_begin_test(void) {
 	FT::vector<int>	vec;
 	for (size_t i = 1; i <= 5; i++){
-std::cout<<"yo"<<std::endl;
 		vec.push_back(i);
-std::cout<<"\\yo"<<std::endl;
 	}
 	
 	std::cout << "Vec contains :" << std::endl;

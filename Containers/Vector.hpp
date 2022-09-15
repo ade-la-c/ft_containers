@@ -175,7 +175,7 @@ namespace	ft {
 		//	Modifiers
 
 		template < class InputIterator >
-		void	assign(InputIterator first, InputIterator last,
+		void		assign(InputIterator first, InputIterator last,
 		typename ft::enable_if< !ft::is_integral<InputIterator>::value, InputIterator >::type * = NULL ) {
 		
 			clear();
@@ -212,15 +212,16 @@ namespace	ft {
 			_size -= 1;
 		}
 		iterator	insert( iterator position, const value_type & val ) {
-
+			print_vector("before insert");//!debug
 			size_type	pos = position - begin();
-			size_type	i = _size;
+			size_type	i = _size + 1;
 
 			reserve(++_size);
 			for (;i > pos; --i) {
 				_valueArray[i] = _valueArray[i - 1];
 			}
 			_valueArray[i] = val;
+			print_vector("after insert");//!debug
 			return begin() + pos;
 		}
 		void		insert( iterator position, size_type n, const value_type & val ) {
@@ -291,15 +292,15 @@ std::cout << position.base() << " - " << &_valueArray[pos] << std::endl;//! not 
 
 		allocator_type	get_allocator( void ) const { return this->_alloc; }
 
-		void	print_vector( std::string str ) const {		//!debug function
+	void	print_vector( std::string str ) const {		//!debug function
 
-			std::cout << str << ":" << std::endl;
-			for (size_type i = 0; i < _size; ++i) {
+		std::cout << str << ": size: " << _size << " cap: " << _capacity << std::endl;
+		for (size_type i = 0; i < _size; ++i) {
 
-				std::cout << _valueArray[i] << " " << std::flush;
-			}
-			std::cout<<std::endl<<std::endl;;
+			std::cout << _valueArray[i] << " " << std::flush;
 		}
+		std::cout<<std::endl<<std::endl;;
+	}
 
 	private:
 
