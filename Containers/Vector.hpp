@@ -44,11 +44,12 @@ namespace	ft {
 		}
 		//*	fill constructor
 		explicit vector( size_type n, const value_type & val = value_type(), const allocator_type & alloc = allocator_type() )
-		: _capacity(0), _size(0), _alloc(alloc) {
+		: _capacity(n), _size(0), _alloc(alloc) {
 
 			this->_valueArray = this->_alloc.allocate(n, 0);
 			for (size_type i = 0; i < n; i++) {
-				_alloc.construct(_valueArray + i, val);
+				// _alloc.construct(_valueArray + i, val);
+				push_back(val);
 			}
 		}
 		//*	range constructor 
@@ -95,7 +96,16 @@ namespace	ft {
 				this->_alloc.deallocate(this->_valueArray, this->_capacity);
 		}
 
-		//	Iterators
+
+//	/*.
+//	#### ######## ######## ########     ###    ########  #######  ########   ######
+//	 ##     ##    ##       ##     ##   ## ##      ##    ##     ## ##     ## ##    ##
+//	 ##     ##    ##       ##     ##  ##   ##     ##    ##     ## ##     ## ##
+//	 ##     ##    ######   ########  ##     ##    ##    ##     ## ########   ######
+//	 ##     ##    ##       ##   ##   #########    ##    ##     ## ##   ##         ##
+//	 ##     ##    ##       ##    ##  ##     ##    ##    ##     ## ##    ##  ##    ##
+//	####    ##    ######## ##     ## ##     ##    ##     #######  ##     ##  ######
+//	*/
 
 		//*	Returns an iterator pointing to the first element in the vector.
 		iterator				begin( void ) { return iterator(this->_valueArray); }
@@ -110,10 +120,19 @@ namespace	ft {
 		reverse_iterator		rend( void ) { return reverse_iterator(this->begin()); }
 		const_reverse_iterator	rend( void ) const { return const_reverse_iterator(this->begin()); }
 
-		//	Capacity
+
+// /*.
+//	 ######     ###    ########     ###     ######  #### ######## ##    ##
+//	##    ##   ## ##   ##     ##   ## ##   ##    ##  ##     ##     ##  ##
+//	##        ##   ##  ##     ##  ##   ##  ##        ##     ##      ####
+//	##       ##     ## ########  ##     ## ##        ##     ##       ##
+//	##       ######### ##        ######### ##        ##     ##       ##
+//	##    ## ##     ## ##        ##     ## ##    ##  ##     ##       ##
+//	 ######  ##     ## ##        ##     ##  ######  ####    ##       ##
+//	*/
 
 		size_type		size( void ) const { return this->_size; }
-		size_type		max_size( void ) const { return std::numeric_limits<size_type>::max(); }
+		size_type		max_size( void ) const { return std::numeric_limits<size_type>::max() / sizeof(value_type); }
 		void			resize( size_type n, value_type val = value_type() ) {
 
 			if (n <= _size) {
@@ -155,7 +174,16 @@ namespace	ft {
 			_valueArray = tmp;
 		}
 
-		//	Element access
+
+//	/*.
+//	######## ##       ######## ##     ## ######## ##    ## ########       ###     ######   ######  ########  ######   ######
+//	##       ##       ##       ###   ### ##       ###   ##    ##         ## ##   ##    ## ##    ## ##       ##    ## ##    ##
+//	##       ##       ##       #### #### ##       ####  ##    ##        ##   ##  ##       ##       ##       ##       ##
+//	######   ##       ######   ## ### ## ######   ## ## ##    ##       ##     ## ##       ##       ######    ######   ######
+//	##       ##       ##       ##     ## ##       ##  ####    ##       ######### ##       ##       ##             ##       ##
+//	##       ##       ##       ##     ## ##       ##   ###    ##       ##     ## ##    ## ##    ## ##       ##    ## ##    ##
+//	######## ######## ######## ##     ## ######## ##    ##    ##       ##     ##  ######   ######  ########  ######   ######
+//	*/
 
 		reference			operator[]( size_type n ) { return *(_valueArray + n); }
 		const_reference		operator[]( size_type n ) const { return *(_valueArray + n); }
@@ -178,14 +206,24 @@ namespace	ft {
 		reference			back( void ) { return this->_valueArray[_size - 1]; }
 		const_reference		back( void ) const { return this->_valueArray[_size - 1]; }
 
-		//	Modifiers
+
+//	/*.
+//	##     ##  #######  ########  #### ######## #### ######## ########   ######
+//	###   ### ##     ## ##     ##  ##  ##        ##  ##       ##     ## ##    ##
+//	#### #### ##     ## ##     ##  ##  ##        ##  ##       ##     ## ##
+//	## ### ## ##     ## ##     ##  ##  ######    ##  ######   ########   ######
+//	##     ## ##     ## ##     ##  ##  ##        ##  ##       ##   ##         ##
+//	##     ## ##     ## ##     ##  ##  ##        ##  ##       ##    ##  ##    ##
+//	##     ##  #######  ########  #### ##       #### ######## ##     ##  ######
+//	*/
 
 		template < class InputIterator >
 		void		assign(InputIterator first, InputIterator last,
 		typename ft::enable_if< !ft::is_integral<InputIterator>::value, InputIterator >::type * = NULL ) {
-		
+
 			clear();
 			for (; first < last; ++first) {
+				// std::cout << "ee" << *first << std::endl;
 				push_back(*first);
 			}
 		}
@@ -200,7 +238,7 @@ namespace	ft {
 
 			if (_size + 1 >= _capacity) {
 				if (!_capacity) {
-					reserve(2);
+					reserve(1);
 				} else {
 					reserve(_capacity * 2);
 				}
@@ -218,12 +256,12 @@ namespace	ft {
 		iterator	insert( iterator position, const value_type & val ) {
 
 			size_type	pos = position - begin();
-			size_type	i = _size + 1;
+			size_type	i = _size;
 
-			std::cerr<<"pos: "<<pos<<std::endl;
+			// std::cerr<<"pos: "<<pos<<std::endl;//!debug
 			reserve(_size + 1);
 			for (; i > pos; --i) {
-				std::cerr << _valueArray+i<<" - "<<&_valueArray[i-1]<<" size: "<<_size<<" cap: "<<_capacity<<" i: "<<i<<std::endl;//!debug
+				// std::cerr << _valueArray+i<<" - "<<&_valueArray[i-1]<<" size: "<<_size<<" cap: "<<_capacity<<" i: "<<i<<std::endl;//!debug
 				_alloc.construct(_valueArray + i, _valueArray[i - 1]);
 			}
 			_size++;
@@ -249,7 +287,7 @@ namespace	ft {
 		iterator	erase( iterator position ) {
 
 			size_type	pos = position - begin();
-			std::cerr << position.base() << " - " << &_valueArray[pos] << std::endl;//! not yet tested (debug)
+			// std::cerr << position.base() << " - " << &_valueArray[pos] << std::endl;//! not yet tested (debug)
 			_alloc.destroy(_valueArray + pos);
 			for (size_type i = pos; i + 1 < _size; ++i) {
 				_valueArray[i] = _valueArray[i + 1];
@@ -294,7 +332,15 @@ namespace	ft {
 			}
 		}
 
-		//	Allocator
+//	/*.
+//	   ###    ##       ##        #######   ######     ###    ########  #######  ########
+//	  ## ##   ##       ##       ##     ## ##    ##   ## ##      ##    ##     ## ##     ##
+//	 ##   ##  ##       ##       ##     ## ##        ##   ##     ##    ##     ## ##     ##
+//	##     ## ##       ##       ##     ## ##       ##     ##    ##    ##     ## ########
+//	######### ##       ##       ##     ## ##       #########    ##    ##     ## ##   ##
+//	##     ## ##       ##       ##     ## ##    ## ##     ##    ##    ##     ## ##    ##
+//	##     ## ######## ########  #######   ######  ##     ##    ##     #######  ##     ##
+//	*/
 
 		allocator_type	get_allocator( void ) const { return this->_alloc; }
 

@@ -7,14 +7,14 @@
 Vector 'first' values :
 
 Vector 'fourth' values :
-
+100 100 100 100 
 Vector 'fifth' values :
 15 3 50 30 
 
 [1;35m/* ******** Vector Operators Test ********** */[0m
 
 Size of first : 0
-Size of second : 0
+Size of second : 3
 
 [1;35m/* ******** Vector Begin Test ************** */[0m
 
@@ -40,13 +40,13 @@ Vec contains :
 
 A. size : 0
 B. size : 10
-C. size : 10
-D. size : 9
+C. size : 20
+D. size : 19
 
 [1;35m/* ******** Vector Maxsize Test ************ */[0m
 
 Size	 : 100
-Max_size : 18446744073709551615
+Max_size : 4611686018427387903
 Capacity : 128
 
 [1;35m/* ******** Vector Resize Test ************* */[0m
@@ -57,7 +57,7 @@ Vec contains :
 [1;35m/* ******** Vector Capacity Test *********** */[0m
 
 Size	 : 100
-Max_size : 18446744073709551615
+Max_size : 4611686018427387903
 Capacity : 128
 
 [1;35m/* ******** Vector Empty Test ************** */[0m
@@ -67,6 +67,7 @@ Total: 55
 [1;35m/* ******** Vector Reserve Test ************ */[0m
 
 Making second grow :
+Capacity changed to : 1
 Capacity changed to : 2
 Capacity changed to : 4
 Capacity changed to : 8
@@ -81,12 +82,12 @@ Capacity changed to : 200
 [1;35m/* ******** Vector Subscript Operator Test * */[0m
 
 Vec contains :
-
+9 8 7 6 5 4 3 2 1 0 
 
 [1;35m/* ******** Vector At Test ***************** */[0m
 
 Vec contains :
-
+0 1 2 3 4 5 6 7 8 9 
 
 [1;35m/* ******** Vector Front Test ************** */[0m
 
@@ -112,4 +113,42 @@ Vec third contains :
 16 4 8 
 
 [1;35m/* ******** Vector Insert Test ************* */[0m
+
+Vec first contains :
+1 2 3 300 300 400 400 200 100 100 100 
+
+[1;35m/* ******** Vector Erase Test ************** */[0m
+
+Vec contains :
+2 4 7 8 9 10 10 10 10 10 
+
+[1;35m/* ******** Vector Swap Test *************** */[0m
+
+*it : 100
+*it : 100
+Vec first contains :
+200 200 200 200 
+
+Vec second contains :
+100 100 100 
+
+[1;35m/* ******** Vector Clear Test *************** */[0m
+
+Vec contains :
+100 200 300 
+
+Vec contains :
+400 500 
+
+[1;35m/* ******** Vector Get_Allocator Test ****** */[0m
+
+Vec contains :
+0 1 2 3 4 
+
+[1;35m/* ******** Vector NM_Swap Test ************ */[0m
+
+Vec first contains :
+300 300 300 300 
+Vec second contains :
+100 100 100 
 
