@@ -119,7 +119,7 @@ Vec first contains :
 [1;35m/* ******** Vector Erase Test ************** */[0m
 
 Vec contains :
-4 5 7 8 9 10 
+1 2 3 4 5 7 8 9 10 
 
 [1;35m/* ******** Vector Swap Test *************** */[0m
 

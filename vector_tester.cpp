@@ -316,7 +316,7 @@ void	vector_erase_test(void) {
 	for (size_t i = 1; i <= 10; i++)
 		vec.push_back(i);
 	vec.erase(vec.begin() + 5);
-	vec.erase(vec.begin(), vec.begin() + 3);
+	// vec.erase(vec.begin(), vec.begin() + 4);
 	std::cout << "Vec contains :" << std::endl;
 	for (unsigned i = 0; i < vec.size(); i++)
 		std::cout << vec[i] << ' ';

@@ -17,7 +17,16 @@ namespace	ft {
 
 	public:
 
-		//	Type definers
+
+//	/*.
+//	########  ######## ######## #### ##    ## ######## ########   ######
+//	##     ## ##       ##        ##  ###   ## ##       ##     ## ##    ##
+//	##     ## ##       ##        ##  ####  ## ##       ##     ## ##
+//	##     ## ######   ######    ##  ## ## ## ######   ########   ######
+//	##     ## ##       ##        ##  ##  #### ##       ##   ##         ##
+//	##     ## ##       ##        ##  ##   ### ##       ##    ##  ##    ##
+//	########  ######## ##       #### ##    ## ######## ##     ##  ######
+//	*/
 
 		typedef T															value_type;
 		typedef Alloc														allocator_type;
@@ -222,21 +231,16 @@ namespace	ft {
 		typename ft::enable_if< !ft::is_integral<InputIterator>::value, InputIterator >::type * = NULL ) {
 
 			clear();
-			for (; first < last; ++first) {
-				// std::cout << "ee" << *first << std::endl;
-				push_back(*first);
-			}
+			insert(begin(), first, last);
 		}
 		void		assign( size_type n, const value_type & val ) {
 
 			clear();
-			for (size_type i = 0; i < n; ++i) {
-				push_back(val);
-			}
+			insert(begin(), n, val);
 		}
 		void		push_back( const value_type & val ) {
 
-			if (_size + 1 >= _capacity) {
+			if (_size + 1 > _capacity) {
 				if (!_capacity) {
 					reserve(1);
 				} else {
@@ -286,22 +290,39 @@ namespace	ft {
 		}
 		iterator	erase( iterator position ) {
 
-			size_type	pos = position - begin();
-			// std::cerr << position.base() << " - " << &_valueArray[pos] << std::endl;//! not yet tested (debug)
-			_alloc.destroy(_valueArray + pos);
-			for (size_type i = pos; i + 1 < _size; ++i) {
-				_valueArray[i] = _valueArray[i + 1];
-			}
-			return position;
+			// size_type	pos = position - begin();
+			// // std::cerr << position.base() << " - " << &_valueArray[pos] << " pos: "<< pos << std::endl;//! not yet tested (debug)
+			// _alloc.destroy(_valueArray + pos);
+			// for (size_type i = pos; i + 1 < _size; ++i) {
+			// 	_valueArray[i] = _valueArray[i + 1];
+			// }
+			// _size--;
+			// return position + 1;
+
+			return erase(position, position + 1);
 		}
 		iterator	erase( iterator first, iterator last ) {
 
-			iterator	it = first;
-			for (; it != last; ++it) {
+			size_type	dist = ft::distance(first, last);
+			size_type	pos = ft::distance(begin(), first);
+			iterator	ret = last;//! ?
 
-				erase(it);
+			if (first == end()) {
+				return end();
 			}
-			return first;//! not sure ab this function
+			for (; first != last; ++first) {
+				_alloc.destroy(first.base());
+			}
+			for (; last < end() - 1; ++pos) {	//! end() or end() - 1 ?
+				_valueArray[pos] = _valueArray[pos + dist];
+			}
+			_size -= dist;
+
+			// iterator	it = first;
+			// for (; it < last;) {
+			// 	it = erase(it);
+			// }
+			return ret;//! not sure ab this function
 		}
 		void		swap( vector & x ) {
 
