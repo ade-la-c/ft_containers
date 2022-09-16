@@ -290,22 +290,16 @@ namespace	ft {
 		}
 		iterator	erase( iterator position ) {
 
-			// size_type	pos = position - begin();
-			// // std::cerr << position.base() << " - " << &_valueArray[pos] << " pos: "<< pos << std::endl;//! not yet tested (debug)
-			// _alloc.destroy(_valueArray + pos);
-			// for (size_type i = pos; i + 1 < _size; ++i) {
-			// 	_valueArray[i] = _valueArray[i + 1];
-			// }
-			// _size--;
-			// return position + 1;
-
 			return erase(position, position + 1);
 		}
 		iterator	erase( iterator first, iterator last ) {
 
+			// size_type	dist = ft::distance(first, last);
+
+			// /*
 			size_type	dist = ft::distance(first, last);
 			size_type	pos = ft::distance(begin(), first);
-			iterator	ret = last;//! ?
+			iterator	ret = last;
 
 			if (first == end()) {
 				return end();
@@ -313,16 +307,16 @@ namespace	ft {
 			for (; first != last; ++first) {
 				_alloc.destroy(first.base());
 			}
-			for (; last < end() - 1; ++pos) {	//! end() or end() - 1 ?
+			for (; last + 1 < end(); ++pos) {
 				_valueArray[pos] = _valueArray[pos + dist];
 			}
 			_size -= dist;
-
+			return ret;//! not sure ab this function
+			// */
 			// iterator	it = first;
 			// for (; it < last;) {
 			// 	it = erase(it);
 			// }
-			return ret;//! not sure ab this function
 		}
 		void		swap( vector & x ) {
 

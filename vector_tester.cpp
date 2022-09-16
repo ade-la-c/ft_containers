@@ -310,13 +310,22 @@ void	vector_insert_test(void) {
 	std::cout << std::endl;
 }
 
-void	vector_erase_test(void) {
+
+
+
+
+
+void	vector_erase_test(void) {//!!!!!!!!!!!!!!!!!!!!!!!!!!
 	FT::vector<int>		vec;
 
 	for (size_t i = 1; i <= 10; i++)
 		vec.push_back(i);
-	vec.erase(vec.begin() + 5);
-	// vec.erase(vec.begin(), vec.begin() + 4);
+	std::cout << "Vec contains (before) :" << std::endl;
+	for (unsigned i = 0; i < vec.size(); i++)
+		std::cout << vec[i] << ' ';
+	std::cout << std::endl;
+	// vec.erase(vec.begin() + 5);
+	vec.erase(vec.begin(), vec.begin() + 1);
 	std::cout << "Vec contains :" << std::endl;
 	for (unsigned i = 0; i < vec.size(); i++)
 		std::cout << vec[i] << ' ';
