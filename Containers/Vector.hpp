@@ -160,9 +160,7 @@ namespace	ft {
 		bool			empty( void ) const { return this->_size == 0 ? true : false; }
 		void			reserve( size_type n ) {
 
-			if (n < _capacity) {
-				return;
-			}
+			if (n < _capacity) { return; }
 			if (n > max_size()) {
 				throw std::length_error("Vector reserve, input is bigger than max size.");
 			}
@@ -175,7 +173,7 @@ namespace	ft {
 			}
 
 			for (size_type i = 0; i < _size; ++i) {
-				// std::cerr<<(tmp+i)<<" - "<<_valueArray + i<<" i: "<<i<<" size: "<<_size<<" cap: "<<_capacity<<" n: "<<n<<std::endl;//!debug
+
 				_alloc.construct(tmp + i, _valueArray[i]);
 			}
 			_alloc.deallocate(_valueArray, _capacity);
@@ -262,10 +260,9 @@ namespace	ft {
 			size_type	pos = position - begin();
 			size_type	i = _size;
 
-			// std::cerr<<"pos: "<<pos<<std::endl;//!debug
 			reserve(_size + 1);
 			for (; i > pos; --i) {
-				// std::cerr << _valueArray+i<<" - "<<&_valueArray[i-1]<<" size: "<<_size<<" cap: "<<_capacity<<" i: "<<i<<std::endl;//!debug
+
 				_alloc.construct(_valueArray + i, _valueArray[i - 1]);
 			}
 			_size++;
@@ -294,29 +291,19 @@ namespace	ft {
 		}
 		iterator	erase( iterator first, iterator last ) {
 
-			// size_type	dist = ft::distance(first, last);
+			if (first == end()) { return end(); }
 
-			// /*
 			size_type	dist = ft::distance(first, last);
-			size_type	pos = ft::distance(begin(), first);
-			iterator	ret = last;
+			size_type	first_pos = ft::distance(begin(), first);
+			// size_type	last_pos = ft::distance(begin(), last);
 
-			if (first == end()) {
-				return end();
-			}
-			for (; first != last; ++first) {
-				_alloc.destroy(first.base());
-			}
-			for (; last + 1 < end(); ++pos) {
-				_valueArray[pos] = _valueArray[pos + dist];
+			for (size_type i = first_pos; i + dist < _size; ++i) {
+
+				_alloc.destroy(_valueArray + i);
+				_alloc.construct(_valueArray + i, _valueArray[i + dist]);
 			}
 			_size -= dist;
-			return ret;//! not sure ab this function
-			// */
-			// iterator	it = first;
-			// for (; it < last;) {
-			// 	it = erase(it);
-			// }
+			return first;
 		}
 		void		swap( vector & x ) {
 
@@ -359,17 +346,20 @@ namespace	ft {
 
 		allocator_type	get_allocator( void ) const { return this->_alloc; }
 
-	void	print_vector( std::string str, bool extra_nl = true ) const {		//!debug function
+		/*.
+		void	print_vector( std::string str, bool extra_nl = true ) const {		//!debug function
 
-		std::cerr << str << ": size: " << _size << " cap: " << _capacity << std::endl;
-		for (size_type i = 0; i < _size; ++i) {
+			std::cerr << str << ": size: " << _size << " cap: " << _capacity << std::endl;
+			for (size_type i = 0; i < _size; ++i) {
 
-			std::cerr << _valueArray[i] << " " << std::flush;
-		}
-		std::cerr<<std::endl;
-		if (extra_nl)
+				std::cerr << _valueArray[i] << " " << std::flush;
+			}
 			std::cerr<<std::endl;
-	}
+			if (extra_nl)
+				std::cerr<<std::endl;
+		}
+		// */
+
 
 	private:
 
