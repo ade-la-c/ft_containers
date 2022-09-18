@@ -52,8 +52,14 @@ namespace   ft {
 		typedef typename std::bidirectional_iterator< value_type >				bidirectional_iterator;
 		typedef typename std::bidirectional_iterator< const value_type >		const_bidirectional_iterator;
 
-		map( void ) {}
-		explicit	map(const key_compare & comp = key_compare())
+		//	methods
+
+		map( void );
+		explicit	map( const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() );
+		template <class InputIterator>
+		map( InputIterator first, InputIterator last, const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() );
+		map( const map & x );
+
 
 
 	private:
