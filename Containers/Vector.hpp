@@ -11,8 +11,12 @@
 namespace	ft {
 
 
-	template< class T, class Alloc = std::allocator<T> >
-	class   vector {
+	template <
+
+		class T,
+		class Alloc = std::allocator<T> 
+
+	> class   vector {
 
 
 	public:
@@ -356,7 +360,10 @@ namespace	ft {
 
 		allocator_type	get_allocator( void ) const { return this->_alloc; }
 
-		/*.
+
+	protected:
+
+		// /*.
 		void	print_vector( std::string str, bool extra_nl = true ) const {		//!debug function
 
 			std::cerr << str << ": size: " << _size << " cap: " << _capacity << std::endl;
