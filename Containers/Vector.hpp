@@ -56,8 +56,9 @@ namespace	ft {
 		: _capacity(n), _size(0), _alloc(alloc) {
 
 			this->_valueArray = this->_alloc.allocate(n, 0);
+
 			for (size_type i = 0; i < n; i++) {
-				// _alloc.construct(_valueArray + i, val);
+
 				push_back(val);
 			}
 		}
@@ -91,6 +92,7 @@ namespace	ft {
 				this->_alloc.deallocate(this->_valueArray, this->_capacity);
 				this->_alloc = rhs._alloc;
 				this->_valueArray = this->_alloc.allocate(rhs._capacity, 0);
+
 				for (size_type i = 0; i < rhs._size; ++i) {
 
 					this->_alloc.construct(this->_valueArray + i, rhs.at(i));
@@ -101,8 +103,10 @@ namespace	ft {
 		~vector( void ) {
 
 			this->clear();
-			if (this->_valueArray)
+			if (this->_valueArray) {
+
 				this->_alloc.deallocate(this->_valueArray, this->_capacity);
+			}
 		}
 
 
@@ -239,6 +243,7 @@ namespace	ft {
 		void		push_back( const value_type & val ) {
 
 			if (_size + 1 > _capacity) {
+
 				if (!_capacity) {
 					reserve(1);
 				} else {
@@ -251,6 +256,7 @@ namespace	ft {
 		void		pop_back( void ) {
 
 			if (_size) {
+
 				_alloc.destroy(_valueArray + _size);
 			}
 			_size -= 1;
@@ -267,12 +273,15 @@ namespace	ft {
 			}
 			_size++;
 			_valueArray[i] = val;
+
 			return begin() + pos;
 		}
 		void		insert( iterator position, size_type n, const value_type & val ) {
 
 			iterator	it = position;
+
 			for (size_type i = 0; i < n; ++i, ++it) {
+
 				it = insert(it, val);
 			}
 		}
@@ -295,7 +304,6 @@ namespace	ft {
 
 			size_type	dist = ft::distance(first, last);
 			size_type	first_pos = ft::distance(begin(), first);
-			// size_type	last_pos = ft::distance(begin(), last);
 
 			for (size_type i = first_pos; i + dist < _size; ++i) {
 
@@ -303,6 +311,7 @@ namespace	ft {
 				_alloc.construct(_valueArray + i, _valueArray[i + dist]);
 			}
 			_size -= dist;
+
 			return first;
 		}
 		void		swap( vector & x ) {
@@ -330,6 +339,7 @@ namespace	ft {
 		void		clear( void ) {
 
 			while (_size) {
+
 				pop_back();
 			}
 		}
