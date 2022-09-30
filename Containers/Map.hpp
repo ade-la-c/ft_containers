@@ -35,57 +35,71 @@ namespace   ft {
 //	########  ######## ##       #### ##    ## ######## ##     ##  ######
 //	*/
 
-		typedef T																mapped_type;
-		typedef Key																key_type;
-		typedef Allocator														allocator_type;
-		typedef Compare															key_compare;
+		typedef				T														mapped_type;
+		typedef				Key														key_type;
+		typedef				Allocator												allocator_type;
+		typedef				Compare													key_compare;
 
-		typedef typename std::pair<const Key, T>								value_type;		//TODO Replace with ft::pair
-		typedef size_t															size_type;
-		typedef typename std::ptrdiff_t											difference_type;
-		typedef typename allocator_type::reference								reference;
-		typedef typename allocator_type::const_reference						const_reference;
-		typedef typename allocator_type::pointer								pointer;
-		typedef typename allocator_type::const_pointer							const_pointer;
+		typedef typename	std::pair<const Key, T>									value_type;		//TODO Replace with ft::pair
+		typedef				size_t													size_type;
+		typedef typename	std::ptrdiff_t											difference_type;
+		typedef typename	allocator_type::reference								reference;
+		typedef typename	allocator_type::const_reference							const_reference;
+		typedef typename	allocator_type::pointer									pointer;
+		typedef typename	allocator_type::const_pointer							const_pointer;
 
-		class	value_compare : public std::binary_function<  > {
+		typedef				ft::reverse_iterator< value_type >						reverse_iterator;		   //???????
+		typedef				ft::reverse_iterator< const value_type >				const_reverse_iterator;	  //???????
+		typedef typename	std::bidirectional_iterator< value_type >				iterator;				 //???????
+		typedef typename	std::bidirectional_iterator< const value_type >			const_iterator;			//???????
+
+		class	value_compare : public std::binary_function< value_type, key_type, bool > {
+			friend class	map< class key_type, class mapped_type, class key_compare, class allocator_type >;
 
 			public:
 
-				typedef value_type	first_value;
+				typedef value_type	first_argument_type;
+				typedef value_type	second_argument_type;
+				typedef bool		result_type;
 
-				value_compare() {}
+				bool	operator() ( const value_type & x, const value_type & y ) const {
 
-				operator() ();
-
+					return comp(x.first, y.first);
+				}
 
 			protected:
 
+				Compare				comp;
 
+				value_compare( Compare c ) : comp(c) {}
 
 		};
-
-		typedef ft::reverse_iterator< value_type >								reverse_iterator;		 //???????
-		typedef ft::reverse_iterator< const value_type >						const_reverse_iterator; //???????
-		typedef typename std::bidirectional_iterator< value_type >				iterator;
-		typedef typename std::bidirectional_iterator< const value_type >		const_iterator;			//??????
 
 		//	methods		//
 
 		//*	empty
-		explicit	map( const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() ) : _size(0), _alloc(NULL) {
+		explicit	map( const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() )
+		: _size(0), _capacity(0), _alloc(alloc) {
 
-
+			this->_valueArray = this->_alloc.allocate(0);
 		}
 		//*	range
 		template <class InputIterator>
-		map( InputIterator first, InputIterator last, const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() ) : _size(0), _alloc(alloc) {
+		map( InputIterator first, InputIterator last, const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() )
+		: _size(0), _capacity(0), _alloc(alloc) {
 
-			_size = ft::distance(first, last);
+			this->_size = ft::distance(first, last);
+			this->_capacity = ft::distance(first, last);
+			this->_alloc.allocate(this->_size);
 
+			for (size_type i = 0; i < this->_size; i++) {
+
+				this->_alloc.construct(this->_valueArray + i, *(first + i));
+			}
+			
 		}
 		//*	copy
-		map( const map & x );
+		map( const map & x ) { *this = x; }
 		//*	assignation operator
 		map &		operator=( const map & x );
 		//*	destructor
@@ -130,7 +144,7 @@ namespace   ft {
 		// observers
 
 		key_compare				key_comp( void ) const;
-		value_compare			value_comp( void ) const;//TODO class to write
+		value_compare			value_comp( void ) const;
 
 		// operations
 
@@ -157,10 +171,12 @@ namespace   ft {
 	private:
 
 		size_type					_size;
+		size_type					_capacity;
 		allocator_type				_alloc;
+		pointer						_valueArray;
 
 
-	}
+	};
 
 
 

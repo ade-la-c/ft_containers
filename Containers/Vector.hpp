@@ -71,19 +71,21 @@ namespace	ft {
 		vector( InputIterator first, InputIterator last, const allocator_type & alloc = allocator_type(),
 		typename ft::enable_if< !ft::is_integral<InputIterator>::value, InputIterator >::type * = NULL ) {
 			
-			_size = ft::distance(first, last);
-			_capacity = _size;
-			_alloc = alloc;
+			this->_size = ft::distance(first, last);
+			this->_capacity =this->_size;
+			this->_alloc = alloc;
 			this->_valueArray = this->_alloc.allocate(_size, 0);
 
 			for (size_type i = 0; i < _size; i++) {
-				_alloc.construct(_valueArray + i, *(first + i));
+
+				this->_alloc.construct(this->_valueArray + i, *(first + i));
 			}
 		}
 		//*	copy constructor
-		vector( const vector & x ) : _capacity(x._capacity), _size(x._size), _alloc(x._alloc) {
+		vector( const vector & x ) : _capacity(x._capacity), _size(x._size), _alloc(x._alloc) {		//TODO		fix possible redundance with operator=()
 
-			this->_valueArray = this->_alloc.allocate(0);
+			this->_valueArray = this->_alloc.allocate(0);						 //!	why ?
+			// this->_valueArray = this->_alloc.allocate(x._capacity);			//?		why not ?
 			*this = x;
 		}
 		//*	assignation operator
