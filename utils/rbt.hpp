@@ -9,8 +9,13 @@
 
 namespace ft {
 
-template <typename T, typename Compare = std::less<T>, typename Allocator = std::allocator<T> >
-class RBtree {
+template <
+
+	typename T,
+	typename Compare = std::less<T>,
+	typename Allocator = std::allocator<T>
+
+> class RBtree {
 	private:
 
 		class RBnode;

@@ -23,9 +23,6 @@ namespace   ft {
 	> class map {
 
 
-	public:
-
-
 //	/*.
 //	########  ######## ######## #### ##    ## ######## ########   ######
 //	##     ## ##       ##        ##  ###   ## ##       ##     ## ##    ##
@@ -35,6 +32,14 @@ namespace   ft {
 //	##     ## ##       ##        ##  ##   ### ##       ##    ##  ##    ##
 //	########  ######## ##       #### ##    ## ######## ##     ##  ######
 //	*/
+
+	private:
+
+		typedef 			ft::RBtree< key_type, mapped_type >						Tree;
+		typedef typename	Allocator::template rebind<Tree>::other					tree_allocator;
+
+
+	public:
 
 		typedef				T														mapped_type;
 		typedef				Key														key_type;
@@ -54,7 +59,14 @@ namespace   ft {
 		typedef typename	std::bidirectional_iterator< value_type >				iterator;				 //???????
 		typedef typename	std::bidirectional_iterator< const value_type >			const_iterator;			//???????
 
-		typedef typename	ft::RBtree< key_type, mapped_type >						Tree;
+
+//*	.##....##.########..######..########.########.########......######..##..........###.....######...######.
+//*	.###...##.##.......##....##....##....##.......##.....##....##....##.##.........##.##...##....##.##....##
+//*	.####..##.##.......##..........##....##.......##.....##....##.......##........##...##..##.......##......
+//*	.##.##.##.######....######.....##....######...##.....##....##.......##.......##.....##..######...######.
+//*	.##..####.##.............##....##....##.......##.....##....##.......##.......#########.......##.......##
+//*	.##...###.##.......##....##....##....##.......##.....##....##....##.##.......##.....##.##....##.##....##
+//*	.##....##.########..######.....##....########.########......######..########.##.....##..######...######.
 
 		class	value_compare : public std::binary_function< value_type, key_type, bool > {
 			friend class	map< class key_type, class mapped_type, class key_compare, class allocator_type >;
@@ -75,46 +87,60 @@ namespace   ft {
 
 		};
 
-		//	methods		//
+//*	.##.....##.########.########.##.....##..#######..########...######.
+//*	.###...###.##..........##....##.....##.##.....##.##.....##.##....##
+//*	.####.####.##..........##....##.....##.##.....##.##.....##.##......
+//*	.##.###.##.######......##....#########.##.....##.##.....##..######.
+//*	.##.....##.##..........##....##.....##.##.....##.##.....##.......##
+//*	.##.....##.##..........##....##.....##.##.....##.##.....##.##....##
+//*	.##.....##.########....##....##.....##..#######..########...######.
 
 		//*	empty
 		explicit	map( const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() )
-		: _size(0), _capacity(0), _alloc(alloc) {
+		: _alloc(alloc) {
 
-			this->_rbt = _alloc.allocate(0);
+			this->_rbt = tree_allocator.allocate(1);
 		}
 		//*	range
 		template <class InputIterator>
 		map( InputIterator first, InputIterator last, const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() )
-		: _size(0), _capacity(0), _alloc(alloc) {
+		: _alloc(alloc), _treeAlloc(alloc) {		//todo add kv_compare
 
-			this->_size = ft::distance(first, last);
-			this->_capacity = ft::distance(first, last);
-			this->_alloc.allocate(this->_size);
-
-			for (size_type i = 0; i < this->_size; i++) {
-
-				this->_alloc.construct(this->_valueArray + i, *(first + i));
-			}
-			
+			this->insert(first, last);
 		}
 		//*	copy
 		map( const map & x ) { *this = x; }
 		//*	assignation operator
-		map &		operator=( const map & x );
+		map &		operator=( const map & rhs ) {
+
+			if (*this == rhs) {
+
+				this->_alloc = rhs._alloc;
+				this->_treeAlloc = rhs._treeAlloc;
+				// this->_rbt = rhs._rbt;
+				tree_allocator.destroy(this->_rbt);
+				tree_allocator.allocate(this->rbt, 1);
+				this->insert(rhs.begin(), rhs.end());
+			}
+			return *this;
+		}
 		//*	destructor
-		~map( void );
+		~map( void ) {
+
+			tree_allocator.destroy(tree);
+			tree_allocator.deallocate(tree, 1);
+		}
 
 		// iterators
 
-		iterator				begin( void );
-		const_iterator			begin( void ) const;
-		iterator				end( void );
-		const_iterator			end( void ) const;
-		reverse_iterator		rbegin( void );
-		const_reverse_iterator	rbegin( void ) const;
-		reverse_iterator		rend( void );
-		const_reverse_iterator	rend( void ) const;
+		iterator				begin( void ) { return _rbt.begin(); }
+		const_iterator			begin( void ) const { return _rbt.begin() }
+		iterator				end( void ) { return _rbt.end(); }
+		const_iterator			end( void ) const { return _rbt.end(); }
+		reverse_iterator		rbegin( void ) { return _rbt.rbegin(); }
+		const_reverse_iterator	rbegin( void ) const { return _rbt.rbegin(); }
+		reverse_iterator		rend( void ) { return _rbt.rend(); }
+		const_reverse_iterator	rend( void ) const { return _rbt.rend(); }
 
 		// size
 
@@ -124,7 +150,10 @@ namespace   ft {
 
 		// element access
 
-		mapped_type &	operator[]( const key_type & k );
+		mapped_type &	operator[]( const key_type & k ) {
+
+			
+		}
 
 		// modifiers
 
@@ -170,10 +199,10 @@ namespace   ft {
 
 	private:
 
-		size_type					_size;
-		size_type					_capacity;
+
 		allocator_type				_alloc;
-		Tree						_rbt;
+		tree_allocator				_treeAlloc;
+		Tree *						_rbt;
 
 
 	};
