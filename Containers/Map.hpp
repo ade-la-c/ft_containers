@@ -8,6 +8,7 @@
 
 #include "../utils/utils.hpp"
 #include "../utils/reverse_iterator.hpp"
+#include "../utils/rbt.hpp"
 
 namespace   ft {
 
@@ -53,6 +54,8 @@ namespace   ft {
 		typedef typename	std::bidirectional_iterator< value_type >				iterator;				 //???????
 		typedef typename	std::bidirectional_iterator< const value_type >			const_iterator;			//???????
 
+		typedef typename	ft::RBtree< key_type, mapped_type >						Tree;
+
 		class	value_compare : public std::binary_function< value_type, key_type, bool > {
 			friend class	map< class key_type, class mapped_type, class key_compare, class allocator_type >;
 
@@ -62,10 +65,7 @@ namespace   ft {
 				typedef value_type	second_argument_type;
 				typedef bool		result_type;
 
-				bool	operator() ( const value_type & x, const value_type & y ) const {
-
-					return comp(x.first, y.first);
-				}
+				bool	operator() ( const value_type & x, const value_type & y ) const { return comp(x.first, y.first); }
 
 			protected:
 
@@ -81,7 +81,7 @@ namespace   ft {
 		explicit	map( const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() )
 		: _size(0), _capacity(0), _alloc(alloc) {
 
-			this->_valueArray = this->_alloc.allocate(0);
+			this->_rbt = _alloc.allocate(0);
 		}
 		//*	range
 		template <class InputIterator>
@@ -173,7 +173,7 @@ namespace   ft {
 		size_type					_size;
 		size_type					_capacity;
 		allocator_type				_alloc;
-		pointer						_valueArray;
+		Tree						_rbt;
 
 
 	};
