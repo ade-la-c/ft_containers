@@ -80,7 +80,7 @@ template <
 
 		//The compare class has to have () overloads if you wish to compare a key of a different type -> have comp(T, T), comp(Key, T) and comp(T, Key)
 		template <typename Key>
-		iterator get(Key const & key) const throw(ElementNotFoundException) {
+		iterator	get(Key const & key) const throw(ElementNotFoundException) {
 
 			RBnode * current = root;
 
@@ -97,7 +97,7 @@ template <
 		}
 
 		template <typename Key>
-		iterator lower_bound(Key const & key) {
+		iterator	lower_bound(Key const & key) {
 
 			RBnode * current = root;
 			RBnode * tmp;
@@ -125,7 +125,7 @@ template <
 		}
 
 		template <typename Key>
-		iterator upper_bound(Key const & key) {
+		iterator	upper_bound(Key const & key) {
 
 			RBnode * current = root;
 			RBnode * tmp;
@@ -151,7 +151,7 @@ template <
 			return iterator(current);
 		}
 
-		iterator insert(value_type const & data) {
+		iterator	insert(value_type const & data) {
 
 			RBnode * node = insert_recolor(bst_insert(data));
 			leaf->parent = root;
@@ -160,7 +160,7 @@ template <
 		}
 
 		template <typename Key>
-		size_type remove(Key const & key) {
+		size_type	remove(Key const & key) {
 
 			RBnode * node;
 			node = bst_delete<Key>(key);
@@ -172,7 +172,7 @@ template <
 			return 1;
 		}
 
-		void remove(iterator & it) {
+		void		remove(iterator & it) {
 
 			if (!it.node || it.node == leaf)
 				return;
@@ -181,17 +181,17 @@ template <
 			leaf->parent = root;
 		}
 
-		void clear() {
+		void		clear() {
 
 			while(root != leaf)
 				bst_delete(root);
 		}
 
-		size_type get_size() const { return size; }
+		size_type	get_size() const { return size; }
 
-		void output() const { output(root, 0); }
+		void		output() const { output(root, 0); }
 
-		void inorder_print() const {
+		void		inorder_print() const {
 
 			const_iterator it;
 			const_iterator ite = end();
@@ -200,7 +200,7 @@ template <
 				std::cout << *it << std::endl;
 		}
 
-		void r_inorder_print() const {
+		void		r_inorder_print() const {
 
 			const_reverse_iterator it;
 			const_reverse_iterator ite = rend();
@@ -211,7 +211,7 @@ template <
 
 		/* iterators*/
 
-		iterator begin() {
+		iterator				begin() {
 
 			RBnode * tmp = root;
 
@@ -222,13 +222,13 @@ template <
 			return iterator(tmp);
 		}
 
-		iterator end() { return iterator(leaf); }
+		iterator				end() { return iterator(leaf); }
 
-		reverse_iterator rbegin() { return reverse_iterator(end()); }
+		reverse_iterator		rbegin() { return reverse_iterator(end()); }
 
-		reverse_iterator rend() { return reverse_iterator(begin()); }
+		reverse_iterator		rend() { return reverse_iterator(begin()); }
 
-		const_iterator begin() const {
+		const_iterator			begin() const {
 
 			RBnode * tmp = root;
 
@@ -239,15 +239,15 @@ template <
 			return const_iterator(tmp);
 		}
 
-		const_iterator end() const { return const_iterator(leaf); }
+		const_iterator			end() const { return const_iterator(leaf); }
 
-		const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
+		const_reverse_iterator	rbegin() const { return const_reverse_iterator(end()); }
 
-		const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
+		const_reverse_iterator	rend() const { return const_reverse_iterator(begin()); }
 
 		/* Operator overloads */
 
-		RBtree & operator=(const RBtree<value_type> & rhs) {
+		RBtree &				operator=(const RBtree<value_type> & rhs) {
 
 			while (root != leaf)
 				bst_delete(root);

@@ -118,18 +118,26 @@ int main(int argc, char** argv) {
 // */
 
 
-#include "Containers/Vector.hpp"
+// #include "Containers/Vector.hpp"
+// #include <iostream>
+// #include <vector>
+// int		main( void ) {
+// 	/* ********************************************************************** */
+// 	/* **************************** TESTS VECTOR **************************** */
+// 	/* ********************************************************************** */
+// 	std::cout << "\033[1;34m/* ***************************************** */\033[0m" << std::endl;
+// 	std::cout << "\033[1;34m/* ************** TESTS VECTOR ************* */\033[0m" << std::endl;
+// 	std::cout << "\033[1;34m/* ***************************************** */\033[0m" << std::endl;
+// 	std::cout << std::endl;
+// std::vector<int>::~vector;
+// 	vector_testing();
+// 	return 0;
+// }
+
 #include <iostream>
-#include <vector>
-int		main( void ) {
-	/* ********************************************************************** */
-	/* **************************** TESTS VECTOR **************************** */
-	/* ********************************************************************** */
-	std::cout << "\033[1;34m/* ***************************************** */\033[0m" << std::endl;
-	std::cout << "\033[1;34m/* ************** TESTS VECTOR ************* */\033[0m" << std::endl;
-	std::cout << "\033[1;34m/* ***************************************** */\033[0m" << std::endl;
-	std::cout << std::endl;
-std::vector<int>::~vector;
-	vector_testing();
-	return 0;
+#include "Containers/Map.hpp"
+
+int main() {
+
+	
 }

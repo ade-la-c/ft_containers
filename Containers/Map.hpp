@@ -97,9 +97,9 @@ namespace   ft {
 
 		//*	empty
 		explicit	map( const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() )
-		: _alloc(alloc) {
+		: _alloc(alloc), _treeAlloc(alloc) {
 
-			this->_rbt = tree_allocator.allocate(1);
+			this->_rbt = _treeAlloc.allocate(1);
 		}
 		//*	range
 		template <class InputIterator>
@@ -117,9 +117,9 @@ namespace   ft {
 
 				this->_alloc = rhs._alloc;
 				this->_treeAlloc = rhs._treeAlloc;
-				// this->_rbt = rhs._rbt;
-				tree_allocator.destroy(this->_rbt);
-				tree_allocator.allocate(this->rbt, 1);
+
+				this->_treeAlloc.destroy(this->_rbt);
+				this->_treeAlloc.allocate(this->rbt, 1);
 				this->insert(rhs.begin(), rhs.end());
 			}
 			return *this;
@@ -127,8 +127,8 @@ namespace   ft {
 		//*	destructor
 		~map( void ) {
 
-			tree_allocator.destroy(tree);
-			tree_allocator.deallocate(tree, 1);
+			this->_treeAlloc.destroy(tree);
+			this->_treeAlloc.deallocate(tree, 1);
 		}
 
 		// iterators
