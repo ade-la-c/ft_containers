@@ -38,8 +38,6 @@ namespace	ft {
 			pair( const first_type & a, const second_type & b ) : _first(a), _second(b) {}
 
 
-
-
 		private:
 
 			first_type		_first;
