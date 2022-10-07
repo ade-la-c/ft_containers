@@ -9,6 +9,7 @@
 #include "../utils/utils.hpp"
 #include "../utils/reverse_iterator.hpp"
 #include "../utils/rbt.hpp"
+#include "../utils/pair.hpp"
 
 namespace   ft {
 
@@ -17,8 +18,8 @@ namespace   ft {
 
 		class Key,																//*	key_type
 		class T,																//*	mapped_type
-		class Compare = std::less< std::pair< const Key, T> >,					//*	key_compare
-		class Allocator = std::allocator< std::pair< const Key, T > >			//*	allocator_type
+		class Compare = std::less< ft::pair< const Key, T> >,					//*	key_compare
+		class Allocator = std::allocator< ft::pair< const Key, T > >			//*	allocator_type
 
 	> class map {
 
@@ -46,7 +47,7 @@ namespace   ft {
 		typedef				Allocator												allocator_type;
 		typedef				Compare													key_compare;
 
-		typedef typename	std::pair<const Key, T>									value_type;		//TODO Replace with ft::pair
+		typedef typename	ft::pair<const Key, T>									value_type;		//TODO Replace with ft::pair
 		typedef				size_t													size_type;
 		typedef typename	std::ptrdiff_t											difference_type;
 		typedef typename	allocator_type::reference								reference;
