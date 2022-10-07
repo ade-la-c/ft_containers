@@ -113,7 +113,7 @@ template <
 				if (!comp(key, *tmp->data) && !comp(*tmp->data, key))
 					return iterator(tmp);
 //while I am smaller than left one, go left
-				while (tmp != leaf && comp(key, *tmp->data)) { 
+				while (tmp != leaf && comp(key, *tmp->data)) {
 					current = tmp;
 					tmp = tmp->left;
 				}
