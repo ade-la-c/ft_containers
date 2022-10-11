@@ -58,7 +58,6 @@ template <
 			root = leaf;
 			leaf->parent = root;
 		}
-
 		RBtree(const RBtree & copy) : comp(copy.comp), value_alloc(copy.value_alloc), node_alloc(copy.node_alloc), leaf(construct()) {
 
 			root = leaf;
@@ -69,7 +68,6 @@ template <
 			for (it = copy.begin(); it != ite; it++)
 				insert(*it);
 		}
-
 		~RBtree() {
 
 			clear();
@@ -95,7 +93,6 @@ template <
 					current = current->right;
 			}
 		}
-
 		template <typename Key>
 		iterator	lower_bound(Key const & key) {
 
@@ -123,7 +120,6 @@ template <
 			}
 			return iterator(current);
 		}
-
 		template <typename Key>
 		iterator	upper_bound(Key const & key) {
 
@@ -150,7 +146,6 @@ template <
 			}
 			return iterator(current);
 		}
-
 		iterator	insert(value_type const & data) {
 
 			RBnode * node = insert_recolor(bst_insert(data));
@@ -158,7 +153,6 @@ template <
 			++size;
 			return iterator(node);
 		}
-
 		template <typename Key>
 		size_type	remove(Key const & key) {
 
@@ -171,7 +165,6 @@ template <
 			leaf->parent = root;
 			return 1;
 		}
-
 		void		remove(iterator & it) {
 
 			if (!it.node || it.node == leaf)
@@ -180,17 +173,13 @@ template <
 			remove_recolor(node);
 			leaf->parent = root;
 		}
-
 		void		clear() {
 
 			while(root != leaf)
 				bst_delete(root);
 		}
-
 		size_type	get_size() const { return size; }
-
 		void		output() const { output(root, 0); }
-
 		void		inorder_print() const {
 
 			const_iterator it;
@@ -199,7 +188,6 @@ template <
 			for(it = begin(); it != ite; it++)
 				std::cout << *it << std::endl;
 		}
-
 		void		r_inorder_print() const {
 
 			const_reverse_iterator it;
@@ -221,13 +209,9 @@ template <
 				tmp = tmp->left;
 			return iterator(tmp);
 		}
-
 		iterator				end() { return iterator(leaf); }
-
 		reverse_iterator		rbegin() { return reverse_iterator(end()); }
-
 		reverse_iterator		rend() { return reverse_iterator(begin()); }
-
 		const_iterator			begin() const {
 
 			RBnode * tmp = root;
@@ -238,11 +222,8 @@ template <
 				tmp = tmp->left;
 			return const_iterator(tmp);
 		}
-
 		const_iterator			end() const { return const_iterator(leaf); }
-
 		const_reverse_iterator	rbegin() const { return const_reverse_iterator(end()); }
-
 		const_reverse_iterator	rend() const { return const_reverse_iterator(begin()); }
 
 		/* Operator overloads */
@@ -267,13 +248,11 @@ template <
 			BLACK,
 			RED
 		} color_t;
-
 		typedef enum side {
 
 			LEFT,
 			RIGHT
 		} side_t;
-
 		class RBnode {
 
 			public :
@@ -390,7 +369,6 @@ template <
 				}
 
 		};
-
 		RBnode * construct() {
 
 			RBnode * node;
@@ -400,7 +378,6 @@ template <
 			node->left = node->right = NULL;
 			return node;
 		}
-
 		RBnode * construct(value_type const & data) {
 
 			RBnode * node;
@@ -409,7 +386,6 @@ template <
 			node_alloc.construct(node, RBnode(data, leaf, value_alloc));
 			return node;
 		}
-
 		RBnode * construct(RBnode const & cpy) {
 
 			RBnode * node;
@@ -418,7 +394,6 @@ template <
 			node_alloc.construct(node, cpy);
 			return node;
 		}
-
 		void destruct(RBnode * node) {
 
 			node_alloc.destroy(node);
@@ -534,7 +509,6 @@ template <
 			node->parent = tmp;
 			node->side = LEFT;
 		}
-
 		void right_rotate(RBnode * node) {
 
 			RBnode * tmp;
@@ -559,7 +533,6 @@ template <
 			node->parent = tmp;
 			node->side = RIGHT;
 		}
-
 		RBnode * insert_recolor(RBnode * node) {
 
 			if (node == root) {
@@ -604,7 +577,6 @@ template <
 			grandfather->color = RED; // is now uncle
 			return node;
 		}
-
 		void remove_recolor(RBnode * node) {
 
 			RBnode * sibling;
@@ -666,7 +638,6 @@ template <
 				}
 			}
 		}
-
 		RBnode * bst_insert(value_type const & data) {
 
 			if (root == leaf) {
@@ -700,7 +671,6 @@ template <
 				}
 			}
 		}
-
 		RBnode * bst_delete(RBnode * node) {
 
 			RBnode * successor;
@@ -741,7 +711,6 @@ template <
 				return (bst_delete(node));
 			}
 		}
-
 		template<typename Key>
 		RBnode * bst_delete(Key const & key) {
 
@@ -758,7 +727,6 @@ template <
 					current = current->right;
 			}
 		}
-
 		void output(RBnode const * node, int depth) const {
 
 			if (node == leaf) {
@@ -781,6 +749,8 @@ template <
 		node_allocator_type node_alloc;
 		RBnode * const leaf;
 		size_type size;
+
+
 };
 
 /* for a static leaf
