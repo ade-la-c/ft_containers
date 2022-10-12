@@ -42,8 +42,8 @@ namespace   ft {
 
 	public:
 
-		typedef				T														mapped_type;
-		typedef				Key														key_type;
+		typedef				T														mapped_type;		//*	DEFINITION
+		typedef				Key														key_type;			//*	KEY
 		typedef				Allocator												allocator_type;
 		typedef				Compare													key_compare;
 
@@ -98,14 +98,14 @@ namespace   ft {
 
 		//*	empty
 		explicit	map( const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() )
-		: _alloc(alloc), _treeAlloc(alloc) {
+		: _size(0), _alloc(alloc), _treeAlloc(alloc) {
 
 			this->_rbt = _treeAlloc.allocate(1);
 		}
 		//*	range
 		template <class InputIterator>
 		map( InputIterator first, InputIterator last, const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() )
-		: _alloc(alloc), _treeAlloc(alloc) {		//todo add kv_compare
+		: _size(0), _alloc(alloc), _treeAlloc(alloc) {		//todo add kv_compare
 
 			this->insert(first, last);
 		}
@@ -116,6 +116,7 @@ namespace   ft {
 
 			if (*this == rhs) {
 
+				this->_size = rhs._size;
 				this->_alloc = rhs._alloc;
 				this->_treeAlloc = rhs._treeAlloc;
 
@@ -183,11 +184,11 @@ namespace   ft {
 
 		size_type				count( const key_type & k ) const;
 
-		iterator				lower_bond( const key_type & k );
-		const_iterator			lower_bond( const key_type & k ) const;
+		iterator				lower_bound( const key_type & k );
+		const_iterator			lower_bound( const key_type & k ) const;
 
-		iterator				upper_bond( const key_type & k );
-		const_iterator			upper_bond( const key_type & k ) const;
+		iterator				upper_bound( const key_type & k );
+		const_iterator			upper_bound( const key_type & k ) const;
 
 		pair<const_iterator, const_iterator>	equal_range( const key_type & k );
 		pair<iterator, iterator>				equal_range( const key_type & k );
@@ -201,6 +202,7 @@ namespace   ft {
 	private:
 
 
+		size_type					_size;
 		allocator_type				_alloc;
 		tree_allocator				_treeAlloc;
 		Tree *						_rbt;

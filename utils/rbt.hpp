@@ -20,7 +20,7 @@ template <
 
 		class RBnode;
 		template <typename U> class iterator_t;
-		typedef typename Allocator::template rebind<RBnode>::other node_allocator_type;
+		typedef typename Allocator::template rebind<RBnode>::other	node_allocator_type;
 
 	public:
 
