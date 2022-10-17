@@ -257,7 +257,6 @@ template <
 
 			public :
 
-
 				value_type * data;
 				color_t color;
 				bool is_double;
