@@ -98,14 +98,14 @@ namespace   ft {
 
 		//*	empty
 		explicit	map( const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() )
-		: _size(0), _alloc(alloc), _treeAlloc(alloc) {
+		: _alloc(alloc), _treeAlloc(alloc) {
 
 			this->_rbt = _treeAlloc.allocate(1);
 		}
 		//*	range
 		template <class InputIterator>
 		map( InputIterator first, InputIterator last, const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() )
-		: _size(0), _alloc(alloc), _treeAlloc(alloc) {		//todo add kv_compare
+		: _alloc(alloc), _treeAlloc(alloc) {		//todo add kv_compare
 
 			this->insert(first, last);
 		}
@@ -135,14 +135,14 @@ namespace   ft {
 
 		// iterators
 
-		iterator				begin( void ) { return _rbt.begin(); }
-		const_iterator			begin( void ) const { return _rbt.begin() }
-		iterator				end( void ) { return _rbt.end(); }
-		const_iterator			end( void ) const { return _rbt.end(); }
-		reverse_iterator		rbegin( void ) { return _rbt.rbegin(); }
-		const_reverse_iterator	rbegin( void ) const { return _rbt.rbegin(); }
-		reverse_iterator		rend( void ) { return _rbt.rend(); }
-		const_reverse_iterator	rend( void ) const { return _rbt.rend(); }
+		iterator				begin( void );
+		const_iterator			begin( void ) const;
+		iterator				end( void );
+		const_iterator			end( void );
+		reverse_iterator		rbegin( void );
+		const_reverse_iterator	rbegin( void );
+		reverse_iterator		rend( void );
+		const_reverse_iterator	rend( void ) const;
 
 		// size
 
@@ -201,12 +201,9 @@ namespace   ft {
 
 	private:
 
-
-		size_type					_size;
 		allocator_type				_alloc;
 		tree_allocator				_treeAlloc;
 		Tree *						_rbt;
-
 
 	};
 

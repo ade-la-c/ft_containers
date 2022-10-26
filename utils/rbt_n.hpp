@@ -45,8 +45,8 @@ namespace ft {
 		public:
 
 			typedef	size_t									size_type;
-			typedef	T										mapped_type;
 			typedef	Key										key_type;
+			typedef	T										mapped_type;
 			typedef	ft::pair<const key_type, mapped_type>	value_type;
 			typedef	std::allocator< Node<value_type> >		node_allocator;
 			typedef	ft::Node<value_type>*					node_pointer;
@@ -84,7 +84,7 @@ namespace ft {
 			~RBTree() {
 				node_allocator().destroy(end);
 				node_allocator().deallocate(end, 1);
-				end = nullptr;
+				end = NULL;
 			}
 
 			/* ************************************************************** */
@@ -98,16 +98,19 @@ namespace ft {
 			node_pointer	getRoot() const { return this->root; }
 			size_type		getSize() const { return this->size; }
 
+			// search returns the node corresponding to the key_type entered as parameter
 			node_pointer	search(const key_type & key) const {
 				node_pointer	tmp = this->root;
 
 				while (tmp != end) {
-					if (tmp->data.first == key)
+
+					if (tmp->data.first == key) {
 						return tmp;
-					else if (key < tmp->data.first)
+					} else if (key < tmp->data.first) {
 						tmp = tmp->left;
-					else
+					} else {
 						tmp = tmp->right;
+					}
 				}
 				return NULL;
 			}
@@ -115,20 +118,24 @@ namespace ft {
 			node_pointer	firstNode() const {
 				node_pointer	tmp = root;
 
-				if (tmp == end)
+				if (tmp == end) {
 					return end;
-				while (tmp->left != end)
+				}
+				while (tmp->left != end) {
 					tmp = tmp->left;
+				}
 				return tmp;
 			}
 
 			node_pointer	lastNode() const {
 				node_pointer	tmp = root;
 
-				if (tmp == end)
+				if (tmp == end) {	
 					return end;
-				while (tmp->right != end)
+				}
+				while (tmp->right != end) {
 					tmp = tmp->right;
+				}
 				return tmp;
 			}
 
@@ -184,7 +191,7 @@ namespace ft {
 				return node;
 			}
 
-			void	insertAll(node_pointer node) {
+			void			insertAll(node_pointer node) {
 				if (node) {
 					insertAll(node->left);
 					insertAll(node->right);
@@ -192,7 +199,7 @@ namespace ft {
 				}
 			}
 
-			size_type	deleteNode(node_pointer node, const key_type & key) {	//! why __SIZE_TYPE__ instead of size_type ?
+			size_type		deleteNode(node_pointer node, const key_type & key) {	//! why __SIZE_TYPE__ instead of size_type ?
 				node_pointer	x, y, z = end;
 
 				/*	Find the node containing the key */
@@ -240,7 +247,7 @@ namespace ft {
 				return 1;
 			}
 
-			void	clear(node_pointer node) {
+			void			clear(node_pointer node) {
 				if (node == end)
 					return;
 				clear(node->left);
@@ -250,7 +257,7 @@ namespace ft {
 				node = NULL;
 			}
 
-			void	swap(RBTree & x) {
+			void			swap(RBTree & x) {
 				size_type		s_size;
 				node_pointer	s_root;
 				node_pointer	s_end;
@@ -439,5 +446,7 @@ namespace ft {
 				}
 				x->color = false;
 			}
+
 	};
+
 }
