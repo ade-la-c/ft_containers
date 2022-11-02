@@ -24,7 +24,6 @@ namespace   ft {
 	> class map {
 
 
-//	/*.
 //	########  ######## ######## #### ##    ## ######## ########   ######
 //	##     ## ##       ##        ##  ###   ## ##       ##     ## ##    ##
 //	##     ## ##       ##        ##  ####  ## ##       ##     ## ##
@@ -32,7 +31,6 @@ namespace   ft {
 //	##     ## ##       ##        ##  ##  #### ##       ##   ##         ##
 //	##     ## ##       ##        ##  ##   ### ##       ##    ##  ##    ##
 //	########  ######## ##       #### ##    ## ######## ##     ##  ######
-//	*/
 
 	private:
 
@@ -47,7 +45,7 @@ namespace   ft {
 		typedef				Allocator												allocator_type;
 		typedef				Compare													key_compare;
 
-		typedef typename	ft::pair<const Key, T>									value_type;		//TODO Replace with ft::pair
+		typedef typename	ft::pair<const Key, T>									value_type;
 		typedef				size_t													size_type;
 		typedef typename	std::ptrdiff_t											difference_type;
 		typedef typename	allocator_type::reference								reference;
@@ -61,13 +59,15 @@ namespace   ft {
 		typedef typename	std::bidirectional_iterator< const value_type >			const_iterator;			//???????
 
 
-//*	.##....##.########..######..########.########.########......######..##..........###.....######...######.
-//*	.###...##.##.......##....##....##....##.......##.....##....##....##.##.........##.##...##....##.##....##
-//*	.####..##.##.......##..........##....##.......##.....##....##.......##........##...##..##.......##......
-//*	.##.##.##.######....######.....##....######...##.....##....##.......##.......##.....##..######...######.
-//*	.##..####.##.............##....##....##.......##.....##....##.......##.......#########.......##.......##
-//*	.##...###.##.......##....##....##....##.......##.....##....##....##.##.......##.....##.##....##.##....##
-//*	.##....##.########..######.....##....########.########......######..########.##.....##..######...######.
+
+//	##    ## ########  ######  ######## ######## ########      ######  ##          ###     ######   ######
+//	###   ## ##       ##    ##    ##    ##       ##     ##    ##    ## ##         ## ##   ##    ## ##    ##
+//	####  ## ##       ##          ##    ##       ##     ##    ##       ##        ##   ##  ##       ##
+//	## ## ## ######    ######     ##    ######   ##     ##    ##       ##       ##     ##  ######   ######
+//	##  #### ##             ##    ##    ##       ##     ##    ##       ##       #########       ##       ##
+//	##   ### ##       ##    ##    ##    ##       ##     ##    ##    ## ##       ##     ## ##    ## ##    ##
+//	##    ## ########  ######     ##    ######## ########      ######  ######## ##     ##  ######   ######
+
 
 		class	value_compare : public std::binary_function< value_type, key_type, bool > {
 			friend class	map< class key_type, class mapped_type, class key_compare, class allocator_type >;
@@ -88,24 +88,24 @@ namespace   ft {
 
 		};
 
-//*	.##.....##.########.########.##.....##..#######..########...######.
-//*	.###...###.##..........##....##.....##.##.....##.##.....##.##....##
-//*	.####.####.##..........##....##.....##.##.....##.##.....##.##......
-//*	.##.###.##.######......##....#########.##.....##.##.....##..######.
-//*	.##.....##.##..........##....##.....##.##.....##.##.....##.......##
-//*	.##.....##.##..........##....##.....##.##.....##.##.....##.##....##
-//*	.##.....##.########....##....##.....##..#######..########...######.
+//	##     ## ######## ######## ##     ##  #######  ########   ######
+//	###   ### ##          ##    ##     ## ##     ## ##     ## ##    ##
+//	#### #### ##          ##    ##     ## ##     ## ##     ## ##
+//	## ### ## ######      ##    ######### ##     ## ##     ##  ######
+//	##     ## ##          ##    ##     ## ##     ## ##     ##       ##
+//	##     ## ##          ##    ##     ## ##     ## ##     ## ##    ##
+//	##     ## ########    ##    ##     ##  #######  ########   ######
 
 		//*	empty
 		explicit	map( const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() )
-		: _alloc(alloc), _treeAlloc(alloc) {
+		: _size(0), _alloc(alloc), _treeAlloc(alloc) {
 
 			this->_rbt = _treeAlloc.allocate(1);
 		}
 		//*	range
 		template <class InputIterator>
 		map( InputIterator first, InputIterator last, const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() )
-		: _alloc(alloc), _treeAlloc(alloc) {		//todo add kv_compare
+		: _size(0), _alloc(alloc), _treeAlloc(alloc) {		//todo add kv_compare
 
 			this->insert(first, last);
 		}
@@ -154,29 +154,44 @@ namespace   ft {
 
 		mapped_type &	operator[]( const key_type & k ) {
 
-			mapped_type &	ret = _rbt.search(k);
+			value_type &	find = _rbt.search(k);
 
-			if (!ret) {
+			if (!find) {
 				//insert new node
 				insert(ft::make_pair(k, mapped_type()));
 			}
-			return ret;
+			return find._second;
 		}
 
 		// modifiers
 
 		//*	single element
-		pair<iterator, bool>	insert( const value_type & val );
+		ft::pair<iterator, bool>	insert( const value_type & val ) {	//???????
+
+			ft::pair<iterator, bool>	find = _rbt.search(val._first);
+
+			if (!find) {
+
+				val._second = false;			//todo does the bool type have to be precised somewhere ?
+				_rbt.insertNode(val);
+			} else {
+				val._second = true;				//todo I don't get it, is the mapped_type of the node not important ?
+			}
+			return find;
+		}
+
+/*
+
 		//*	fill
-		iterator				insert( iterator position, value_type & val );
+		iterator					insert( iterator position, value_type & val );
 		//*	range
 		template<class InputIterator>
-		void					insert( InputIterator first, InputIterator last );
-		void					erase( iterator position );
-		size_type				erase( const key_compare & k );
-		void					erase( iterator first, iterator last );
-		void					swap( map & x );
-		void					clear( void );
+		void						insert( InputIterator first, InputIterator last );
+		void						erase( iterator position );
+		size_type					erase( const key_compare & k );
+		void						erase( iterator first, iterator last );
+		void						swap( map & x );
+		void						clear( void );
 
 		// observers
 
@@ -203,10 +218,11 @@ namespace   ft {
 
 		allocator_type	get_allocator( void ) const { return _alloc; }
 
-
+*/
 
 	private:
 
+		size_type					_size;
 		allocator_type				_alloc;
 		tree_allocator				_treeAlloc;
 		Tree *						_rbt;
