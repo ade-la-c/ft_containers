@@ -158,6 +158,7 @@ namespace   ft {
 
 			if (!ret) {
 				//insert new node
+				insert(ft::make_pair(k, mapped_type()));
 			}
 			return ret;
 		}
