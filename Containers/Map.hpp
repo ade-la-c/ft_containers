@@ -154,7 +154,12 @@ namespace   ft {
 
 		mapped_type &	operator[]( const key_type & k ) {
 
-			
+			mapped_type &	ret = _rbt.search(k);
+
+			if (!ret) {
+				//insert new node
+			}
+			return ret;
 		}
 
 		// modifiers
