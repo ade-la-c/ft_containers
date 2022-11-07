@@ -185,8 +185,9 @@ namespace ft {
 					indexEnd();
 					return node;
 				}
-				/*	Fix the tree */
-				fixInsert(node); /* fixInsert(node) */
+				*/
+				//	Fix the tree
+				fixInsert(node); // fixInsert(node)
 				indexEnd();
 				return node;
 			}
