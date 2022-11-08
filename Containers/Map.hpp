@@ -57,7 +57,9 @@ namespace	ft {
 	private:
 
 		typedef 			ft::RBTree< key_type, mapped_type >						Tree;
-		typedef typename	Allocator::template rebind<Tree>::other					tree_allocator;
+		typedef typename	allocator_type::template rebind<Tree>::other			tree_allocator;
+		typedef typename	ft::Node<value_type> *									node_pointer;
+		typedef typename	ft::Node<value_type>									node_type;
 
 
 //	##    ## ########  ######  ######## ######## ########      ######  ##          ###     ######   ######
@@ -158,14 +160,13 @@ namespace	ft {
 
 		mapped_type &	operator[]( const key_type & k ) {
 
-			ft::Node<value_type> *	find = _rbt.search(k);
+			node_pointer	find = _rbt->search(k);
 
 			if (!find) {
-				//*	insert new node
-				// insert(ft::make_pair<key_type, mapped_type>(k, mapped_type()));
-				_rbt.insertNode(find);				//? one or the other
+				//	insert new node
+				find = _rbt->insertNode(ft::make_pair<key_type, mapped_type>(k, mapped_type()));
 			}
-			return find._second;
+			return find->data.second;
 		}
 
 		//* modifiers
@@ -173,24 +174,24 @@ namespace	ft {
 		//*	single element
 		ft::pair<iterator, bool>	insert( const value_type & val ) {
 
-			ft::Node<value_type> *				ptr = _rbt.search(val._first);
+			ft::Node<value_type> *		ptr = _rbt->search(val._first);
 			// ft::pair<iterator, bool>	ret = ft::make_pair<iterator, bool>(NULL, false);		//todo remove line if it works ;)
 
 			if (!ptr) {
-				return ft::make_pair<iterator, bool>(_rbt.insertNode(val), true);
+				return ft::make_pair<iterator, bool>(_rbt->insertNode(val), true);			//?
 			} else {
 				return ft::make_pair<iterator, bool>(ptr, false);
 			}
 		}
+/*
 
-		//*	with hint
+		//	with hint
 		iterator					insert( iterator position, value_type & val ) {
 
 			// value_type *	ptr = _rbt.search(val);
 
 			std::cout << "position " << position << std::endl;
 		}
-/*
 		//	range
 		template<class InputIterator>
 		void						insert( InputIterator first, InputIterator last );

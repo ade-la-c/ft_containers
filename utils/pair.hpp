@@ -23,25 +23,17 @@ namespace	ft {
 			//*	methods
 
 			//	default constructor
-			pair( void ) : _first(), _second() {}
+			pair( void ) : first(), second() {}
 			//	copy constructor
 			template< class U, class V >
-			pair( const pair<U,V> & pr ) { *this = pr; }
+			pair( const pair<U,V> & pr ) : first(pr.first), second(pr.second) { *this = pr; }
 			//	assignation operator
-			pair &	operator=( pair const & rhs ) {
-
-				this->_first = rhs._first;
-				this->_second = rhs._second;
-				return *this;
-			}
+			pair &	operator=( pair const & rhs ) { if (this != &rhs) {} return *this; }
 			//	initialization constructor
-			pair( const first_type & a, const second_type & b ) : _first(a), _second(b) {}
+			pair( const first_type & a, const second_type & b ) : first(a), second(b) {}
 
-
-		private:
-
-			first_type		_first;
-			second_type		_second;
+			first_type		first;
+			second_type		second;
 
 
 	};
