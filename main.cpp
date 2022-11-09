@@ -1,14 +1,15 @@
 #include "Containers/Map.hpp"
 
-void	print_map(ft::map) {
+// void	print_map(ft::map) {
 
-}
+// }
 
 int main(void) {
 
 	ft::map<char, int>	first;
 
-	first['a'] = 5;
+	// first['a'] = 5;
+	first.insert(ft::pair<char, int>('5', 5));
 
 	
 

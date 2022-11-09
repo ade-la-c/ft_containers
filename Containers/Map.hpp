@@ -42,7 +42,7 @@ namespace	ft {
 		typedef				Compare													key_compare;
 
 		typedef typename	ft::pair<const key_type, mapped_type>					value_type;
-		typedef				size_t													size_type;
+		typedef	typename	std::size_t													size_type;
 		typedef typename	std::ptrdiff_t											difference_type;
 		typedef 			value_type &											reference;
 		typedef 			const value_type &										const_reference;
@@ -164,7 +164,8 @@ namespace	ft {
 
 			if (!find) {
 				//	insert new node
-				find = _rbt->insertNode(ft::make_pair<key_type, mapped_type>(k, mapped_type()));
+				find = _rbt->insertNode(ft::make_pair(k, mapped_type()));
+				// _rbt->insertNode(ft::make_pair<key_type, mapped_type>(k, mapped_type()));
 			}
 			return find->data.second;
 		}
@@ -172,17 +173,37 @@ namespace	ft {
 		//* modifiers
 
 		//*	single element
+		// ft::pair<iterator, bool>	insert( const value_type & val ) {
+
+		// 	ft::Node<value_type> *		ptr = _rbt->search(val.first);
+		// 	// ft::pair<iterator, bool>	ret = ft::make_pair<iterator, bool>(NULL, false);		//todo remove line if it works ;)
+
+		// 	if (!ptr) {
+		// 		return ft::make_pair<iterator, bool>(_rbt->insertNode(val), true);			//?
+		// 	} else {
+		// 		return ft::make_pair<iterator, bool>(ptr, false);
+		// 	}
+		// }
+
+// /*	//!	insert v2 ?
 		ft::pair<iterator, bool>	insert( const value_type & val ) {
 
-			ft::Node<value_type> *		ptr = _rbt->search(val._first);
-			// ft::pair<iterator, bool>	ret = ft::make_pair<iterator, bool>(NULL, false);		//todo remove line if it works ;)
+			ft::Node<value_type> *		ptr = _rbt->search(val.first);
+			ft::pair<iterator, bool>	ret = ft::make_pair(ptr, false);		//todo remove line if it works ;)
 
 			if (!ptr) {
-				return ft::make_pair<iterator, bool>(_rbt->insertNode(val), true);			//?
+				// return ft::make_pair(_rbt->insertNode(val), true);			//?
+				ret.first = iterator(_rbt->insertNode(val));
+				ret.second = true;
 			} else {
-				return ft::make_pair<iterator, bool>(ptr, false);
+				ret.first = ptr;
+				ret.second = false;
+				// return ft::make_pair(ptr, false);
 			}
+			return ret;
 		}
+// */
+
 /*
 
 		//	with hint

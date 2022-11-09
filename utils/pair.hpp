@@ -28,7 +28,11 @@ namespace	ft {
 			template< class U, class V >
 			pair( const pair<U,V> & pr ) : first(pr.first), second(pr.second) { *this = pr; }
 			//	assignation operator
-			pair &	operator=( pair const & rhs ) { if (this != &rhs) {} return *this; }
+			pair &	operator=( pair const & rhs ) {
+				
+				if (this != &rhs) {}
+				return *this;
+			}
 			//	initialization constructor
 			pair( const first_type & a, const second_type & b ) : first(a), second(b) {}
 
@@ -66,5 +70,7 @@ namespace	ft {
 	//*	constructs pair object
 	template< class T1, class T2 >
 	pair<T1,T2>		make_pair(T1 x, T2 y) { return pair<T1,T2>(x,y); }
+
+
 
 }
