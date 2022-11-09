@@ -10,6 +10,7 @@
 #include "../utils/reverse_iterator.hpp"
 #include "../utils/rbt_n.hpp"
 #include "../utils/pair.hpp"
+#include "../utils/bidirectional_iterator.hpp"
 
 namespace	ft {
 
@@ -42,7 +43,7 @@ namespace	ft {
 		typedef				Compare													key_compare;
 
 		typedef typename	ft::pair<const key_type, mapped_type>					value_type;
-		typedef	typename	std::size_t													size_type;
+		typedef	typename	std::size_t												size_type;
 		typedef typename	std::ptrdiff_t											difference_type;
 		typedef 			value_type &											reference;
 		typedef 			const value_type &										const_reference;
@@ -173,19 +174,24 @@ namespace	ft {
 		//* modifiers
 
 		//*	single element
-		// ft::pair<iterator, bool>	insert( const value_type & val ) {
 
-		// 	ft::Node<value_type> *		ptr = _rbt->search(val.first);
-		// 	// ft::pair<iterator, bool>	ret = ft::make_pair<iterator, bool>(NULL, false);		//todo remove line if it works ;)
+// /*
 
-		// 	if (!ptr) {
-		// 		return ft::make_pair<iterator, bool>(_rbt->insertNode(val), true);			//?
-		// 	} else {
-		// 		return ft::make_pair<iterator, bool>(ptr, false);
-		// 	}
-		// }
+		ft::pair<iterator, bool>	insert( const value_type & val ) {
 
-// /*	//!	insert v2 ?
+			ft::Node<value_type> *		ptr = _rbt->search(val.first);
+			// ft::pair<iterator, bool>	ret = ft::make_pair<iterator, bool>(NULL, false);		//todo remove line if it works ;)
+
+			if (!ptr) {
+				ptr = _rbt->insertNode(val);
+				return ft::pair<iterator, bool>(iterator(ptr, _rbt->getEnd()), true);			//?
+			} else {
+				return ft::pair<iterator, bool>(iterator(ptr, _rbt->getEnd()), false);
+			}
+		}
+// */
+
+/*	//!	insert v2 ?
 		ft::pair<iterator, bool>	insert( const value_type & val ) {
 
 			ft::Node<value_type> *		ptr = _rbt->search(val.first);

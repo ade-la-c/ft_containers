@@ -14,8 +14,8 @@ namespace	ft {
 		typedef typename ft::iterator<random_access_iterator_tag, T>::iterator_category		iterator_category;
 		typedef typename ft::iterator<random_access_iterator_tag, T>::value_type			value_type;
 		typedef typename ft::iterator<random_access_iterator_tag, T>::difference_type		difference_type;
-		typedef T*													pointer;
-		typedef T&													reference;
+		typedef T*																			pointer;
+		typedef T&																			reference;
 
 		random_access_iterator( void ) : _content() {}
 
