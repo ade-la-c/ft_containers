@@ -8,8 +8,8 @@ int main(void) {
 
 	ft::map<char, int>	first;
 
-	// first['a'] = 5;
-	first.insert(ft::pair<char, int>('5', 5));
+	first['a'] = 5;
+	// first.insert(ft::pair<char, int>('5', 5));
 
 	
 

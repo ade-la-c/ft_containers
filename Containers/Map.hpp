@@ -106,12 +106,12 @@ namespace	ft {
 		explicit	map( const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() )
 		: _size(0), _alloc(alloc), _treeAlloc(alloc), _comp(comp) {
 
-			this->_rbt = _treeAlloc.allocate(1);
+			this->_rbt = this->_treeAlloc.allocate(1);
 		}
 		//*	range
 		template <class InputIterator>
 		map( InputIterator first, InputIterator last, const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() )
-		: _size(0), _alloc(alloc), _treeAlloc(alloc), _comp(comp) {		//todo add kv_compare
+		: _size(0), _alloc(alloc), _treeAlloc(alloc), _comp(comp) {
 
 			this->insert(first, last);
 		}
@@ -142,19 +142,19 @@ namespace	ft {
 
 		//* iterators
 
-		// iterator				begin( void );
-		// const_iterator			begin( void ) const;
-		// iterator				end( void );
-		// const_iterator			end( void );
-		// reverse_iterator		rbegin( void );
-		// const_reverse_iterator	rbegin( void );
-		// reverse_iterator		rend( void );
-		// const_reverse_iterator	rend( void ) const;
+		iterator				begin( void ) { return _rbt->getRoot(); }
+		const_iterator			begin( void ) const { return _rbt->getRoot(); }
+		iterator				end( void ) { return _rbt->getEnd(); }
+		const_iterator			end( void ) const { return _rbt->getEnd(); }
+		reverse_iterator		rbegin( void ) { return reverse_iterator(_rbt->getRoot()); }
+		const_reverse_iterator	rbegin( void ) const { return const_reverse_iterator(_rbt->getRoot()); }
+		reverse_iterator		rend( void ) { return reverse_iterator(_rbt->getEnd()); }
+		const_reverse_iterator	rend( void ) const { return const_reverse_iterator(_rbt->getEnd()); }
 
 		//* size
 
-		bool			empty( void ) const { return !_size; }	//! allowed ?
-		size_type		size( void ) const { return _size; }
+		bool			empty( void ) const { return !(_rbt->getSize()); }	//! allowed ?
+		size_type		size( void ) const { return _rbt->getSize; }
 		size_type		max_size( void ) const { return std::numeric_limits<size_type>::max() / sizeof(value_type); }
 
 		//* element access
@@ -175,7 +175,7 @@ namespace	ft {
 
 		//*	single element
 
-// /*
+/*
 
 		ft::pair<iterator, bool>	insert( const value_type & val ) {
 
@@ -191,20 +191,16 @@ namespace	ft {
 		}
 // */
 
-/*	//!	insert v2 ?
+// /*	//!	insert v2 ?
 		ft::pair<iterator, bool>	insert( const value_type & val ) {
 
 			ft::Node<value_type> *		ptr = _rbt->search(val.first);
-			ft::pair<iterator, bool>	ret = ft::make_pair(ptr, false);		//todo remove line if it works ;)
+			ft::pair<iterator, bool>	ret = ft::make_pair(iterator(ptr, _rbt->getEnd()), false);		//todo remove line if it works ;)
 
 			if (!ptr) {
 				// return ft::make_pair(_rbt->insertNode(val), true);			//?
-				ret.first = iterator(_rbt->insertNode(val));
+				ret.first = iterator(_rbt->insertNode(val), _rbt->getEnd());
 				ret.second = true;
-			} else {
-				ret.first = ptr;
-				ret.second = false;
-				// return ft::make_pair(ptr, false);
 			}
 			return ret;
 		}

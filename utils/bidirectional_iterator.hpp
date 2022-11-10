@@ -9,7 +9,8 @@ namespace	ft {
 
 
 	template< typename T >
-	class bidirectional_iterator {
+	class	bidirectional_iterator {
+
 		public:
 			/* ************************ Member Types ************************ */
 			typedef typename	ft::iterator_traits< ft::iterator< ft::bidirectional_iterator_tag, T> >::iterator_category	iterator_category;
@@ -124,6 +125,7 @@ namespace	ft {
 			}
 
 		private:
+
 			node_pointer	_node;
 			node_pointer	_end;
 	};
