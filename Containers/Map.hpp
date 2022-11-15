@@ -141,10 +141,10 @@ namespace	ft {
 
 			//* iterators
 
-			iterator				begin( void ) { return _rbt->getRoot(); }
-			const_iterator			begin( void ) const { return _rbt->getRoot(); }
-			iterator				end( void ) { return _rbt->getEnd(); }
-			const_iterator			end( void ) const { return _rbt->getEnd(); }
+			iterator				begin( void ) { return iterator(_rbt->firstNode(), _rbt->getEnd()); }
+			const_iterator			begin( void ) const { return const_iterator(_rbt->firstNode(), _rbt->getEnd()); }
+			iterator				end( void ) { return iterator(_rbt->getEnd(), _rbt->getEnd()); }
+			const_iterator			end( void ) const { return const_iterator(_rbt->getEnd(), _rbt->getEnd()); }
 			reverse_iterator		rbegin( void ) { return reverse_iterator(_rbt->getRoot()); }
 			const_reverse_iterator	rbegin( void ) const { return const_reverse_iterator(_rbt->getRoot()); }
 			reverse_iterator		rend( void ) { return reverse_iterator(_rbt->getEnd()); }
@@ -188,7 +188,7 @@ namespace	ft {
 			}
 
 			//	with hint
-			iterator					insert( iterator position, value_type & val ) {
+			iterator			insert( iterator position, value_type & val ) {
 
 				node_pointer		ptr = _rbt->search(val.first);
 
@@ -201,7 +201,7 @@ namespace	ft {
 			}
 			//	range
 			template<class InputIterator>
-			void						insert( InputIterator first, InputIterator last ) {
+			void				insert( InputIterator first, InputIterator last ) {
 
 				while (first != last) {
 
@@ -209,7 +209,7 @@ namespace	ft {
 					first++;
 				}
 			}
-			void						erase( iterator position ) {
+			void				erase( iterator position ) {
 
 				value_type		val = position.base()->data;
 				node_pointer	ptr = _rbt->search(val.first);
@@ -218,9 +218,9 @@ namespace	ft {
 			}
 			size_type					erase( const key_type & k ) {
 
-				return _rbt.deleteNode(_rbt->getRoot(), k);
+				return _rbt->deleteNode(_rbt->getRoot(), k);
 			}
-			void						erase( iterator first, iterator last ) {
+			void				erase( iterator first, iterator last ) {
 
 				value_type	val = first.base()->data;
 
@@ -230,7 +230,7 @@ namespace	ft {
 					first++;
 				}
 			}
-			void						swap( map & x ) {		//! is it enough ?
+			void				swap( map & x ) {		//! is it enough ?
 
 				allocator_type	allo;
 				tree_allocator	treeallo;
@@ -243,7 +243,7 @@ namespace	ft {
 				com = this->_comp;
 
 				this->_alloc = x._alloc;
-				this->_treeAlloc = x._treeAlloc
+				this->_treeAlloc = x._treeAlloc;
 				this->_rbt = x._rbt;
 				this->_comp = x._comp;
 
@@ -252,38 +252,109 @@ namespace	ft {
 				x._rbt = tree;
 				x._comp = com;
 			}
-			void						clear( void ) {
+			void				clear( void ) {
 
-				
+				_rbt->~RBTree();	//? c'est tout ?
 			}
-/*
 
 			//	observers
 
-			key_compare				key_comp( void ) const;
-			value_compare			value_comp( void ) const;
+			key_compare			key_comp( void ) const { return _comp; }
+			value_compare		value_comp( void ) const { return value_compare(key_compare()); }
 
 			//	operations
 
-			iterator				find( const key_type & k );
-			const_iterator			find( const key_type &k ) const;
+			iterator			find( const key_type & k ) {
 
-			size_type				count( const key_type & k ) const;
+				node_pointer	ptr = _rbt->search(k);
 
-			iterator				lower_bound( const key_type & k );
-			const_iterator			lower_bound( const key_type & k ) const;
+				if (!ptr) {
+					return end();
+				} else {
+					return iterator(ptr, _rbt->getEnd());
+				}
+			}
+			const_iterator		find( const key_type &k ) const {
 
-			iterator				upper_bound( const key_type & k );
-			const_iterator			upper_bound( const key_type & k ) const;
+				return const_iterator(find(k));		//?	is this right ?
+			}
+			size_type			count( const key_type & k ) const {
 
-			pair<const_iterator, const_iterator>	equal_range( const key_type & k );
-			pair<iterator, iterator>				equal_range( const key_type & k );
+				// return (_rbt->search(k) == NULL ? 0 : 1);
+				return !(!(_rbt->search(k)));			//! cursed af but maybe working
+			}
+			iterator			lower_bound( const key_type & k ) {
+
+				iterator	it = begin();
+				value_type	val = it.base()->data;
+
+				while (it != end()) {
+					if (_comp(val.first, k) == false) {
+						break;
+					}
+					it++;
+				}
+				return it;
+			}
+			const_iterator		lower_bound( const key_type & k ) const {
+
+				const_iterator	it = begin();
+				value_type		val = it.base()->data;
+
+				while (it != end()) {
+					if (_comp(val.first, k) == false) {
+						break;
+					}
+					it++;
+				}
+				return it;
+			}
+			iterator			upper_bound( const key_type & k ) {
+
+				iterator	it = begin();
+				value_type	val = it.base()->data;
+
+				while (it != end()) {
+					if (_comp(val.first, k) == true) {
+						break;
+					}
+					it++;
+				}
+
+				return it;
+			}
+			const_iterator		upper_bound( const key_type & k ) const {
+
+				const_iterator	it = begin();
+				value_type	val = it.base()->data;
+
+				while (it != end()) {
+					if (_comp(val.first, k) == true) {
+						break;
+					}
+					it++;
+				}
+
+				return it;
+			}
+
+			ft::pair<const_iterator, const_iterator>	equal_range( const key_type & k ) const {
+
+				node_pointer	ptr = _rbt->search(k);
+
+				return ft::pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k));
+			}
+			pair<iterator, iterator>					equal_range( const key_type & k ) {
+
+				node_pointer	ptr = _rbt->search(k);
+
+				return ft::pair<iterator, iterator>(lower_bound(k), upper_bound(k));
+			}
 
 			//	allocator
 
 			allocator_type	get_allocator( void ) const { return _alloc; }
 
-	*/
 
 		private:
 
