@@ -1,4 +1,7 @@
 #include "Containers/Map.hpp"
+#include <map>
+
+#define FT std
 
 // void	print_map(ft::map) {
 
@@ -6,11 +9,11 @@
 
 int main(void) {
 
-	ft::map<char, int>	first;
+	FT::map<char, int> *	first = new FT::map<char, int>();
+std::cerr<<"print"<<std::endl;
 
-	first['a'] = 5;
-	// first.insert(ft::pair<char, int>('5', 5));
-
+	first->insert(FT::make_pair('5', 5));
+	first->insert(FT::pair<char, int>('5', 5));
 	
 
 	return 0;
