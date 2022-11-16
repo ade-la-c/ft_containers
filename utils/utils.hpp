@@ -81,7 +81,7 @@ namespace	ft {
 	//*	difference allows us to quickly calculate the space between two iterators
 	template<class InputIterator>
 	typename ft::iterator_traits<InputIterator>::difference_type
-	distance (InputIterator first, InputIterator last) {
+	distance( InputIterator first, InputIterator last ) {
 
 		typename ft::iterator_traits<InputIterator>::difference_type rtn = 0;
 		while (first != last) {
@@ -89,13 +89,14 @@ namespace	ft {
 			first++;
 			rtn++;
 		}
-		return (rtn);
+		return rtn;
 	}
 	// */
 
 	//*	Exceptions
 	template <typename T>
 	class	InvalidIteratorException : public std::exception {
+
 
 		private:
 
@@ -104,11 +105,11 @@ namespace	ft {
 
 		public:
 
-			InvalidIteratorException ( void ) throw() { _msg = "Is invalid iterator tag : " + std::string(typeid(T).name()); }
-			InvalidIteratorException (const InvalidIteratorException&) throw() {}
-			InvalidIteratorException& operator= (const InvalidIteratorException&) throw() {}
+			InvalidIteratorException( void ) throw() { _msg = "Is invalid iterator tag : " + std::string(typeid(T).name()); }
+			InvalidIteratorException( const InvalidIteratorException& ) throw() {}
+			InvalidIteratorException& operator=( const InvalidIteratorException & ) throw() {}
 			virtual ~InvalidIteratorException( void ) throw() {}
-			virtual const char* what( void ) const throw() { return (_msg.c_str()); }
+			virtual const char* what( void ) const throw() { return _msg.c_str(); }
 
 
 	};
@@ -121,13 +122,17 @@ namespace	ft {
 	bool	lexicographical_compare( InputIterator1 first1, InputIterator1 last1,
 									InputIterator2 first2, InputIterator2 last2 ) {
 
-		while (first1!=last1)
+		while (first1 != last1)
 		{
-			if (first2==last2 || *first2<*first1) return false;
-			else if (*first1<*first2) return true;
-			++first1; ++first2;
+			if (first2 == last2 || *first2 < *first1) {
+				return false;
+			} else if (*first1 < *first2) {
+				return true;
+			}
+			++first1;
+			++first2;
 		}
-		return (first2!=last2);
+		return first2 != last2;
 	}
 
 	// */
