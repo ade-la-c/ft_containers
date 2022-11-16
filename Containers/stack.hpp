@@ -1,6 +1,9 @@
 #pragma once
 
+#include "vector.hpp"
+
 #include <iostream>
+#include <deque>
 
 namespace	ft {
 
@@ -8,7 +11,7 @@ namespace	ft {
 	template <
 	
 		class T,
-		class Container = deque<T>
+		class Container = ft::vector<T>
 
 	> class stack {
 
@@ -19,49 +22,48 @@ namespace	ft {
 			typedef				size_t					size_type;
 
 
-			explicit stack( const cotainer_type & ctnr = container_type() ) : _container(ctnr), _size(0) {}
+			explicit stack( const container_type & ctnr = container_type() ) : _container(ctnr) {}
 
-			bool					empty() const { return !_size; }
-			size_type				size() const { return _size; }
-			value_type &			top();
-			const value_type &		top() const;
-			void					push( const value_type & val );
-			void					pop();
-
-
+			bool					empty() const { return !(_container.size()); }
+			size_type				size() const { return _container.size(); }
+			value_type &			top() { return _container.getEnd() - 1; }
+			const value_type &		top() const { return _container.getEnd() - 1; }
+			void					push( const value_type & val ) { _container.push_back(val); }
+			void					pop() { _container.pop_back(val); }
 
 		private:
 
+			template< class T, class Container >
+			friend bool	operator==( const stack<T,Container> & lhs, const stack<T,Container> & rhs )
+			{ return lhs._size == rhs._size; }
+
+			template< class T, class Container >
+			friend bool	operator!=( const stack<T,Container> & lhs, const stack<T,Container> & rhs )
+			{ return !(lhs._size == rhs._size); }
+
+			template< class T, class Container >
+			friend bool	operator<( const stack<T,Container> & lhs, const stack<T,Container> & rhs )
+			{ return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()); }
+
+			template< class T, class Container >
+			friend bool	operator<=( const stack<T,Container> & lhs, const stack<T,Container> & rhs )
+			{ return lhs <= rhs; }
+
+			template< class T, class Container >
+			friend bool	operator>( const stack<T,Container> & lhs, const stack<T,Container> & rhs )
+			{ return lhs > rhs; }
+
+			template< class T, class Container >
+			friend bool	operator>=( const stack<T,Container> & lhs, const stack<T,Container> & rhs )
+			{ return lhs >= rhs; }
+
+
+		protected:
+
 			container_type	_container;
-			size_type		_size;
 
 
 	};
-
-
-	template< class T, class Container >
-	bool	operator==( const stack<T,Container> & lhs, const stack<T,Container> & rhs )
-	{ return lhs._size == rhs._size; }
-
-	template< class T, class Container >
-	bool	operator!=( const stack<T,Container> & lhs, const stack<T,Container> & rhs )
-	{ return !(lhs._size == rhs._size); }
-
-	template< class T, class Container >
-	bool	operator<( const stack<T,Container> & lhs, const stack<T,Container> & rhs )
-	{ return lhs < rhs; }
-
-	template< class T, class Container >
-	bool	operator<=( const stack<T,Container> & lhs, const stack<T,Container> & rhs )
-	{ return lhs <= rhs; }
-
-	template< class T, class Container >
-	bool	operator>( const stack<T,Container> & lhs, const stack<T,Container> & rhs )
-	{ return lhs > rhs; }
-
-	template< class T, class Container >
-	bool	operator>=( const stack<T,Container> & lhs, const stack<T,Container> & rhs )
-	{ return lhs >= rhs; }
 
 
 }

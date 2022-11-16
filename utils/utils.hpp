@@ -32,7 +32,6 @@ namespace	ft {
 
 	template<typename>
 	struct	is_integral_type : public is_integral_res<false, bool> {};
-
 	template<>
 	struct	is_integral_type<bool> : public is_integral_res<true, bool> {};
 	template<>

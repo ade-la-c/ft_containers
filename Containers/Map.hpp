@@ -153,7 +153,7 @@ namespace	ft {
 			//* size
 
 			bool			empty( void ) const { return !(_rbt->getSize()); }	//! allowed ?
-			size_type		size( void ) const { return _rbt->getSize; }
+			size_type		size( void ) const { return _rbt->getSize(); }
 			size_type		max_size( void ) const { return std::numeric_limits<size_type>::max() / sizeof(value_type); }
 
 			//* element access

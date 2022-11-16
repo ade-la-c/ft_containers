@@ -1,9 +1,10 @@
-#include "../Containers/map.hpp"
+// #include "../Containers/map.hpp"
+#include "/Users/ade-la-c/goinfre/nathancontainers/map/map.hpp"
 #include <iostream>
 #include <map>
 
 #ifndef FT
- #define FT ft
+ #define FT std
 #endif
 
 /* ************************************************************************** */
@@ -223,7 +224,7 @@ void	real_map_max_size_test(void) {
 /* ************************************************************************** */
 
 void	map_element_access_operator_test(void) {
-	ft::map<char, std::string>	mapp;
+	FT::map<char, std::string>	mapp;
 
 	mapp['x'] = "pikachu";
 	mapp['y'] = "charmander";
