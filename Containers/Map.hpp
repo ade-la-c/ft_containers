@@ -320,7 +320,6 @@ namespace	ft {
 					}
 					it++;
 				}
-
 				return it;
 			}
 			const_iterator		upper_bound( const key_type & k ) const {
@@ -334,19 +333,14 @@ namespace	ft {
 					}
 					it++;
 				}
-
 				return it;
 			}
 
 			ft::pair<const_iterator, const_iterator>	equal_range( const key_type & k ) const {
 
-				node_pointer	ptr = _rbt->search(k);
-
 				return ft::pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k));
 			}
 			pair<iterator, iterator>					equal_range( const key_type & k ) {
-
-				node_pointer	ptr = _rbt->search(k);
 
 				return ft::pair<iterator, iterator>(lower_bound(k), upper_bound(k));
 			}
