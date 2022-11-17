@@ -50,10 +50,10 @@ namespace	ft {
 			typedef typename	allocator_type::pointer									pointer;
 			typedef typename	allocator_type::const_pointer							const_pointer;
 
-			typedef				ft::reverse_iterator< value_type >						reverse_iterator;		   //???????
-			typedef				ft::reverse_iterator< const value_type >				const_reverse_iterator;	  //???????
-			typedef 			ft::bidirectional_iterator< value_type >				iterator;				 //???????
-			typedef 			ft::bidirectional_iterator< const value_type >			const_iterator;			//???????
+			typedef 			ft::bidirectional_iterator< value_type >				iterator;
+			typedef 			ft::bidirectional_iterator< const value_type >			const_iterator;
+			typedef				ft::reverse_iterator< iterator >						reverse_iterator;
+			typedef				ft::reverse_iterator< const_iterator >					const_reverse_iterator;
 
 		private:
 
@@ -71,9 +71,9 @@ namespace	ft {
 //	##   ### ##       ##    ##    ##    ##       ##     ##    ##    ## ##       ##     ## ##    ## ##    ##
 //	##    ## ########  ######     ##    ######## ########      ######  ######## ##     ##  ######   ######
 
-		protected:
+		public:
 
-			class	value_compare : public std::binary_function< value_type, key_type, bool > {
+			class	value_compare : public ft::binary_function< value_type, key_type, bool > {
 				friend class	map< key_type, mapped_type, key_compare, allocator_type >;
 
 				public:
@@ -104,14 +104,14 @@ namespace	ft {
 
 			//*	empty
 			explicit	map( const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() )
-			: _alloc(alloc), _treeAlloc(alloc), _comp(comp) {
+			: _alloc(alloc), _treeAlloc(alloc), _rbt(), _comp(comp) {
 
 				this->_rbt = this->_treeAlloc.allocate(1);
 			}
 			//*	range
 			template <class InputIterator>
 			map( InputIterator first, InputIterator last, const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() )
-			: _alloc(alloc), _treeAlloc(alloc), _comp(comp) {
+			: _alloc(alloc), _treeAlloc(alloc), _rbt(), _comp(comp) {
 
 				this->insert(first, last);
 			}
@@ -172,7 +172,7 @@ namespace	ft {
 
 			//* modifiers
 
-			//*	single element
+			//	single element
 
 			ft::pair<iterator, bool>	insert( const value_type & val ) {
 
@@ -188,7 +188,7 @@ namespace	ft {
 			}
 
 			//	with hint
-			iterator			insert( iterator position, value_type & val ) {
+			iterator			insert( iterator position, const value_type & val ) {
 
 				node_pointer		ptr = _rbt->search(val.first);
 
@@ -274,7 +274,7 @@ namespace	ft {
 					return iterator(ptr, _rbt->getEnd());
 				}
 			}
-			const_iterator		find( const key_type &k ) const {
+			const_iterator		find( const key_type & k ) const {
 
 				return const_iterator(find(k));		//?	is this right ?
 			}

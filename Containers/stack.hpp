@@ -22,14 +22,14 @@ namespace	ft {
 			typedef				size_t					size_type;
 
 
-			explicit stack( const container_type & ctnr = container_type() ) : _container(ctnr) {}
+			explicit stack( const container_type & ctnr = container_type() ) : container(ctnr) {}
 
-			bool					empty() const { return !(_container.size()); }
-			size_type				size() const { return _container.size(); }
-			value_type &			top() { return _container.back(); }
-			const value_type &		top() const { return _container.back(); }
-			void					push( const value_type & val ) { _container.push_back(val); }
-			void					pop() { _container.pop_back(); }
+			bool					empty() const { return !(container.size()); }
+			size_type				size() const { return container.size(); }
+			value_type &			top() { return container.back(); }
+			const value_type &		top() const { return container.back(); }
+			void					push( const value_type & val ) { container.push_back(val); }
+			void					pop() { container.pop_back(); }
 
 			template< class Tn, class ContainerN >
 			friend bool	operator==( const stack<Tn,ContainerN> & lhs, const stack<Tn,ContainerN> & rhs )
@@ -41,7 +41,7 @@ namespace	ft {
 
 			template< class Tn, class ContainerN >
 			friend bool	operator<( const stack<Tn,ContainerN> & lhs, const stack<Tn,ContainerN> & rhs )
-			{ return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()); }
+			{ return lhs.container < lhs.container; }
 
 			template< class Tn, class ContainerN >
 			friend bool	operator<=( const stack<Tn,ContainerN> & lhs, const stack<Tn,ContainerN> & rhs )
@@ -58,7 +58,7 @@ namespace	ft {
 
 		protected:
 
-			container_type	_container;
+			container_type	container;
 
 
 	};
