@@ -60,23 +60,6 @@ namespace	ft {
 	template<typename T>
 	struct	is_integral : public is_integral_type<T> {};
 
-	// */
-
-	//*	Iterator classes
-	template<class Category, class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T&>
-	struct iterator {
-
-
-		typedef Distance					difference_type;
-		typedef T							value_type;
-		typedef Pointer						pointer;
-		typedef Reference					reference;
-		typedef Category					iterator_category;
-	};
-
-	// */
-
-
 	//*	difference allows us to quickly calculate the space between two iterators
 	template<class InputIterator>
 	typename ft::iterator_traits<InputIterator>::difference_type

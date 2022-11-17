@@ -130,6 +130,18 @@ namespace	ft {
 			node_pointer	_end;
 	};
 
+	template< class T >
+	bool	operator==(const ft::bidirectional_iterator< T >& lhs, const ft::bidirectional_iterator< T >& rhs)
+	{ return (lhs.base() == rhs.base()); }
+	template< class T, class U >
+	bool	operator==(const ft::bidirectional_iterator< T >& lhs, const ft::bidirectional_iterator< U >& rhs)
+	{ return (lhs.base() == rhs.base()); }
+	template< class T >
+	bool	operator!=(const ft::bidirectional_iterator< T >& lhs, const ft::bidirectional_iterator< T >& rhs)
+	{ return (lhs.base() != rhs.base()); }
+	template< class T, class U >
+	bool	operator!=(const ft::bidirectional_iterator< T >& lhs, const ft::bidirectional_iterator< U >& rhs)
+	{ return (lhs.base() != rhs.base()); }
 
 
 }

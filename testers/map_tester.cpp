@@ -1,10 +1,10 @@
-// #include "../Containers/map.hpp"
-#include "/Users/ade-la-c/goinfre/nathancontainers/map/map.hpp"
+#include "../Containers/map.hpp"
+// #include "/Users/ade-la-c/goinfre/nathancontainers/map/map.hpp"
 #include <iostream>
 #include <map>
 
 #ifndef FT
- #define FT std
+ #define FT ft
 #endif
 
 /* ************************************************************************** */
