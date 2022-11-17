@@ -26,8 +26,8 @@ namespace	ft {
 
 			bool					empty() const { return !(_container.size()); }
 			size_type				size() const { return _container.size(); }
-			value_type &			top() { return _container[_container.size()]; }
-			const value_type &		top() const { return _container[_container.size() - 1]; }
+			value_type &			top() { return _container.back(); }
+			const value_type &		top() const { return _container.back(); }
 			void					push( const value_type & val ) { _container.push_back(val); }
 			void					pop() { _container.pop_back(); }
 
