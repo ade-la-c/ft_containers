@@ -114,3 +114,7 @@ void	stack_testing(void) {
 	std::cout << std::endl;
 	real_stack_top_test();
 }
+
+int main() {
+	stack_testing();
+}

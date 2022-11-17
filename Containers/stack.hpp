@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vector.hpp"
+#include "../Containers/vector.hpp"
 
 #include <iostream>
 #include <deque>
@@ -26,35 +26,33 @@ namespace	ft {
 
 			bool					empty() const { return !(_container.size()); }
 			size_type				size() const { return _container.size(); }
-			value_type &			top() { return _container.getEnd() - 1; }
-			const value_type &		top() const { return _container.getEnd() - 1; }
+			value_type &			top() { return _container[_container.size()]; }
+			const value_type &		top() const { return _container[_container.size() - 1]; }
 			void					push( const value_type & val ) { _container.push_back(val); }
-			void					pop() { _container.pop_back(val); }
+			void					pop() { _container.pop_back(); }
 
-		private:
+			template< class Tn, class ContainerN >
+			friend bool	operator==( const stack<Tn,ContainerN> & lhs, const stack<Tn,ContainerN> & rhs )
+			{ return lhs.size() == rhs.size(); }
 
-			template< class T, class Container >
-			friend bool	operator==( const stack<T,Container> & lhs, const stack<T,Container> & rhs )
-			{ return lhs._size == rhs._size; }
+			template< class Tn, class ContainerN >
+			friend bool	operator!=( const stack<Tn,ContainerN> & lhs, const stack<Tn,ContainerN> & rhs )
+			{ return !(lhs.size() == rhs.size()); }
 
-			template< class T, class Container >
-			friend bool	operator!=( const stack<T,Container> & lhs, const stack<T,Container> & rhs )
-			{ return !(lhs._size == rhs._size); }
-
-			template< class T, class Container >
-			friend bool	operator<( const stack<T,Container> & lhs, const stack<T,Container> & rhs )
+			template< class Tn, class ContainerN >
+			friend bool	operator<( const stack<Tn,ContainerN> & lhs, const stack<Tn,ContainerN> & rhs )
 			{ return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()); }
 
-			template< class T, class Container >
-			friend bool	operator<=( const stack<T,Container> & lhs, const stack<T,Container> & rhs )
+			template< class Tn, class ContainerN >
+			friend bool	operator<=( const stack<Tn,ContainerN> & lhs, const stack<Tn,ContainerN> & rhs )
 			{ return lhs <= rhs; }
 
-			template< class T, class Container >
-			friend bool	operator>( const stack<T,Container> & lhs, const stack<T,Container> & rhs )
+			template< class Tn, class ContainerN >
+			friend bool	operator>( const stack<Tn,ContainerN> & lhs, const stack<Tn,ContainerN> & rhs )
 			{ return lhs > rhs; }
 
-			template< class T, class Container >
-			friend bool	operator>=( const stack<T,Container> & lhs, const stack<T,Container> & rhs )
+			template< class Tn, class ContainerN >
+			friend bool	operator>=( const stack<Tn,ContainerN> & lhs, const stack<Tn,ContainerN> & rhs )
 			{ return lhs >= rhs; }
 
 
@@ -67,3 +65,5 @@ namespace	ft {
 
 
 }
+
+void stack_testing( void );
