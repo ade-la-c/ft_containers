@@ -19,7 +19,7 @@ namespace	ft {
 
 		class Key,																//*	key_type
 		class T,																//*	mapped_type
-		class Compare = std::less< ft::pair< const Key, T> >,					//*	key_compare
+		class Compare = std::less< Key >,					//*	key_compare
 		class Allocator = std::allocator< ft::pair< const Key, T > >			//*	allocator_type
 
 	> class map {
@@ -51,14 +51,14 @@ namespace	ft {
 			typedef typename	allocator_type::const_pointer							const_pointer;
 
 			typedef 			ft::bidirectional_iterator< value_type >				iterator;
-			typedef 			ft::bidirectional_iterator< const value_type >			const_iterator;
+			typedef 			ft::bidirectional_iterator< value_type >				const_iterator;
 			typedef				ft::reverse_iterator< iterator >						reverse_iterator;
 			typedef				ft::reverse_iterator< const_iterator >					const_reverse_iterator;
 
 		private:
 
 			typedef 			ft::RBTree< key_type, mapped_type >						Tree;
-			typedef typename	allocator_type::template rebind<Tree>::other			tree_allocator;
+			// typedef typename	allocator_type::template rebind<Tree>::other			tree_allocator;
 			typedef typename	ft::Node<value_type> *									node_pointer;
 			typedef typename	ft::Node<value_type>									node_type;
 
@@ -73,7 +73,7 @@ namespace	ft {
 
 		public:
 
-			class	value_compare : public ft::binary_function< value_type, key_type, bool > {
+			class	value_compare : public std::binary_function< value_type, key_type, bool > {
 				friend class	map< key_type, mapped_type, key_compare, allocator_type >;
 
 				public:
@@ -104,14 +104,14 @@ namespace	ft {
 
 			//*	empty
 			explicit	map( const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() )
-			: _alloc(alloc), _treeAlloc(alloc), _rbt(), _comp(comp) {
+			: _alloc(alloc), _rbt(), _comp(comp) {
 
-				this->_rbt = this->_treeAlloc.allocate(1);
+				// this->_rbt = this->_treeAlloc.allocate(1);
 			}
 			//*	range
 			template <class InputIterator>
 			map( InputIterator first, InputIterator last, const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() )
-			: _alloc(alloc), _treeAlloc(alloc), _rbt(), _comp(comp) {
+			: _alloc(alloc), _rbt(), _comp(comp) {
 
 				this->insert(first, last);
 			}
@@ -123,10 +123,10 @@ namespace	ft {
 				if (*this == rhs) {
 
 					this->_alloc = rhs._alloc;
-					this->_treeAlloc = rhs._treeAlloc;
 
-					this->_treeAlloc.destroy(this->_rbt);
-					this->_treeAlloc.allocate(this->rbt, 1);
+					for (node_pointer ptr = _rbt.firstNode(); ptr != _rbt.getEnd(); ptr++) {
+						this->_rbt.clear(ptr);
+					}
 					this->insert(rhs.begin(), rhs.end());
 					this->_comp = rhs._comp;
 				}
@@ -135,37 +135,36 @@ namespace	ft {
 			//*	destructor
 			~map( void ) {
 
-				this->_treeAlloc.destroy(_rbt);
-				this->_treeAlloc.deallocate(_rbt, 1);
+				_rbt.clear(_rbt.getRoot());
 			}
 
 			//* iterators
 
-			iterator				begin( void ) { return iterator(_rbt->firstNode(), _rbt->getEnd()); }
-			const_iterator			begin( void ) const { return const_iterator(_rbt->firstNode(), _rbt->getEnd()); }
-			iterator				end( void ) { return iterator(_rbt->getEnd(), _rbt->getEnd()); }
-			const_iterator			end( void ) const { return const_iterator(_rbt->getEnd(), _rbt->getEnd()); }
-			reverse_iterator		rbegin( void ) { return reverse_iterator(_rbt->getRoot()); }
-			const_reverse_iterator	rbegin( void ) const { return const_reverse_iterator(_rbt->getRoot()); }
-			reverse_iterator		rend( void ) { return reverse_iterator(_rbt->getEnd()); }
-			const_reverse_iterator	rend( void ) const { return const_reverse_iterator(_rbt->getEnd()); }
+			iterator				begin( void ) { return iterator(_rbt.firstNode(), _rbt.getEnd()); }
+			const_iterator			begin( void ) const { return iterator(_rbt.firstNode(), _rbt.getEnd()); }
+			iterator				end( void ) { return iterator(_rbt.getEnd(), _rbt.getEnd()); }
+			const_iterator			end( void ) const { return iterator(_rbt.getEnd(), _rbt.getEnd()); }
+			reverse_iterator		rbegin( void ) { return reverse_iterator(iterator(_rbt.getRoot(), _rbt.getEnd())); }
+			const_reverse_iterator	rbegin( void ) const { return const_reverse_iterator(iterator(_rbt.getRoot(), _rbt.getEnd())); }
+			reverse_iterator		rend( void ) { return reverse_iterator(begin()); }
+			const_reverse_iterator	rend( void ) const { return const_reverse_iterator(begin()); }
 
 			//* size
 
-			bool			empty( void ) const { return !(_rbt->getSize()); }	//! allowed ?
-			size_type		size( void ) const { return _rbt->getSize(); }
+			bool			empty( void ) const { return !(_rbt.getSize()); }	//! allowed ?
+			size_type		size( void ) const { return _rbt.getSize(); }
 			size_type		max_size( void ) const { return std::numeric_limits<size_type>::max() / sizeof(value_type); }
 
 			//* element access
 
 			mapped_type &	operator[]( const key_type & k ) {
 
-				node_pointer	find = _rbt->search(k);
+				node_pointer	find = _rbt.search(k);
 
 				if (!find) {
 					//	insert new node
-					find = _rbt->insertNode(ft::make_pair(k, mapped_type()));
-					// _rbt->insertNode(ft::make_pair<key_type, mapped_type>(k, mapped_type()));
+					find = _rbt.insertNode(ft::pair<key_type, mapped_type>(k, mapped_type()));
+					// _rbt.insertNode(ft::make_pair<key_type, mapped_type>(k, mapped_type()));
 				}
 				return find->data.second;
 			}
@@ -176,12 +175,12 @@ namespace	ft {
 
 			ft::pair<iterator, bool>	insert( const value_type & val ) {
 
-				node_pointer				ptr = _rbt->search(val.first);
-				ft::pair<iterator, bool>	ret = ft::make_pair(iterator(ptr, _rbt->getEnd()), false);
+				node_pointer				ptr = _rbt.search(val.first);
+				ft::pair<iterator, bool>	ret = ft::make_pair(iterator(ptr, _rbt.getEnd()), false);
 
 				if (!ptr) {
-					// return ft::make_pair(_rbt->insertNode(val), true);			//?
-					ret.first = iterator(_rbt->insertNode(val), _rbt->getEnd());
+					// return ft::make_pair(_rbt.insertNode(val), true);			//?
+					ret.first = iterator(_rbt.insertNode(val), _rbt.getEnd());
 					ret.second = true;
 				}
 				return ret;
@@ -190,14 +189,14 @@ namespace	ft {
 			//	with hint
 			iterator			insert( iterator position, const value_type & val ) {
 
-				node_pointer		ptr = _rbt->search(val.first);
+				node_pointer		ptr = _rbt.search(val.first);
 
 				(void)position;
 				if (!ptr) {
 
-					ptr = _rbt->insertNode(val);
+					ptr = _rbt.insertNode(val);
 				}
-				return iterator(ptr, _rbt->getEnd());
+				return iterator(ptr, _rbt.getEnd());
 			}
 			//	range
 			template<class InputIterator>
@@ -205,20 +204,20 @@ namespace	ft {
 
 				while (first != last) {
 
-					_rbt->insertNode(*first);
+					_rbt.insertNode(*first);
 					first++;
 				}
 			}
 			void				erase( iterator position ) {
 
 				value_type		val = position.base()->data;
-				node_pointer	ptr = _rbt->search(val.first);
+				node_pointer	ptr = _rbt.search(val.first);
 
-				_rbt->deleteNode(ptr, val.first);
+				_rbt.deleteNode(ptr, val.first);
 			}
 			size_type					erase( const key_type & k ) {
 
-				return _rbt->deleteNode(_rbt->getRoot(), k);
+				return _rbt.deleteNode(_rbt.getRoot(), k);
 			}
 			void				erase( iterator first, iterator last ) {
 
@@ -226,35 +225,27 @@ namespace	ft {
 
 				while (first != last) {
 
-					_rbt->deleteNode(*first, val.first);
-					first++;
+					_rbt.deleteNode(first.base(), val.first);
+					++first;
 				}
+				// map	x(first, last);
+
+				// first = x.begin();
+				// last = x.end();
+				// while (first != last) {
+				// 	_rbt.deleteNode(_rbt.getRoot(), first->first);
+				// 	first++;
+				// }
+
+				
 			}
-			void				swap( map & x ) {		//! is it enough ?
+			void				swap( map & x ) {
 
-				allocator_type	allo;
-				tree_allocator	treeallo;
-				Tree *			tree;
-				key_compare		com;
-
-				allo = this->_alloc;
-				treeallo = this->_treeAlloc;
-				tree = this->_rbt;
-				com = this->_comp;
-
-				this->_alloc = x._alloc;
-				this->_treeAlloc = x._treeAlloc;
-				this->_rbt = x._rbt;
-				this->_comp = x._comp;
-
-				x._alloc = allo;
-				x._treeAlloc = treeallo;
-				x._rbt = tree;
-				x._comp = com;
+				_rbt.swap(x._rbt);
 			}
 			void				clear( void ) {
 
-				_rbt->~RBTree();	//? c'est tout ?
+				erase(begin(), end());
 			}
 
 			//	observers
@@ -266,12 +257,12 @@ namespace	ft {
 
 			iterator			find( const key_type & k ) {
 
-				node_pointer	ptr = _rbt->search(k);
+				node_pointer	ptr = _rbt.search(k);
 
 				if (!ptr) {
 					return end();
 				} else {
-					return iterator(ptr, _rbt->getEnd());
+					return iterator(ptr, _rbt.getEnd());
 				}
 			}
 			const_iterator		find( const key_type & k ) const {
@@ -280,8 +271,8 @@ namespace	ft {
 			}
 			size_type			count( const key_type & k ) const {
 
-				// return (_rbt->search(k) == NULL ? 0 : 1);
-				return !(!(_rbt->search(k)));			//! cursed af but maybe working
+				// return (_rbt.search(k) == NULL ? 0 : 1);
+				return !(!(_rbt.search(k)));			//! cursed af but maybe working
 			}
 			iterator			lower_bound( const key_type & k ) {
 
@@ -353,8 +344,7 @@ namespace	ft {
 		private:
 
 			allocator_type				_alloc;
-			tree_allocator				_treeAlloc;
-			Tree *						_rbt;
+			Tree						_rbt;
 			key_compare					_comp;
 
 	};

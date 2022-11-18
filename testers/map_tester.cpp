@@ -13,7 +13,6 @@
 
 void	map_constructor_test(void) {
 	FT::map<char, int>	first;
-
 	first['a'] = 10;
 	first['b'] = 30;
 	first['c'] = 50;
@@ -104,8 +103,9 @@ void	map_begin_end_test(void) {
 	mapp['y'] = 16;
 	mapp['z'] = 32;
 	std::cout << "Mapp contains :\n";
-	for (FT::map<char, int>::iterator it = mapp.begin(); it != mapp.end(); ++it)
+	for (FT::map<char, int>::iterator it = mapp.begin(); it != mapp.end(); ++it) {
 		std::cout << "[ " << it->first << " : " << it->second << " ]" << std::endl;
+	}
 }
 
 void	real_map_begin_end_test(void) {

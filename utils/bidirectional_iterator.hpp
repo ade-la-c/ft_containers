@@ -28,7 +28,7 @@ namespace	ft {
 
 			/*	Copy */
 			template< class U >
-			bidirectional_iterator(const bidirectional_iterator< U >& x) : _node(x._node), _end(x._end) {}
+			bidirectional_iterator(const bidirectional_iterator< U >& x) : _node(x.getNode()), _end(x.getEnd()) {}
 
 			/*	Operator= */
 			template< class U >
@@ -113,6 +113,7 @@ namespace	ft {
 				return (*this);
 			}
 
+
 			bidirectional_iterator			operator--(int) {
 				bidirectional_iterator	tmp(*this);
 
@@ -123,6 +124,9 @@ namespace	ft {
 			pointer		operator->() const {
 				return (&this->_node->data);
 			}
+
+			node_pointer	getNode() const { return _node; }
+			node_pointer	getEnd() const { return _end; }
 
 		private:
 

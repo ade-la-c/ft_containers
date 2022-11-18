@@ -26,15 +26,19 @@ namespace	ft {
 			pair( void ) : first(), second() {}
 			//	copy constructor
 			template< class U, class V >
-			pair( const pair<U,V> & pr ) : first(pr.first), second(pr.second) { *this = pr; }
+			pair( const pair<U,V> & pr ) : first(pr.first), second(pr.second) {}
 			//	assignation operator
 			pair &	operator=( pair const & rhs ) {
 				
-				if (this != &rhs) {}
+				if (this != &rhs) {
+					this->first = rhs.first;
+					this->second = rhs.second;
+				}
 				return *this;
 			}
 			//	initialization constructor
 			pair( const first_type & a, const second_type & b ) : first(a), second(b) {}
+			~pair() {}
 
 			first_type		first;
 			second_type		second;

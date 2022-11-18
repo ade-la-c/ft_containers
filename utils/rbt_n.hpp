@@ -71,7 +71,7 @@ namespace ft {
 			}
 			/*	Operator= */
 			RBTree &	operator=(const RBTree & x) {
-				if (this != x) {
+				if (this != &x) {
 					this->clear(this->root);
 					this->insertAll(x.root);
 					this->root = x.root;
@@ -175,7 +175,7 @@ namespace ft {
 				else
 					y->right = node;
 				
-				/*	If new node is a root node, simply return/
+				// /*	If new node is a root node, simply return/
 				if (node->parent == NULL) {
 					node->color = false;
 					indexEnd();
@@ -185,7 +185,7 @@ namespace ft {
 					indexEnd();
 					return node;
 				}
-				*/
+				// */
 				//	Fix the tree
 				fixInsert(node); // fixInsert(node)
 				indexEnd();
@@ -193,14 +193,15 @@ namespace ft {
 			}
 
 			void			insertAll(node_pointer node) {
-				if (node) {
-					insertAll(node->left);
-					insertAll(node->right);
-					insertNode(node->data);
-				}
+
+				if (node == NULL)
+					return ;
+				insertAll(node->left);
+				insertAll(node->right);
+				insertNode(node->data);
 			}
 
-			size_type		deleteNode(node_pointer node, const key_type & key) {	//! why __SIZE_TYPE__ instead of size_type ?
+			size_type		deleteNode(node_pointer node, const key_type & key) {
 				node_pointer	x, y, z = end;
 
 				/*	Find the node containing the key */
