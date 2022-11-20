@@ -1,5 +1,5 @@
 #include "../Containers/map.hpp"
-// #include "/Users/ade-la-c/goinfre/nathancontainers/map/map.hpp"
+// #include "/Users/ade-la-c/Desktop/cont_namenega/map/map.hpp"
 #include <iostream>
 #include <map>
 
@@ -423,7 +423,7 @@ void	real_map_clear_test(void) {
 	for (std::map<char, int>::iterator it = mapp.begin(); it != mapp.end(); it++)
 		std::cout << "[ " << it->first << " : " << it->second << " ]" << std::endl;
 	std::cout << std::endl;
-
+mapp.erase(mapp.begin(), mapp.end());
 	mapp.clear();
 	mapp['a'] = 500;
 	mapp['b'] = 600;

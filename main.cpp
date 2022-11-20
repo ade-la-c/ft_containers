@@ -1,5 +1,5 @@
-#include "Containers/Map.hpp"
-#include "Containers/Vector.hpp"
+#include "Containers/map.hpp"
+#include "Containers/vector.hpp"
 
 // #include "/Users/ade-la-c/goinfre/nathancontainers/vector/vector.hpp"
 
@@ -12,9 +12,29 @@ int main(void) {
 	FT::map<char, int> *	first = new FT::map<char, int>();
 std::cerr<<"print"<<std::endl;
 
-	first->insert(FT::make_pair('5', 5));
-	first->insert(FT::pair<char, int>('5', 5));
-	
+	first->insert(FT::pair<char, int>('1', 1));
+	first->insert(FT::pair<char, int>('2', 2));
+	first->insert(FT::pair<char, int>('3', 3));
+	first->insert(FT::pair<char, int>('4', 4));
+
+
+	FT::map<char, int>::iterator	it;
+
+	first->insert(first->begin(), first->end());
+
+	std::cout<<"first:"<<std::endl;
+	for (it = first->begin(); it != first->end(); it++)
+		std::cout << "[ " << it->first << " : " << it->second << " ]" << std::endl;
+
+	ft::distance(first->begin(), first->end());
+	FT::map<char, int> *	second = new FT::map<char, int>(first->begin(), first->end());
+
+	// second->insert(first->begin(), first->end());
+
+	std::cout<<"second:"<<std::endl;
+	for (it = second->begin(); it != second->end(); it++)
+		std::cout << "[ " << it->first << " : " << it->second << " ]" << std::endl;
+
 
 	return 0;
 }

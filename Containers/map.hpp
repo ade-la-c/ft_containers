@@ -58,7 +58,6 @@ namespace	ft {
 		private:
 
 			typedef 			ft::RBTree< key_type, mapped_type >						Tree;
-			// typedef typename	allocator_type::template rebind<Tree>::other			tree_allocator;
 			typedef typename	ft::Node<value_type> *									node_pointer;
 			typedef typename	ft::Node<value_type>									node_type;
 
@@ -104,10 +103,7 @@ namespace	ft {
 
 			//*	empty
 			explicit	map( const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() )
-			: _alloc(alloc), _rbt(), _comp(comp) {
-
-				// this->_rbt = this->_treeAlloc.allocate(1);
-			}
+			: _alloc(alloc), _rbt(), _comp(comp) {}
 			//*	range
 			template <class InputIterator>
 			map( InputIterator first, InputIterator last, const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() )
@@ -203,9 +199,9 @@ namespace	ft {
 			void				insert( InputIterator first, InputIterator last ) {
 
 				while (first != last) {
-
+std::cout<<"insert range"<<std::endl;//!debug
 					_rbt.insertNode(*first);
-					first++;
+					first++;								//!iterators n'ont pas l'air de marcher
 				}
 			}
 			void				erase( iterator position ) {
@@ -215,29 +211,35 @@ namespace	ft {
 
 				_rbt.deleteNode(ptr, val.first);
 			}
-			size_type					erase( const key_type & k ) {
+			size_type			erase( const key_type & k ) {
 
 				return _rbt.deleteNode(_rbt.getRoot(), k);
 			}
 			void				erase( iterator first, iterator last ) {
 
-				value_type	val = first.base()->data;
+				// value_type	val = last.base()->data;
 
-				while (first != last) {
-
-					_rbt.deleteNode(first.base(), val.first);
-					++first;
-				}
-				// map	x(first, last);
-
-				// first = x.begin();
-				// last = x.end();
 				// while (first != last) {
-				// 	_rbt.deleteNode(_rbt.getRoot(), first->first);
-				// 	first++;
+
+				// 	erase(first++);
 				// }
 
-				
+//*opt 2 (not working)
+				// size_type	diff = ft::distance(first, last);
+				// for (iterator it = last - diff; diff > 0; diff--) {
+				// 	_rbt.deleteNode(it.base(), it.base()->data.first);
+				// }
+
+//* opt 1
+				map	x(first, last);
+
+				first = x.begin();
+				last = x.end();
+				while (first != last) {
+					std::cout<<"c'est ici cça bug"<<std::endl;//!debug
+					_rbt.deleteNode(_rbt.getRoot(), first->first);
+					first++;
+				}
 			}
 			void				swap( map & x ) {
 
