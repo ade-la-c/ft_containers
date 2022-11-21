@@ -12,6 +12,10 @@
 #define MAGENTA "\033[35m"
 #define CYAN "\033[36m"
 
+void	map_testing( void );
+void	vector_testing( void );
+void	stack_testing( void );
+
 void	map_script(void) {
 	std::cout << "\033[1;34m/* ***************************************** */\033[0m" << std::endl;
 	std::cout << "\033[1;34m/* ************** TEST MAP ***************** */\033[0m" << std::endl;
@@ -74,7 +78,8 @@ int		main() {
 }
 
 
-/*
+/*.
+#include <stack>
 int main(void) {
 
 	FT::map<char, int> *	first = new FT::map<char, int>();
@@ -102,12 +107,15 @@ std::cerr<<"print"<<std::endl;
 	for (it = second->begin(); it != second->end(); it++)
 		std::cout << "[ " << it->first << " : " << it->second << " ]" << std::endl;
 
+std::stack<int> i();
+std::stack<int> j();
+if (i < j) return 1;
 
 	return 0;
 }
-*/
+// */
 
-/*
+/*.
 int main(void) {
 
 	FT::vector<int> vec;
@@ -123,4 +131,4 @@ int main(void) {
 	if (it == itb) { std::cout<<"cool cça marchee"<<std::endl; }
 
 }
-*/
+// */

@@ -400,5 +400,3 @@ namespace	ft {
 
 
 }
-
-// void	map_testing( void );

@@ -14,15 +14,13 @@ namespace	ft {
 	template <
 
 		class T,
-		class Alloc = std::allocator<T> 
+		class Alloc = std::allocator< T > 
 
 	> class   vector {
 
 
 	public:
 
-
-//	/*.
 //	########  ######## ######## #### ##    ## ######## ########   ######
 //	##     ## ##       ##        ##  ###   ## ##       ##     ## ##    ##
 //	##     ## ##       ##        ##  ####  ## ##       ##     ## ##
@@ -30,7 +28,7 @@ namespace	ft {
 //	##     ## ##       ##        ##  ##  #### ##       ##   ##         ##
 //	##     ## ##       ##        ##  ##   ### ##       ##    ##  ##    ##
 //	########  ######## ##       #### ##    ## ######## ##     ##  ######
-//	*/
+
 
 		typedef T															value_type;
 		typedef Alloc														allocator_type;
@@ -47,7 +45,7 @@ namespace	ft {
 		typedef size_t														size_type;
 		typedef typename ft::iterator_traits<iterator>::difference_type		difference_type;
 
-// /*.
+
 //  ######   #######  ##    ##  ######  ######## ########  ##     ##  ######  ########  #######  ########   ######
 // ##    ## ##     ## ###   ## ##    ##    ##    ##     ## ##     ## ##    ##    ##    ##     ## ##     ## ##    ##
 // ##       ##     ## ####  ## ##          ##    ##     ## ##     ## ##          ##    ##     ## ##     ## ##
@@ -55,7 +53,7 @@ namespace	ft {
 // ##       ##     ## ##  ####       ##    ##    ##   ##   ##     ## ##          ##    ##     ## ##   ##         ##
 // ##    ## ##     ## ##   ### ##    ##    ##    ##    ##  ##     ## ##    ##    ##    ##     ## ##    ##  ##    ##
 //  ######   #######  ##    ##  ######     ##    ##     ##  #######   ######     ##     #######  ##     ##  ######
-// */
+
 
 		//* default constructor
 		explicit vector( const allocator_type & alloc = allocator_type() )
@@ -124,7 +122,6 @@ namespace	ft {
 		}
 
 
-//	/*.
 //	#### ######## ######## ########     ###    ########  #######  ########   ######
 //	 ##     ##    ##       ##     ##   ## ##      ##    ##     ## ##     ## ##    ##
 //	 ##     ##    ##       ##     ##  ##   ##     ##    ##     ## ##     ## ##
@@ -132,7 +129,7 @@ namespace	ft {
 //	 ##     ##    ##       ##   ##   #########    ##    ##     ## ##   ##         ##
 //	 ##     ##    ##       ##    ##  ##     ##    ##    ##     ## ##    ##  ##    ##
 //	####    ##    ######## ##     ## ##     ##    ##     #######  ##     ##  ######
-//	*/
+
 
 		//*	Returns an iterator pointing to the first element in the vector.
 		iterator				begin( void ) { return iterator(this->_valueArray); }
@@ -148,7 +145,6 @@ namespace	ft {
 		const_reverse_iterator	rend( void ) const { return const_reverse_iterator(this->begin()); }
 
 
-// /*.
 //	 ######     ###    ########     ###     ######  #### ######## ##    ##
 //	##    ##   ## ##   ##     ##   ## ##   ##    ##  ##     ##     ##  ##
 //	##        ##   ##  ##     ##  ##   ##  ##        ##     ##      ####
@@ -156,7 +152,7 @@ namespace	ft {
 //	##       ######### ##        ######### ##        ##     ##       ##
 //	##    ## ##     ## ##        ##     ## ##    ##  ##     ##       ##
 //	 ######  ##     ## ##        ##     ##  ######  ####    ##       ##
-//	*/
+
 
 		size_type		size( void ) const { return this->_size; }
 		size_type		max_size( void ) const { return std::numeric_limits<size_type>::max() / sizeof(value_type); }
@@ -191,7 +187,6 @@ namespace	ft {
 			}
 
 			for (size_type i = 0; i < _size; ++i) {
-
 				_alloc.construct(tmp + i, _valueArray[i]);
 			}
 			_alloc.deallocate(_valueArray, _capacity);
@@ -200,7 +195,7 @@ namespace	ft {
 		}
 
 
-//	/*.
+
 //	######## ##       ######## ##     ## ######## ##    ## ########       ###     ######   ######  ########  ######   ######
 //	##       ##       ##       ###   ### ##       ###   ##    ##         ## ##   ##    ## ##    ## ##       ##    ## ##    ##
 //	##       ##       ##       #### #### ##       ####  ##    ##        ##   ##  ##       ##       ##       ##       ##
@@ -208,7 +203,7 @@ namespace	ft {
 //	##       ##       ##       ##     ## ##       ##  ####    ##       ######### ##       ##       ##             ##       ##
 //	##       ##       ##       ##     ## ##       ##   ###    ##       ##     ## ##    ## ##    ## ##       ##    ## ##    ##
 //	######## ######## ######## ##     ## ######## ##    ##    ##       ##     ##  ######   ######  ########  ######   ######
-//	*/
+
 
 		reference			operator[]( size_type n ) { return *(_valueArray + n); }
 		const_reference		operator[]( size_type n ) const { return *(_valueArray + n); }
@@ -232,7 +227,6 @@ namespace	ft {
 		const_reference		back( void ) const { return this->_valueArray[_size - 1]; }
 
 
-//	/*.
 //	##     ##  #######  ########  #### ######## #### ######## ########   ######
 //	###   ### ##     ## ##     ##  ##  ##        ##  ##       ##     ## ##    ##
 //	#### #### ##     ## ##     ##  ##  ##        ##  ##       ##     ## ##
@@ -240,7 +234,7 @@ namespace	ft {
 //	##     ## ##     ## ##     ##  ##  ##        ##  ##       ##   ##         ##
 //	##     ## ##     ## ##     ##  ##  ##        ##  ##       ##    ##  ##    ##
 //	##     ##  #######  ########  #### ##       #### ######## ##     ##  ######
-//	*/
+
 
 		template < class InputIterator >
 		void		assign(InputIterator first, InputIterator last,
@@ -358,7 +352,7 @@ namespace	ft {
 			}
 		}
 
-//	/*.
+
 //	   ###    ##       ##        #######   ######     ###    ########  #######  ########
 //	  ## ##   ##       ##       ##     ## ##    ##   ## ##      ##    ##     ## ##     ##
 //	 ##   ##  ##       ##       ##     ## ##        ##   ##     ##    ##     ## ##     ##
@@ -366,7 +360,7 @@ namespace	ft {
 //	######### ##       ##       ##     ## ##       #########    ##    ##     ## ##   ##
 //	##     ## ##       ##       ##     ## ##    ## ##     ##    ##    ##     ## ##    ##
 //	##     ## ######## ########  #######   ######  ##     ##    ##     #######  ##     ##
-//	*/
+
 
 		allocator_type	get_allocator( void ) const { return this->_alloc; }
 
@@ -399,19 +393,40 @@ namespace	ft {
 	};
 
 	template < class T, class Alloc >
-	bool	operator==( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs ) { return lhs == rhs; }
+	bool	operator==( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs ) {
+
+		if (lhs.size() != rhs.size()) { return false; }
+
+		for (size_t i = 0; i < lhs.size(); ++i) {
+
+			if (lhs[i] != rhs[i]) { return false; }
+		}
+		return true;
+	}
 	template < class T, class Alloc >
-	bool	operator!=( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs ) { return lhs != rhs; }
+	bool	operator!=( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs ) { return !(lhs == rhs); }
 	template < class T, class Alloc >
-	bool	operator<( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs ) { return lhs < rhs; }
+	bool	operator<( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs ) {
+		size_t		n;
+
+		if (lhs.size() > rhs.size()) {
+			n = rhs.size();
+		} else {
+			n = lhs.size();
+		}
+		for (size_t i = 0; i < n; ++i) {
+
+			if (lhs.at(i) != rhs.at(i)) { return (lhs.at(i) < rhs.at(i)); }
+		}
+		return lhs.size() < rhs.size();
+	}
 	template < class T, class Alloc >
-	bool	operator<=( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs ) { return lhs <= rhs; }
+	bool	operator<=( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs ) { return lhs < rhs || lhs == rhs; }
 	template < class T, class Alloc >
-	bool	operator>(const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs) { return lhs > rhs; }
+	bool	operator>(const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs) { return !(lhs < rhs); }
 	template < class T, class Alloc >
-	bool	operator>=( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs ) { return lhs >= rhs; }
+	bool	operator>=( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs ) { return lhs > rhs || lhs == rhs; }
 	template< class T, class Alloc >
 	void	swap( vector<T,Alloc> & x, vector<T,Alloc> & y ) { x.swap(y); }
 
 }
-// void	vector_testing( void );

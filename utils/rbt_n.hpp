@@ -44,13 +44,14 @@ namespace ft {
 
 		public:
 
-			typedef	size_t									size_type;
-			typedef	Key										key_type;
-			typedef	T										mapped_type;
-			typedef	ft::pair<const key_type, mapped_type>	value_type;
-			typedef	std::allocator< Node<value_type> >		node_allocator;
-			typedef	ft::Node<value_type>*					node_pointer;
-			typedef	ft::Node<value_type>					node_type;
+			typedef				Key																key_type;
+			typedef				T																mapped_type;
+			typedef	typename	ft::pair<const key_type, mapped_type>							value_type;
+			typedef	typename	std::allocator< RBTree<Key, T> >								allocator_type;
+			typedef typename	std::size_t														size_type;
+			typedef typename	allocator_type::template rebind< Node<value_type> >::other		node_allocator;
+			typedef				ft::Node<value_type>*											node_pointer;
+			typedef				ft::Node<value_type>											node_type;
 
 			/* ************************ Constructors ************************ */
 			/*	Default */
