@@ -115,6 +115,6 @@ void	stack_testing(void) {
 	real_stack_top_test();
 }
 
-int main() {
-	stack_testing();
-}
+// int main() {
+// 	stack_testing();
+// }

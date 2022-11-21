@@ -41,7 +41,7 @@ namespace	ft {
 
 			template< class Tn, class ContainerN >
 			friend bool	operator<( const stack<Tn,ContainerN> & lhs, const stack<Tn,ContainerN> & rhs )
-			{ return lhs.container < lhs.container; }
+			{ return lhs.container < rhs.container; }
 
 			template< class Tn, class ContainerN >
 			friend bool	operator<=( const stack<Tn,ContainerN> & lhs, const stack<Tn,ContainerN> & rhs )
@@ -65,5 +65,4 @@ namespace	ft {
 
 
 }
-
-void stack_testing( void );
+// void stack_testing( void );

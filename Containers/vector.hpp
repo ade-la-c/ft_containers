@@ -47,7 +47,15 @@ namespace	ft {
 		typedef size_t														size_type;
 		typedef typename ft::iterator_traits<iterator>::difference_type		difference_type;
 
-		//	methods
+// /*.
+//  ######   #######  ##    ##  ######  ######## ########  ##     ##  ######  ########  #######  ########   ######
+// ##    ## ##     ## ###   ## ##    ##    ##    ##     ## ##     ## ##    ##    ##    ##     ## ##     ## ##    ##
+// ##       ##     ## ####  ## ##          ##    ##     ## ##     ## ##          ##    ##     ## ##     ## ##
+// ##       ##     ## ## ## ##  ######     ##    ########  ##     ## ##          ##    ##     ## ########   ######
+// ##       ##     ## ##  ####       ##    ##    ##   ##   ##     ## ##          ##    ##     ## ##   ##         ##
+// ##    ## ##     ## ##   ### ##    ##    ##    ##    ##  ##     ## ##    ##    ##    ##     ## ##    ##  ##    ##
+//  ######   #######  ##    ##  ######     ##    ##     ##  #######   ######     ##     #######  ##     ##  ######
+// */
 
 		//* default constructor
 		explicit vector( const allocator_type & alloc = allocator_type() )
@@ -365,7 +373,7 @@ namespace	ft {
 
 	protected:
 
-		// /*.
+		/*.
 		void	print_vector( std::string str, bool extra_nl = true ) const {		//!debug function
 
 			std::cerr << str << ": size: " << _size << " cap: " << _capacity << std::endl;
@@ -406,4 +414,4 @@ namespace	ft {
 	void	swap( vector<T,Alloc> & x, vector<T,Alloc> & y ) { x.swap(y); }
 
 }
-void	vector_testing( void );
+// void	vector_testing( void );

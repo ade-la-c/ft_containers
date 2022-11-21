@@ -205,7 +205,7 @@ namespace ft {
 				node_pointer	x, y, z = end;
 
 				/*	Find the node containing the key */
-				while (node != end) {
+				while (node != end) { 
 					if (node->data.first == key) {
 						z = node;
 					}
