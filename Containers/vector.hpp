@@ -174,20 +174,20 @@ namespace	ft {
 		bool			empty( void ) const { return this->_size == 0 ? true : false; }
 		void			reserve( size_type n ) {
 
-			if (n < _capacity) { return; }
+			if (n <= _capacity) { return; }
 			if (n > max_size()) {
 				throw std::length_error("Vector reserve, input is bigger than max size.");
 			}
 			pointer		tmp;
 
-			if (n < _capacity * 2) {
-				tmp = _alloc.allocate(_capacity * 2);
-			} else {
+			// if (n < _capacity * 2) {
+			// 	tmp = _alloc.allocate(_capacity * 2);
+			// } else {
 				tmp = _alloc.allocate(n);
-			}
+			// }
 
 			for (size_type i = 0; i < _size; ++i) {
-				_alloc.construct(tmp + i, _valueArray[i]);
+				_alloc.construct(tmp + i, *(_valueArray + i));
 			}
 			_alloc.deallocate(_valueArray, _capacity);
 			_capacity = n;
@@ -216,7 +216,7 @@ namespace	ft {
 		}
 		const_reference		at( size_type n ) const {
 
-			if (n >= _size) {	
+			if (n >= _size) {
 				throw std::out_of_range("Vector const at.");
 			}
 			return *(this->_valueArray + n);

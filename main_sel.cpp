@@ -923,33 +923,33 @@ std::cout << "----------MINE_IT_OP[]_OP+_OP-_OP+=_OP-=()-----------" << std::end
 	std::cout << it[0] << std::endl;
 
 }
-// std::cout << "----------STL_SPECIAL---------" << std::endl;
-// // THIS IS AN ADDITIONAL TEST TO CHECK ITERATOR DESIGN VALIDITY
-// {
-// std::vector<int> lst;
-// lst.push_back(1);
-// lst.push_back(2);
-// lst.push_back(3);
-// std::vector<int>::iterator it = lst.end();
-// lst.erase(--lst.end());
-// lst.insert(lst.end(), lst.begin(), (++lst.begin()));
-// lst.insert(--(--lst.end()), 19);
-// while (it != lst.begin())
-// 	std::cout << *--it << std::endl;
-// }
-// std::cout << "----------MINE_SPECIAL---------" << std::endl;
-// {
-// ft::vector<int> lst;
-// lst.push_back(1);
-// lst.push_back(2);
-// lst.push_back(3);
-// ft::vector<int>::iterator it = lst.end();
-// lst.erase(--lst.end());
-// lst.insert(lst.end(), lst.begin(), (++lst.begin()));
-// lst.insert(--(--lst.end()), 19);
-// while (it != lst.begin())
-// 	std::cout << *--it << std::endl;
-// }
+std::cout << "----------STL_SPECIAL---------" << std::endl;
+// THIS IS AN ADDITIONAL TEST TO CHECK ITERATOR DESIGN VALIDITY
+{
+std::vector<int> lst;
+lst.push_back(1);
+lst.push_back(2);
+lst.push_back(3);
+std::vector<int>::iterator it = lst.end();
+lst.erase(--lst.end());
+lst.insert(lst.end(), lst.begin(), (++lst.begin()));
+lst.insert(--(--lst.end()), 19);
+while (it != lst.begin())
+	std::cout << *--it << std::endl;
+}
+std::cout << "----------MINE_SPECIAL---------" << std::endl;
+{
+ft::vector<int> lst;
+lst.push_back(1);
+lst.push_back(2);
+lst.push_back(3);
+ft::vector<int>::iterator it = lst.end();
+lst.erase(--lst.end());
+lst.insert(lst.end(), lst.begin(), (++lst.begin()));
+lst.insert(--(--lst.end()), 19);
+while (it != lst.begin())
+	std::cout << *--it << std::endl;
+}
 
 std::cout << "----------STL_RESIZE-----------" << std::endl;
 {
