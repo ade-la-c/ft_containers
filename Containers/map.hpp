@@ -247,8 +247,7 @@ namespace	ft {
 
 				while (first != last ) {
 
-					erase(first);
-					first++;
+					erase(first++);
 				}
 			}
 			void				swap( map & x ) {
