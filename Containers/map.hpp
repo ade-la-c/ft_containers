@@ -282,11 +282,18 @@ namespace	ft {
 			}
 			const_iterator		find( const key_type & k ) const {
 
-				return const_iterator(find(k));		//?	is this right ?
+				node_pointer	ptr = _rbt.search(k);
+
+				if (!ptr) {
+					return end();
+				} else {
+					return const_iterator(ptr, _rbt.getEnd());
+				}
 			}
 			size_type			count( const key_type & k ) const {
 
 				return !(!(_rbt.search(k)));
+				// return _rbt.search(k) == NULL ? 0 : 1;	//* equivalent
 			}
 			iterator			lower_bound( const key_type & k ) {
 

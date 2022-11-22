@@ -92,7 +92,7 @@ namespace	ft {
 
 			this->_valueArray = this->_alloc.allocate(0);						 //!	why ?
 			// this->_valueArray = this->_alloc.allocate(x._capacity);			//?		why not ?
-			*this = x;
+			// *this = x;
 		}
 		//*	assignation operator
 		vector &	operator=( const vector & rhs ) {
@@ -423,7 +423,7 @@ namespace	ft {
 	template < class T, class Alloc >
 	bool	operator<=( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs ) { return lhs < rhs || lhs == rhs; }
 	template < class T, class Alloc >
-	bool	operator>(const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs) { return !(lhs < rhs); }
+	bool	operator>(const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs) { return !(lhs <= rhs); }
 	template < class T, class Alloc >
 	bool	operator>=( const vector<T,Alloc> & lhs, const vector<T,Alloc> & rhs ) { return lhs > rhs || lhs == rhs; }
 	template< class T, class Alloc >
