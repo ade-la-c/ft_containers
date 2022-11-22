@@ -58,7 +58,7 @@ namespace	ft {
 
 		private:
 
-			typedef 			ft::RBTree< key_type, mapped_type >						Tree;
+			typedef 			ft::RBTree< key_type, mapped_type, key_compare >		Tree;
 			typedef typename	ft::Node< value_type > *								node_pointer;
 			typedef typename	ft::Node< value_type >									node_type;
 
@@ -105,12 +105,12 @@ namespace	ft {
 
 			//*	empty
 			explicit	map( const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() )
-			: _alloc(alloc), _rbt(), _comp(comp) {}
+			: _alloc(alloc), _rbt(comp), _comp(comp) {
+			}
 			//*	range
 			template <class InputIterator>
 			map( InputIterator first, InputIterator last, const key_compare & comp = key_compare(), const allocator_type & alloc = allocator_type() )
-			: _alloc(alloc), _rbt(), _comp(comp) {
-
+			: _alloc(alloc), _rbt(comp), _comp(comp) {
 				this->insert(first, last);
 			}
 			//*	copy

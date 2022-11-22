@@ -39,15 +39,16 @@ namespace ft {
 		}
 	};
 
-	template< class Key, class T >
+	template< class Key, class T, class Compare >
 	class RBTree {
 
 		public:
 
 			typedef				Key																key_type;
 			typedef				T																mapped_type;
+			typedef				Compare															key_compare;
 			typedef	typename	ft::pair<const key_type, mapped_type>							value_type;
-			typedef	typename	std::allocator< RBTree<Key, T> >								allocator_type;
+			typedef	typename	std::allocator< RBTree<Key, T, key_compare> >								allocator_type;
 			typedef typename	std::size_t														size_type;
 			typedef typename	allocator_type::template rebind< Node<value_type> >::other		node_allocator;
 			typedef				ft::Node<value_type>*											node_pointer;
@@ -55,7 +56,8 @@ namespace ft {
 
 			/* ************************ Constructors ************************ */
 			/*	Default */
-			RBTree() {
+			RBTree(const key_compare & comp = key_compare()) {
+				this->comp = comp;
 				end = node_allocator().allocate(1);
 				node_allocator().construct(end, node_type());
 				end->parent = NULL;
@@ -66,7 +68,7 @@ namespace ft {
 				size = 0;
 			}
 			/*	Copy */
-			RBTree(const RBTree & x) : root(x.root), end(x.end), size(x.size) {
+			RBTree(const RBTree & x) : root(x.root), end(x.end), size(x.size), comp(x.comp) {
 				this->clear(this->root);
 				this->insertAll(x.root);
 			}
@@ -78,6 +80,7 @@ namespace ft {
 					this->root = x.root;
 					this->end = x.end;
 					this->size = x.size;
+					this->comp = x.comp;
 				}
 				return *this;
 			}
@@ -281,6 +284,7 @@ namespace ft {
 			node_pointer	root;
 			node_pointer	end;
 			size_type		size;
+			key_compare		comp;
 
 			void	indexEnd() {
 				end->left = firstNode();
