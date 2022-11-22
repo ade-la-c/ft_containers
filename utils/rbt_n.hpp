@@ -163,7 +163,7 @@ namespace ft {
 
 				while (x != end) {
 					y = x;
-					if (node->data < x->data)
+					if (node->data.first < x->data.first)
 						x = x->left;
 					else
 						x = x->right;
@@ -171,7 +171,7 @@ namespace ft {
 				node->parent = y; /* y is parent of x */
 				if (y == NULL)
 					root = node;
-				else if (node->data < y->data)
+				else if (node->data.first < y->data.first)
 					y->left = node;
 				else
 					y->right = node;

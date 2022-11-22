@@ -5,6 +5,7 @@
 #include <memory>
 #include <iterator>
 #include <functional>
+#include <vector>//!
 
 #include "../utils/utils.hpp"
 #include "../utils/reverse_iterator.hpp"
@@ -51,7 +52,7 @@ namespace	ft {
 			typedef typename	allocator_type::const_pointer							const_pointer;
 
 			typedef 			ft::bidirectional_iterator< value_type >				iterator;
-			typedef 			ft::bidirectional_iterator< value_type >				const_iterator;
+			typedef 			ft::bidirectional_iterator< const value_type >				const_iterator;
 			typedef				ft::reverse_iterator< iterator >						reverse_iterator;
 			typedef				ft::reverse_iterator< const_iterator >					const_reverse_iterator;
 
@@ -142,9 +143,11 @@ namespace	ft {
 
 
 			iterator				begin( void ) { return iterator(_rbt.firstNode(), _rbt.getEnd()); }
-			const_iterator			begin( void ) const { return iterator(_rbt.firstNode(), _rbt.getEnd()); }
+			// const_iterator			begin( void ) const { return iterator(_rbt.firstNode(), _rbt.getEnd()); }
+			const_iterator			begin( void ) const { return static_cast<const_iterator>(iterator(_rbt.firstNode(), _rbt.getEnd())); }
 			iterator				end( void ) { return iterator(_rbt.getEnd(), _rbt.getEnd()); }
-			const_iterator			end( void ) const { return iterator(_rbt.getEnd(), _rbt.getEnd()); }
+			// const_iterator			end( void ) const { return iterator(_rbt.getEnd(), _rbt.getEnd()); }
+			const_iterator			end( void ) const { return static_cast<const_iterator>(iterator(_rbt.getEnd(), _rbt.getEnd())); }
 			reverse_iterator		rbegin( void ) { return reverse_iterator(iterator(_rbt.getEnd(), _rbt.getEnd())); }
 			const_reverse_iterator	rbegin( void ) const { return const_reverse_iterator(iterator(_rbt.getEnd(), _rbt.getEnd())); }
 			reverse_iterator		rend( void ) { return reverse_iterator(begin()); }
@@ -179,9 +182,8 @@ namespace	ft {
 				node_pointer	find = _rbt.search(k);
 
 				if (!find) {
-					//	insert new node
-					find = _rbt.insertNode(ft::pair<key_type, mapped_type>(k, mapped_type()));
-					// _rbt.insertNode(ft::make_pair<key_type, mapped_type>(k, mapped_type()));
+
+					find = _rbt.insertNode(ft::make_pair<key_type, mapped_type>(k, mapped_type()));
 				}
 				return find->data.second;
 			}
@@ -222,9 +224,7 @@ namespace	ft {
 			//	range
 			template<class InputIterator>
 			void				insert( InputIterator first, InputIterator last ) {
-
 				while (first != last) {
-
 					_rbt.insertNode(*first);
 					first++;
 				}
@@ -234,7 +234,10 @@ namespace	ft {
 				value_type		val = position.base()->data;
 				node_pointer	ptr = _rbt.search(val.first);
 
-				_rbt.deleteNode(ptr, val.first);
+				// _rbt.deleteNode(ptr, val.first);
+				if (ptr) {
+					erase(val.first);
+				}
 			}
 			size_type			erase( const key_type & k ) {
 
@@ -242,9 +245,10 @@ namespace	ft {
 			}
 			void				erase( iterator first, iterator last ) {
 
-				while (first != last) {
+				while (first != last ) {
 
-					erase(first++);
+					erase(first);
+					first++;
 				}
 			}
 			void				swap( map & x ) {
@@ -287,7 +291,7 @@ namespace	ft {
 				if (!ptr) {
 					return end();
 				} else {
-					return const_iterator(ptr, _rbt.getEnd());
+					return iterator(ptr, _rbt.getEnd());
 				}
 			}
 			size_type			count( const key_type & k ) const {
@@ -308,7 +312,7 @@ namespace	ft {
 			}
 			const_iterator		lower_bound( const key_type & k ) const {
 
-				iterator	it = begin();
+				const_iterator	it = begin();
 
 				while (it != end()) {
 					if (_comp(it->first, k) == false)

@@ -88,11 +88,10 @@ namespace	ft {
 			}
 		}
 		//*	copy constructor
-		vector( const vector & x ) : _capacity(x._capacity), _size(x._size), _alloc(x._alloc) {		//TODO		fix possible redundance with operator=()
+		vector( const vector & x ) : _capacity(x._capacity), _size(x._size), _alloc(x._alloc) {
 
-			this->_valueArray = this->_alloc.allocate(0);						 //!	why ?
-			// this->_valueArray = this->_alloc.allocate(x._capacity);			//?		why not ?
-			// *this = x;
+			this->_valueArray = this->_alloc.allocate(0);
+			*this = x;
 		}
 		//*	assignation operator
 		vector &	operator=( const vector & rhs ) {

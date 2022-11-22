@@ -35,4 +35,4 @@ tests.cpp
 .vscode
 a.out.*
 *.log
-containers_test
+# containers_test

@@ -27,8 +27,7 @@ namespace	ft {
 			bidirectional_iterator(node_pointer node, node_pointer end) : _node(node), _end(end) {}
 
 			/*	Copy */
-			template< class U >
-			bidirectional_iterator(const bidirectional_iterator< U >& x) : _node(x.getNode()), _end(x.getEnd()) {}
+			bidirectional_iterator(const bidirectional_iterator& x) : _node(x._node), _end(x._end) {}
 
 			/*	Operator= */
 			template< class U >
@@ -49,9 +48,13 @@ namespace	ft {
 				return (this->_node);
 			}
 			/*	Operator* - Dereference iterator */
-			reference	operator*() const {
+			reference	operator*() {
 				return (this->_node->data);
 			}
+			const reference	operator*() const {
+				return (this->_node->data);
+			}
+
 			/*	Operator++ - Increment iterator position */
 			bidirectional_iterator &		operator++(void) {
 				node_pointer	cursor = _node;
@@ -111,8 +114,17 @@ namespace	ft {
 					_node = cursor;
 				}
 				return (*this);
-			}
 
+				// if (_node->left != _end) {
+				// 	_node = _node->left;
+				// 	while (_node->right != _end) {_node = _node->right;}
+				// } else {
+				// 	node_pointer tmp = _node;
+				// 	while ( tmp->parent && tmp == tmp->parent->left) {tmp = tmp->parent;}
+				// 	_node = tmp->parent;
+				// }
+				// return *this;
+			}
 
 			bidirectional_iterator			operator--(int) {
 				bidirectional_iterator	tmp(*this);
@@ -121,12 +133,23 @@ namespace	ft {
 				return (tmp);
 			}
 			/*	Operator-> - Dereference iterator */
-			pointer		operator->() const {
+			pointer		operator->() {
 				return (&this->_node->data);
 			}
 
-			node_pointer	getNode() const { return _node; }
-			node_pointer	getEnd() const { return _end; }
+			const pointer		operator->() const {
+				return (&this->_node->data);
+			}
+
+			operator bidirectional_iterator< const T >() const {
+				return bidirectional_iterator< const T >( (typename bidirectional_iterator< const T >::node_pointer) _node,
+															(typename bidirectional_iterator< const T >::node_pointer) _end);
+			}
+
+			const node_pointer	getNode() const { return _node; }
+			node_pointer	getNode() { return _node; }
+			const node_pointer	getEnd() const { return _end; }
+			node_pointer	getEnd() { return _end; }
 
 		private:
 
@@ -136,16 +159,21 @@ namespace	ft {
 
 	template< class T >
 	bool	operator==(const ft::bidirectional_iterator< T >& lhs, const ft::bidirectional_iterator< T >& rhs)
-	{ return (lhs.base() == rhs.base()); }
-	template< class T, class U >
-	bool	operator==(const ft::bidirectional_iterator< T >& lhs, const ft::bidirectional_iterator< U >& rhs)
-	{ return (lhs.base() == rhs.base()); }
+	{ return ((void*)lhs.base() == (void*)(rhs.base())); }
+	template< class T >
+	bool	operator==(const ft::bidirectional_iterator< T >& lhs, const ft::bidirectional_iterator< const T >& rhs)
+	{ return ((void*)lhs.base() == (void*)(rhs.base())); }
+	template< class T >
+	bool	operator==(const ft::bidirectional_iterator< const T >& lhs, const ft::bidirectional_iterator< T >& rhs)
+	{ return ((void*)lhs.base() == (void*)(rhs.base())); }
 	template< class T >
 	bool	operator!=(const ft::bidirectional_iterator< T >& lhs, const ft::bidirectional_iterator< T >& rhs)
-	{ return (lhs.base() != rhs.base()); }
-	template< class T, class U >
-	bool	operator!=(const ft::bidirectional_iterator< T >& lhs, const ft::bidirectional_iterator< U >& rhs)
-	{ return (lhs.base() != rhs.base()); }
-
+	{ return ((void*)lhs.base() != (void*)(rhs.base())); }
+	template< class T >
+	bool	operator!=(const ft::bidirectional_iterator< T >& lhs, const ft::bidirectional_iterator< const T >& rhs)
+	{ return ((void*)lhs.base() != (void*)(rhs.base())); }
+	template< class T >
+	bool	operator!=(const ft::bidirectional_iterator< const T >& lhs, const ft::bidirectional_iterator< T >& rhs)
+	{ return ((void*)lhs.base() != (void*)(rhs.base())); }
 
 }
