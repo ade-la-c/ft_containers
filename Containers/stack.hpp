@@ -40,7 +40,7 @@ namespace	ft {
 
 			template< class Tn, class ContainerN >
 			friend bool	operator!=( const stack<Tn,ContainerN> & lhs, const stack<Tn,ContainerN> & rhs )
-			{ return !(lhs == rhs); }
+			{ return lhs.c != rhs.c; }
 
 			template< class Tn, class ContainerN >
 			friend bool	operator<( const stack<Tn,ContainerN> & lhs, const stack<Tn,ContainerN> & rhs )
@@ -52,11 +52,11 @@ namespace	ft {
 
 			template< class Tn, class ContainerN >
 			friend bool	operator>( const stack<Tn,ContainerN> & lhs, const stack<Tn,ContainerN> & rhs )
-			{ return lhs.c <= rhs.c; }
+			{ return lhs.c > rhs.c; }
 
 			template< class Tn, class ContainerN >
 			friend bool	operator>=( const stack<Tn,ContainerN> & lhs, const stack<Tn,ContainerN> & rhs )
-			{ return !(lhs < rhs); }
+			{ return lhs.c >= rhs.c; }
 
 
 		protected:
