@@ -24,6 +24,7 @@ int main()
 test_vector();
 test_map();
 test_stack();
+system("leaks a.out");
 }
 
 void test_stack()
