@@ -3,7 +3,8 @@ NAME =		containers
 SRCS =		./map_tester.cpp	\
 			./stack_tester.cpp	\
 			./vector_tester.cpp	\
-			./main.cpp
+			./main_sel.cpp
+			# ./main.cpp
 
 CXX =		c++
 
