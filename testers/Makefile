@@ -13,9 +13,9 @@ RM =		rm -rf
 
 OBJS =		${SRCS:.cpp=.o}
 
-${NAME} =	${OBJS}
+all:		${NAME}
 
-all:		${OBJS}
+${NAME}:	${OBJS}
 			${CXX} ${CXXFLAGS} ${OBJS} -o ${NAME}
 
 clean:

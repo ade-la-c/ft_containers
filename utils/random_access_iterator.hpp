@@ -17,13 +17,13 @@ namespace	ft {
 
 			/* ************************ Constructors ************************ */
 			/*	 Default */
-			random_access_iterator(pointer ptr = nullptr) : _node(ptr) {}
+			random_access_iterator(pointer ptr = NULL) : _node(ptr) {}
 			/*	Copy */
 			template< class V >
 			random_access_iterator(const random_access_iterator<V>& x) : _node(x.base()) {}
 			/*	Destructor */
 			~random_access_iterator() {
-				_node = nullptr;
+				_node = NULL;
 			}
 
 			/* ********************** Base & Operators ********************** */
