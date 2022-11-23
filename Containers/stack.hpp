@@ -3,8 +3,8 @@
 #include "../Containers/vector.hpp"
 
 #include <iostream>
-// #include <deque>
-// #include <list>
+// #include <deque>			//* uncomment to test stack compatibility
+// #include <list>			//* uncomment to test list compatibility
 
 namespace	ft {
 
@@ -13,7 +13,7 @@ namespace	ft {
 	
 		class T,
 		// class Container = std::deque< T >	//* uncomment to test stack compatibility 
-		// class Container = std::list< T >		//* uncomment to test stack compatibility 
+		// class Container = std::list< T >		//* uncomment to test list compatibility 
 		class Container = ft::vector< T >
 
 	> class stack {
