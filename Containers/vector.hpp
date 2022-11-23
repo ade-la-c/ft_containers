@@ -84,7 +84,7 @@ namespace	ft {
 
 			for (size_type i = 0; i < _size; i++) {
 
-				this->_alloc.construct(this->_valueArray + i, *(first + i));
+				this->_alloc.construct(this->_valueArray + i, *(increment_iterator(first, i)));
 			}
 		}
 		//*	copy constructor
@@ -382,6 +382,15 @@ namespace	ft {
 
 
 	private:
+
+		template< class InputIterator >
+		InputIterator	increment_iterator( InputIterator it, size_type incr ) {
+
+			for (size_type i = 0; i < incr; i++) {
+				it++;
+			}
+			return it;
+		}
 
 		size_type			_capacity;		//* number of cells allocated
 		size_type			_size;			//* number of cells filled

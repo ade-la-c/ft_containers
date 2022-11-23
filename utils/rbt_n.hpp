@@ -29,11 +29,11 @@ namespace ft {
 		/*	Operator= */
 		Node &	operator=(const Node & x) {
 			if (this != &x) {
-				this->data = x.data;
-				this->color = x.color;
-				this->parent = x.parent;
-				this->left = x.left;
-				this->right = x.right;
+				this->data		= x.data;
+				this->color		= x.color;
+				this->parent	= x.parent;
+				this->left		= x.left;
+				this->right		= x.right;
 			}
 			return *this;
 		}
@@ -48,7 +48,7 @@ namespace ft {
 			typedef				T																mapped_type;
 			typedef				Compare															key_compare;
 			typedef	typename	ft::pair<const key_type, mapped_type>							value_type;
-			typedef	typename	std::allocator< RBTree<Key, T, key_compare> >								allocator_type;
+			typedef	typename	std::allocator< RBTree<Key, T, key_compare> >					allocator_type;
 			typedef typename	std::size_t														size_type;
 			typedef typename	allocator_type::template rebind< Node<value_type> >::other		node_allocator;
 			typedef				ft::Node<value_type>*											node_pointer;
@@ -60,10 +60,10 @@ namespace ft {
 				this->comp = comp;
 				end = node_allocator().allocate(1);
 				node_allocator().construct(end, node_type());
-				end->parent = NULL;
-				end->left = NULL;
-				end->right = NULL;
-				end->color = false;
+				end->parent	= NULL;
+				end->left	= NULL;
+				end->right	= NULL;
+				end->color	= false;
 				root = end;
 				size = 0;
 			}
@@ -77,10 +77,10 @@ namespace ft {
 				if (this != &x) {
 					this->clear(this->root);
 					this->insertAll(x.root);
-					this->root = x.root;
-					this->end = x.end;
-					this->size = x.size;
-					this->comp = x.comp;
+					this->root	= x.root;
+					this->end	= x.end;
+					this->size	= x.size;
+					this->comp	= x.comp;
 				}
 				return *this;
 			}
@@ -103,17 +103,33 @@ namespace ft {
 			size_type		getSize() const { return this->size; }
 
 			// search returns the node corresponding to the key_type entered as parameter
-			node_pointer	search(const key_type & key) const {
-				node_pointer	tmp = this->root;
+			// node_pointer	search(const key_type & key) const {
+			// 	node_pointer	tmp = this->root;
 
+			// 	while (tmp != end) {
+
+			// 		if (tmp->data.first == key) {
+			// 			return tmp;
+			// 		} else if (key < tmp->data.first) {					//? old search using operators
+			// 			tmp = tmp->left;
+			// 		} else {
+			// 			tmp = tmp->right;
+			// 		}
+			// 	}
+			// 	return NULL;
+			// }
+
+			node_pointer	search( const key_type & key ) const {
+				node_pointer	tmp = this->root;
+			
 				while (tmp != end) {
 
-					if (tmp->data.first == key) {
-						return tmp;
-					} else if (key < tmp->data.first) {
+					if (comp(key, tmp->data.first)) {
 						tmp = tmp->left;
-					} else {
+					} else if (comp(tmp->data.first, key)) {			//! new search using compare
 						tmp = tmp->right;
+					} else {
+						return tmp;
 					}
 				}
 				return NULL;
@@ -156,28 +172,46 @@ namespace ft {
 					return find;
 				node_pointer	node = node_allocator().allocate(1);
 				node_allocator().construct(node, node_type(ft::make_pair<key_type, mapped_type>(val.first, val.second)));
-				node->parent = NULL;
-				node->left = end;
-				node->right = end;
-				node->color = true; /* new node is red */
+				node->parent	= NULL;
+				node->left		= end;
+				node->right		= end;
+				node->color		= true; /* new node is red */
 				size++;
-				node_pointer y = NULL;
-				node_pointer x = this->root;
+				node_pointer y	= NULL;
+				node_pointer x	= this->root;
+
+				// while (x != end) {
+				// 	y = x;
+				// 	if (node->data.first < x->data.first)					//? old loop using operators
+				// 		x = x->left;
+				// 	else
+				// 		x = x->right;
+				// }
 
 				while (x != end) {
 					y = x;
-					if (node->data.first < x->data.first)
+					if (comp(node->data.first, x->data.first)) {			//!new loop using comp
 						x = x->left;
-					else
+					} else {
 						x = x->right;
+					}
 				}
+
 				node->parent = y; /* y is parent of x */
-				if (y == NULL)
+				// if (y == NULL)
+				// 	root = node;
+				// else if (node->data.first < y->data.first)					//? old block using operators
+				// 	y->left = node;
+				// else
+				// 	y->right = node;
+
+				if (y == NULL) {
 					root = node;
-				else if (node->data.first < y->data.first)
+				} else if (comp(node->data.first, y->data.first)) {				//! new block using comp
 					y->left = node;
-				else
+				} else {
 					y->right = node;
+				}
 				
 				// /*	If new node is a root node, simply return/
 				if (node->parent == NULL) {
@@ -209,15 +243,27 @@ namespace ft {
 				node_pointer	x, y, z = end;
 
 				/*	Find the node containing the key */
-				while (node != end) { 
-					if (node->data.first == key) {
+
+				// while (node != end) { 
+				// 	if (node->data.first == key) {
+				// 		z = node;
+				// 	}
+				// 	if (node->data.first <= key)											//? old loop using operators
+				// 		node = node->right;
+				// 	else
+				// 		node = node->left;
+				// }
+
+				while (node != end) {
+					if (!comp(node->data.first, key) && !comp(key, node->data.first)) {
 						z = node;
-					}
-					if (node->data.first <= key)
+					} if (!comp(key, node->data.first)) {									//! new loop using comp
 						node = node->right;
-					else
+					} else {
 						node = node->left;
+					}
 				}
+
 				if (z == end)
 					return 0;
 				y = z;
@@ -268,16 +314,17 @@ namespace ft {
 				node_pointer	s_root;
 				node_pointer	s_end;
 
-				s_size = x.size;
-				s_root = x.root;
-				s_end = x.end;
-				x.size = this->size;
-				x.root = this->root;
-				x.end = this->end;
-				this->size = s_size;
-				this->root = s_root;
-				this->end = s_end;
+				s_size		= x.size;
+				s_root		= x.root;
+				s_end		= x.end;
+				x.size		= this->size;
+				x.root		= this->root;
+				x.end		= this->end;
+				this->size	= s_size;
+				this->root	= s_root;
+				this->end	= s_end;
 			}
+
 
 		private:
 
@@ -453,6 +500,7 @@ namespace ft {
 				}
 				x->color = false;
 			}
+
 
 	};
 

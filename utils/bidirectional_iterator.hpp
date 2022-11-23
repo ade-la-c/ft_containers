@@ -57,29 +57,23 @@ namespace	ft {
 
 			/*	Operator++ - Increment iterator position */
 			bidirectional_iterator &		operator++(void) {
-				node_pointer	cursor = _node;
 
-				if (_node->right == _end) {
-					cursor = _node->parent;
-					while (cursor != NULL && cursor != _end && cursor->data.first < _node->data.first)
-						cursor = cursor->parent;
-					if (cursor == 0)
-						_node = _end;
-					else
-						_node = cursor;
-				} else if (cursor == _end) {
-					_node = _end;
+				if (_node->right != _end) {
+
+					_node = _node->right;
+					while (_node->left != _end) { _node = _node->left; }
+
 				} else {
-					cursor = _node->right;
-					if (cursor == _end->parent && cursor->right == _end)
-						_node = cursor;
-					else {
-						while (cursor->left != _end)
-							cursor = cursor->left;
+
+					node_pointer tmp = _node;
+					while (tmp->parent && tmp == tmp->parent->right) {
+						tmp = tmp->parent;
 					}
-					_node = cursor;
+					if (tmp->parent != _end) { _node = tmp->parent; }
+					if (!_node) { _node = _end; }
+
 				}
-				return (*this);
+				return *this;
 			}
 
 			bidirectional_iterator			operator++(int) {
@@ -90,40 +84,27 @@ namespace	ft {
 			}
 			/*	Operator-- - Decrease iterator opinion */
 			bidirectional_iterator &		operator--(void) {
-				node_pointer	cursor = _node;
 
-				if (_node->left == _end) {
-					cursor = _node->parent;
-					while (cursor != NULL && cursor != _end && cursor->data.first > _node->data.first)
-						cursor = cursor->parent;
-					_node = cursor;
-					if (cursor == 0)
-						_node = _end->right;
-					else
-						_node = cursor;
-				} else if (cursor == _end) {
-					_node = _end->right;
+				if ( _node == _end ) {
+
+					while (_node->parent) { _node = _node->parent; }
+					while (_node->right != _end) { _node = _node->right; }
+
+				} else if (_node->left != _end) {
+
+					_node = _node->left;
+					while (_node->right != _end) { _node = _node->right; }
+
 				} else {
-					cursor = _node->left;
-					if (cursor == _end->parent && cursor->left == _end)
-						_node = cursor;
-					else {
-						while (cursor->right != _end)
-							cursor = cursor->right;
-					}
-					_node = cursor;
-				}
-				return (*this);
 
-				// if (_node->left != _end) {
-				// 	_node = _node->left;
-				// 	while (_node->right != _end) {_node = _node->right;}
-				// } else {
-				// 	node_pointer tmp = _node;
-				// 	while ( tmp->parent && tmp == tmp->parent->left) {tmp = tmp->parent;}
-				// 	_node = tmp->parent;
-				// }
-				// return *this;
+					node_pointer tmp = _node;
+					while (tmp->parent && tmp == tmp->parent->left) {
+						tmp = tmp->parent;
+					}
+					_node = tmp->parent;
+					if (!_node) { _node = _end; }
+				}
+				return *this;
 			}
 
 			bidirectional_iterator			operator--(int) {

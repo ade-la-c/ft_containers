@@ -26,6 +26,16 @@ namespace	ft {
 			virtual	~reverse_iterator( void ) {}
 
 			iterator_type		base( void ) const { return _content; }
+
+			// template< class U >
+			reverse_iterator&	operator=( const reverse_iterator & other ) {
+
+				if (this != &other) {
+					this->_content = other._content;
+				}
+				return *this;
+			}
+
 			reference			operator*( void ) const {
 
 				Iterator	tmp = this->_content;
@@ -135,19 +145,20 @@ namespace	ft {
 						const ft::reverse_iterator<Iterator2> & rhs )
 	{ return lhs.base() <= rhs.base(); }
 
-	template< class Iterator >
-	bool	operator+( typename reverse_iterator<Iterator>::difference_type & n,
-						const ft::reverse_iterator<Iterator> & rev_it )
-	{ return rev_it + n; }
+	template<class Iterator>
+	reverse_iterator<Iterator> operator+(typename reverse_iterator<Iterator>::difference_type n, const reverse_iterator<Iterator> &rev_it)
+	{
+		return (reverse_iterator<Iterator>(rev_it.base() - n));
+	}
 
 	template< class Iterator >
 	typename reverse_iterator<Iterator>::difference_type
 		operator-( const ft::reverse_iterator<Iterator> & lhs, const ft::reverse_iterator<Iterator> & rhs )
-	{ return lhs.base() - rhs.base(); }
+	{ return rhs.base() - lhs.base(); }
 
 	template< class Iterator, class Iterator2 >
 	typename reverse_iterator<Iterator>::difference_type
 		operator-( const ft::reverse_iterator<Iterator> & lhs, const ft::reverse_iterator<Iterator2> & rhs )
-	{ return lhs.base() - rhs.base(); }
+	{ return rhs.base() - lhs.base(); }
 
 }
